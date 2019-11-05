@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/xiaoniao.jpg">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/xiaoniao.jpg">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":true,"style":"default"},
+    back2top: {"enable":true,"sidebar":true,"scrollpercent":true},
+    bookmark: {"enable":true,"color":"#222","save":"manual"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="Kubernetes是一个跨主机集群的开源的容器调度平台,它可以自动化应用容器的部署,扩展和操作,提供以容器为中心的基础架构">
+<meta name="keywords" content="Kubernetes">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Kubernetes-详细介绍和架构详解">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;10&#x2F;29&#x2F;Kubernetes-%E8%AF%A6%E7%BB%86%E4%BB%8B%E7%BB%8D%E5%92%8C%E6%9E%B6%E6%9E%84%E8%AF%A6%E8%A7%A3&#x2F;index.html">
+<meta property="og:site_name" content="SmallBird&#96;s Blog">
+<meta property="og:description" content="Kubernetes是一个跨主机集群的开源的容器调度平台,它可以自动化应用容器的部署,扩展和操作,提供以容器为中心的基础架构">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-10-29T01:51:19.811Z">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://yoursite.com/2019/10/29/Kubernetes-%E8%AF%A6%E7%BB%86%E4%BB%8B%E7%BB%8D%E5%92%8C%E6%9E%B6%E6%9E%84%E8%AF%A6%E8%A7%A3/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>Kubernetes-详细介绍和架构详解 | SmallBird`s Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">SmallBird`s Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">今春看又过，何日是归年?</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-首页">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-分类">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-标签">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-归档">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-关于">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/29/Kubernetes-%E8%AF%A6%E7%BB%86%E4%BB%8B%E7%BB%8D%E5%92%8C%E6%9E%B6%E6%9E%84%E8%AF%A6%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/xiaoniao.jpg">
+      <meta itemprop="name" content="SmallBird">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="SmallBird`s Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Kubernetes-详细介绍和架构详解
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2019-10-29 09:49:24 / 修改时间：09:51:19" itemprop="dateCreated datePublished" datetime="2019-10-29T09:49:24+08:00">2019-10-29</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Kubernetes/" itemprop="url" rel="index">
+                    <span itemprop="name">Kubernetes</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><em>Kubernetes是一个跨主机集群的开源的容器调度平台,它可以自动化应用容器的部署,扩展和操作,提供以容器为中心的基础架构</em></p><a id="more"></a>
+<h1 id="Kubernetes用途"><a href="#Kubernetes用途" class="headerlink" title="Kubernetes用途"></a>Kubernetes用途</h1><p>Kubernetes是容器集群管理系统,是一个开源的平台,可以实现容器集群的自动化部署,自动扩缩容,维护等功能</p>
+<ul>
+<li>快速部署应用</li>
+<li>快速扩展应用</li>
+<li>无缝对接新的应用功能</li>
+<li>节省资源,优化硬件资源的使用</li>
+</ul>
+<h1 id="Kubernetes特点"><a href="#Kubernetes特点" class="headerlink" title="Kubernetes特点"></a>Kubernetes特点</h1><ul>
+<li>可移植 : 支持公有云,私有云,混合云,多重云</li>
+<li>可扩展 : 模块化,插件化,可挂载,可组合,支持各种形式的扩展</li>
+<li>自动化 : 自动部署,自动重启,自动复制,自动伸缩/扩展,通过声明式语法提供了强大的自修复能力</li>
+</ul>
+<p>Kubernetes是Google2014年创建管理的,是Google10多年大规模容器管理技术Borg的开源版本</p>
+<h1 id="介绍容器技术"><a href="#介绍容器技术" class="headerlink" title="介绍容器技术"></a>介绍容器技术</h1><p>Kubernetes使用Linux容器技术来提供应用的隔离,如Docker或者rkt</p>
+<p>容器允许你在同一台机器上运行多个服务,不仅提供不同的环境给每个服务,而且将它们互相隔离,容器类似于虚拟机,但开销小很多</p>
+<p>一个容器仅仅是运行在宿主机上被隔离的单个进程,仅消耗应用容器消耗的资源,不会有其他进程的开销</p>
+<p>容器都是调用同一个内核,自然会有安全隐患</p>
+<h2 id="容器实现隔离机制介绍"><a href="#容器实现隔离机制介绍" class="headerlink" title="容器实现隔离机制介绍"></a>容器实现隔离机制介绍</h2><p>有两个机制可用 :<br>第一个是Linux命名空间,它使每个进程只能看到它自己的系统视图(文件,进程,网络接口,主机名等)<br>第二个是Linux控制组(cgroups),它限制了进程能使用的资源量(CPU,内存,网络带宽等)</p>
+<h2 id="Docker容器镜像层"><a href="#Docker容器镜像层" class="headerlink" title="Docker容器镜像层"></a>Docker容器镜像层</h2><p>容器镜像层是只读的,容器运行时,一个新的可写层在镜像层之上被创建容器中进程写入位于底层的一个文件时,此文件的一个拷贝在顶层被创建,进程写得此时拷贝</p>
+<h2 id="容器镜像可移植性的限制"><a href="#容器镜像可移植性的限制" class="headerlink" title="容器镜像可移植性的限制"></a>容器镜像可移植性的限制</h2><p>一个在特定硬件架构之上编译的容器化应用,只能在有相同硬件架构的机器上运行</p>
+<h2 id="容器优点"><a href="#容器优点" class="headerlink" title="容器优点"></a>容器优点</h2><ul>
+<li>敏捷的应用程序创建和部署 : 与虚拟机镜像相比,容器镜像更容器创建,提升了硬件的使用效率</li>
+<li>持续开发,集成和部署 : 提供可靠与频繁的容器镜像构建和部署,可以很方便及快速的回滚(由于镜像不可变性)</li>
+<li>关注开发与运维的分离 : 在构建/发布时创建应用程序容器镜像,从而将应用程序和基础架构分离</li>
+<li>开发,测试和生产环境的一致性 : 在笔记本电脑上运行与云中一样</li>
+<li>云和操作系统的可移植性 : 可运行在Ubuntu,RHEL,CoreOS,内部部署,Google 容器引擎和其他任何地方</li>
+<li>以应用为中心的管理 : 提升了操作系统的抽象级别,以便在使用逻辑资源的操作系统上运行应用程序</li>
+<li>松耦合,分布式,弹性伸缩,微服务 : 应用程序被分成更小,更独立的部分,可以动态部署和管理,而不是巨型单体应用运行在专用的大型机上</li>
+<li>资源隔离 : 通过对应用进行资源隔离,可以很容易的预测应用程序性能</li>
+<li>资源利用 : 高效率和高密度</li>
+</ul>
+<h1 id="Kubernetes能做什么"><a href="#Kubernetes能做什么" class="headerlink" title="Kubernetes能做什么?"></a>Kubernetes能做什么?</h1><p>最基础的,Kubernetes可以在物理或虚拟机集群上调度和运行应用程序容器.然而,Kubernetes还允许开发人员从物理和虚拟机’脱离’,从以主机为中心的基础架构转移到以容器为中心的基础架构,这样可以提供容器固有的全部优点和益处.Kubernetes提供了基础设施来构建一个真正以容器为中心的开发环境</p>
+<h2 id="Kubernetes满足了生产中运行应用程序的许多常见的需求"><a href="#Kubernetes满足了生产中运行应用程序的许多常见的需求" class="headerlink" title="Kubernetes满足了生产中运行应用程序的许多常见的需求"></a>Kubernetes满足了生产中运行应用程序的许多常见的需求</h2><ul>
+<li>Pod提供复合应用并保留一个应用一个容器的容器模型</li>
+<li>挂载外部存储</li>
+<li>Secret管理</li>
+<li>应用健康检查</li>
+<li>副本应用实例</li>
+<li>横向自动扩缩容</li>
+<li>服务发现</li>
+<li>负载均衡</li>
+<li>滚动更新</li>
+<li>资源监测</li>
+<li>日志采集和存储</li>
+<li>支持自检和调试</li>
+<li>认证和鉴权</li>
+</ul>
+<p>这提供了平台即服务(PAAS)的简单性以及基础架构即服务(IAAS)的灵活性,并促进跨基础设施供应商的可移植性</p>
+<h1 id="使用Kubernetes的好处"><a href="#使用Kubernetes的好处" class="headerlink" title="使用Kubernetes的好处"></a>使用Kubernetes的好处</h1><ul>
+<li>简化应用程序部署</li>
+<li>更好的利用硬件</li>
+<li>健康检查和自修复</li>
+<li>自动扩容</li>
+<li>简化应用部署</li>
+</ul>
+<h1 id="了解架构"><a href="#了解架构" class="headerlink" title="了解架构"></a>了解架构</h1><p><strong>Kubernetes集群分为两部分 :</strong></p>
+<ul>
+<li>Kubernetes控制平面</li>
+<li>(工作)节点</li>
+</ul>
+<p><strong>控制平面的组件 :</strong></p>
+<ul>
+<li>etcd分布式持久化存储</li>
+<li>API服务器</li>
+<li>调度器</li>
+<li>控制器管理器</li>
+</ul>
+<p>这些组件用来存储,管理集群状态,但它们不是运行应用的容器</p>
+<p><strong>工作节点上运行的组件 :</strong></p>
+<ul>
+<li>Kubelet</li>
+<li>Kubelet服务代理(kube-proxy)</li>
+<li>容器进行时(Docker,rkt或者其他)</li>
+</ul>
+<p><strong>附加组件 :</strong></p>
+<ul>
+<li>Kubernetes DNS服务器</li>
+<li>仪表板</li>
+<li>Ingress控制器</li>
+<li>Heapster(容器集群监控)</li>
+<li>容器网络接口插件</li>
+</ul>
+<h2 id="etcd"><a href="#etcd" class="headerlink" title="etcd"></a>etcd</h2><p>创建的所有对象 - pod,ReplicationController,服务和私密凭据等,需要以持久化方式存储到某个地方,这样它们的manifest在API服务器重启和失败的时候才不会丢失.为此,Kubernetes使用了etcd</p>
+<p>etcd是一个响应快,分布式,一致的Key-value存储.因为它是分布式的,故可以运行多个etcd实例来获取高可用性和更好的性能</p>
+<p>唯一能直接和etcd通信的是Kubernetes的API服务器.所有其他组件通过API服务器间接地读取,写入数据到etcd.这带来一些好处,其中之一就是增强乐观锁系统,验证系统的健壮性;并且,通过把实际存储机制从其他组件抽离,未来替换起来也更容易.值得强调的是,etcd是Kubernetes存储集群状态和元数据的唯一的地方</p>
+<h2 id="API服务器"><a href="#API服务器" class="headerlink" title="API服务器"></a>API服务器</h2><p>Kubernetes API服务器作为中心组件,其他组件或者客户端都会去调用它.以RESTful API的形式提供了可以查询,修改集群状态的CRUD(Create,Read,Update,Delete)接口.他将状态存储到etcd中</p>
+<p>API服务器除了提供一种一致的方式将对象存储到etcd,也对这些对象做校验,这样客户端就无法存入非法的对象(直接写入存储的话是有可能的).除了检验,还会处理乐观锁,这样对于并发更新的情况,对对象做更改就不会被其他客户端覆盖</p>
+<p>API服务器的客户端之一就是使用的命令行工具kubectl,也支持监听资源</p>
+<h2 id="调度器"><a href="#调度器" class="headerlink" title="调度器"></a>调度器</h2><p>通常不会去指定pod应该运行在哪个集群节点上,这项工作交给调度器.宏观来看,调度器的操作比较简单.就是利用API服务器的监听机制等待新创建的pod,然后给每个新的,没有节点集的pod分配节点</p>
+<p>调度器不会命令选中的节点去运行pod.调度器做的就是通过API服务器更新pod的定义.然后API服务器再去通知Kubelet该pod已经被调度过.当目标节点上的Kubelet发现该pod被调度到本节点,他就会创建并且运行pod的容器</p>
+<p>尽管宏观上调度的过程看起来比较简单,但实际上为pod选择最佳节点的任务并不简单.当然,最简单的调度方式是不关心节点上已经运行的pod,随机选择一个节点.另一方面,调度器可以利用高级技术,例如机器学习,来预测接下来几分钟或几小时哪种类型的pod将会被调度,然后以最大的硬件利用率,无须重新调度已运行pod的方式来调度.Kubernetes的默认调度器实现方式处于最简单和最复杂程度之间</p>
+<h2 id="控制器管理器"><a href="#控制器管理器" class="headerlink" title="控制器管理器"></a>控制器管理器</h2><p>API服务器只做了存储资源到etcd和通知客户端有变更的工作.调度器则只是给pod分配节点,所以需要有活跃的组件确保系统真实状态朝API服务器定义的期望的状态收敛.这个工作由控制器管理器里的控制器来实现</p>
+<p>单个控制器,管理器进程当前组合了多个执行不同非冲突任务的控制器.这些控制器最终会被分解到不同的进程,如果需要的话,我们能够用自定义实现替换它们每一个</p>
+<p><strong>控制器包括 :</strong></p>
+<ul>
+<li>Replication管理器(ReplicationController资源的管理器)</li>
+<li>ReplicaSet,DaemonSet以及Job控制器</li>
+<li>Deployment控制器</li>
+<li>StatefulSet控制器</li>
+<li>Node控制器</li>
+<li>Service控制器</li>
+<li>Endpoints控制器</li>
+<li>Namespace控制器</li>
+<li>PersistentVolume控制器</li>
+<li>其他</li>
+</ul>
+<h2 id="Kubelet"><a href="#Kubelet" class="headerlink" title="Kubelet"></a>Kubelet</h2><p>Kubelet就是负责所有运行在工作节点上内容的组件.它第一个任务就是在API服务器中创建一个Node资源来注册该节点.然后需要持续监控API服务器是否把该节点分配给pod,然后启动pod容器.具体实现方式是告知配置好的容器进行时来从特定容器镜像运行容器,Kubelet随后持续监控运行的容器,向API服务器报告他们的状态,事件和资源消耗</p>
+<p>Kubelet也是运行容器存活探针的组件,当探针报错时它会重启容器.最后一点,当pod从API服务器删除时,Kubelet终止容器,并通知服务器pod已经被终止了</p>
+<h2 id="kube-proxy"><a href="#kube-proxy" class="headerlink" title="kube-proxy"></a>kube-proxy</h2><p>每个工作节点都会运行kube-proxy,用于确保客户端可以通过Kubernetes API连接到你定义的服务</p>
+<p>kube-proxy确保对服务IP和端口的连接最终能到达支持服务的某个pod处.如果有多个pod支撑一个服务,那么代理会发挥对pod的负载均衡作用</p>
+<h2 id="docker"><a href="#docker" class="headerlink" title="docker"></a>docker</h2><p>Docker用于运行容器</p>
+<h2 id="supervisord"><a href="#supervisord" class="headerlink" title="supervisord"></a>supervisord</h2><p>supervisord是一个轻量级的进程监控系统,可以用来保证kubelet和docker运行</p>
+<h2 id="fluentd"><a href="#fluentd" class="headerlink" title="fluentd"></a>fluentd</h2><p>fluentd是一个守护进程,它有助于提供集群层面日志集群层面的日志</p>
+<h2 id="Kubernetes插件"><a href="#Kubernetes插件" class="headerlink" title="Kubernetes插件"></a>Kubernetes插件</h2><h3 id="DNS服务器"><a href="#DNS服务器" class="headerlink" title="DNS服务器"></a>DNS服务器</h3><p>集群中的所有pod默认配置使用集群内部DNS服务器.这使得pod能够轻松地通过名称查询到服务,甚至是无头服务pod的IP地址</p>
+<p>DNS服务pod通过kube-dns服务对外暴露,使得该pod能够像其他pod一样在集群中移动.服务的IP地址在集群每个容器的/etc/reslv.conf文件的nameserver中定义.kube-dns pod利用API服务器的监控机制来订阅Service和Endpoint的变动,以及DNS记录的变更,是的其客户端总是能够获取到最新的DNS信息.客观的说,在Service和Endpoint资源发生变化到DNS pod收到订阅通知时间点之间,DNS记录可能会无效</p>
+<h3 id="Ingress控制器"><a href="#Ingress控制器" class="headerlink" title="Ingress控制器"></a>Ingress控制器</h3><p>Ingress控制器运行一个反向代理服务器,根据集群中定义的Ingress,service以及Endpoint资源来配置该控制器.所以需要订阅这些资源,然后每次其中一个发生变化则更新代理服务器的配置</p>
+<p>尽管Ingress资源的定义指向一个Service,Ingress控制器会直接将流量转到服务的pod而不经过服务IP.当外部客户端通过Ingress控制器连接时,会对客户端IP进行保存,这使得在某些用例中,控制器比Service更受欢迎</p>
+<h3 id="用户界面"><a href="#用户界面" class="headerlink" title="用户界面"></a>用户界面</h3><p>dashboard提供了集群状态的只读概述</p>
+<h3 id="容器资源监控"><a href="#容器资源监控" class="headerlink" title="容器资源监控"></a>容器资源监控</h3><p>容器资源监控将关于容器的一些常见的时间序列度量值保存到一个集中的数据库,并提供用于浏览这些数据的界面</p>
+<h3 id="集群层面日志"><a href="#集群层面日志" class="headerlink" title="集群层面日志"></a>集群层面日志</h3><p>集群层面日志机制负责将容器的日志数据保存到一个集中的日志存储中,该存储能够提供搜索和浏览接口</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Kubernetes/" rel="tag"># Kubernetes</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2019/10/29/Kubernetes-%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5/" rel="next" title="Kubernetes-基础概念">
+                  <i class="fa fa-chevron-left"></i> Kubernetes-基础概念
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/2019/10/29/%E4%BD%BF%E7%94%A8kubeadm%E6%96%B9%E5%BC%8F%E5%AE%89%E8%A3%85K8S/" rel="prev" title="使用kubeadm方式安装K8S">
+                  使用kubeadm方式安装K8S <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Kubernetes用途"><span class="nav-number">1.</span> <span class="nav-text">Kubernetes用途</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Kubernetes特点"><span class="nav-number">2.</span> <span class="nav-text">Kubernetes特点</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#介绍容器技术"><span class="nav-number">3.</span> <span class="nav-text">介绍容器技术</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#容器实现隔离机制介绍"><span class="nav-number">3.1.</span> <span class="nav-text">容器实现隔离机制介绍</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Docker容器镜像层"><span class="nav-number">3.2.</span> <span class="nav-text">Docker容器镜像层</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#容器镜像可移植性的限制"><span class="nav-number">3.3.</span> <span class="nav-text">容器镜像可移植性的限制</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#容器优点"><span class="nav-number">3.4.</span> <span class="nav-text">容器优点</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Kubernetes能做什么"><span class="nav-number">4.</span> <span class="nav-text">Kubernetes能做什么?</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Kubernetes满足了生产中运行应用程序的许多常见的需求"><span class="nav-number">4.1.</span> <span class="nav-text">Kubernetes满足了生产中运行应用程序的许多常见的需求</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#使用Kubernetes的好处"><span class="nav-number">5.</span> <span class="nav-text">使用Kubernetes的好处</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#了解架构"><span class="nav-number">6.</span> <span class="nav-text">了解架构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#etcd"><span class="nav-number">6.1.</span> <span class="nav-text">etcd</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#API服务器"><span class="nav-number">6.2.</span> <span class="nav-text">API服务器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#调度器"><span class="nav-number">6.3.</span> <span class="nav-text">调度器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#控制器管理器"><span class="nav-number">6.4.</span> <span class="nav-text">控制器管理器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Kubelet"><span class="nav-number">6.5.</span> <span class="nav-text">Kubelet</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#kube-proxy"><span class="nav-number">6.6.</span> <span class="nav-text">kube-proxy</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#docker"><span class="nav-number">6.7.</span> <span class="nav-text">docker</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#supervisord"><span class="nav-number">6.8.</span> <span class="nav-text">supervisord</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#fluentd"><span class="nav-number">6.9.</span> <span class="nav-text">fluentd</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Kubernetes插件"><span class="nav-number">6.10.</span> <span class="nav-text">Kubernetes插件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#DNS服务器"><span class="nav-number">6.10.1.</span> <span class="nav-text">DNS服务器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Ingress控制器"><span class="nav-number">6.10.2.</span> <span class="nav-text">Ingress控制器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#用户界面"><span class="nav-number">6.10.3.</span> <span class="nav-text">用户界面</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#容器资源监控"><span class="nav-number">6.10.4.</span> <span class="nav-text">容器资源监控</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#集群层面日志"><span class="nav-number">6.10.5.</span> <span class="nav-text">集群层面日志</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="site-author-image" itemprop="image" alt="SmallBird"
+    src="/images/xiaoniao.jpg">
+  <p class="site-author-name" itemprop="name">SmallBird</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">12</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/SmallBird6" title="GitHub &amp;rarr; https:&#x2F;&#x2F;github.com&#x2F;SmallBird6" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-globe"></i>
+      友情链接
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://smallbird6.gitee.io/smallbirdblog" title="http:&#x2F;&#x2F;smallbird6.gitee.io&#x2F;smallbirdblog" rel="noopener" target="_blank">SmallBird</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">SmallBird</span>
+</div>
+  <div class="theme-info">主题 – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

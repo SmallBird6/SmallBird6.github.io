@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/xiaoniao.jpg">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/xiaoniao.jpg">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":true,"style":"default"},
+    back2top: {"enable":true,"sidebar":true,"scrollpercent":true},
+    bookmark: {"enable":true,"color":"#222","save":"manual"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="YARN也采用了Master&#x2F;Slave结构，其中，Master实现为ResourceManager，负责整个集群资源的管理与调度；Slave实现为NodeManager，负责单个节点的资源管理与任务启动ResourceManager是整个YARN集群中最重要的组件之一，它的设计直接决定了系统的可扩展性、可用性和容错性等特点，它的功能较多，包括ApplicationMaster管理（启动、停止等）">
+<meta name="keywords" content="Hadoop,大数据">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ResourceManager基本职能和内部架构">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;10&#x2F;29&#x2F;ResourceManager%E5%9F%BA%E6%9C%AC%E8%81%8C%E8%83%BD%E5%92%8C%E5%86%85%E9%83%A8%E6%9E%B6%E6%9E%84&#x2F;index.html">
+<meta property="og:site_name" content="SmallBird&#96;s Blog">
+<meta property="og:description" content="YARN也采用了Master&#x2F;Slave结构，其中，Master实现为ResourceManager，负责整个集群资源的管理与调度；Slave实现为NodeManager，负责单个节点的资源管理与任务启动ResourceManager是整个YARN集群中最重要的组件之一，它的设计直接决定了系统的可扩展性、可用性和容错性等特点，它的功能较多，包括ApplicationMaster管理（启动、停止等）">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;10&#x2F;29&#x2F;ResourceManager%E5%9F%BA%E6%9C%AC%E8%81%8C%E8%83%BD%E5%92%8C%E5%86%85%E9%83%A8%E6%9E%B6%E6%9E%84&#x2F;blog1.png">
+<meta property="og:updated_time" content="2019-10-29T01:29:32.355Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;10&#x2F;29&#x2F;ResourceManager%E5%9F%BA%E6%9C%AC%E8%81%8C%E8%83%BD%E5%92%8C%E5%86%85%E9%83%A8%E6%9E%B6%E6%9E%84&#x2F;blog1.png">
+
+<link rel="canonical" href="http://yoursite.com/2019/10/29/ResourceManager%E5%9F%BA%E6%9C%AC%E8%81%8C%E8%83%BD%E5%92%8C%E5%86%85%E9%83%A8%E6%9E%B6%E6%9E%84/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>ResourceManager基本职能和内部架构 | SmallBird`s Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">SmallBird`s Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">今春看又过，何日是归年?</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-首页">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-分类">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-标签">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-归档">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-关于">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/29/ResourceManager%E5%9F%BA%E6%9C%AC%E8%81%8C%E8%83%BD%E5%92%8C%E5%86%85%E9%83%A8%E6%9E%B6%E6%9E%84/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/xiaoniao.jpg">
+      <meta itemprop="name" content="SmallBird">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="SmallBird`s Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          ResourceManager基本职能和内部架构
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2019-10-29 09:26:19 / 修改时间：09:29:32" itemprop="dateCreated datePublished" datetime="2019-10-29T09:26:19+08:00">2019-10-29</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Hadoop/" itemprop="url" rel="index">
+                    <span itemprop="name">Hadoop</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p><em>YARN也采用了Master/Slave结构，其中，Master实现为ResourceManager，负责整个集群资源的管理与调度；Slave实现为NodeManager，负责单个节点的资源管理与任务启动ResourceManager是整个YARN集群中最重要的组件之一，它的设计直接决定了系统的可扩展性、可用性和容错性等特点，它的功能较多，包括ApplicationMaster管理（启动、停止等）、NodeManager管理、Application管理、状态机管理等</em></p><a id="more"></a>
+<hr>
+<p>ResourceManager负责集群中所有资源的统一管理和分配，它接收来自各个节点的资源汇报信息，并把这些信息按照一定的策略分配给各个应用程序</p>
+<h1 id="ResourceManager基本职能"><a href="#ResourceManager基本职能" class="headerlink" title="ResourceManager基本职能"></a>ResourceManager基本职能</h1><h2 id="ResourceManager需通过两个RPC协议与NodeManager和AppMaster交互-具体如下"><a href="#ResourceManager需通过两个RPC协议与NodeManager和AppMaster交互-具体如下" class="headerlink" title="ResourceManager需通过两个RPC协议与NodeManager和AppMaster交互,具体如下 :"></a>ResourceManager需通过两个RPC协议与NodeManager和AppMaster交互,具体如下 :</h2><ul>
+<li><strong>ResourceTracker :</strong> NodeManager通过该RPC协议向ResourceManager注册、汇报节点健康状况和Container运行状态，并领取ResourceManager下达的命令，这些命令包括重新初始化、清理Container等，在该RPC协议中，ResourceManager扮演RPCServer的角色，而NodeManager扮演RPCClient的角色，换句话说，NodeManager与ResourceManager之间采用了“pull模型”,NodeManager总是周期性地主动向ResourceManager发起请求,并通过领取下达给自己的命令 </li>
+<li><strong>ApplicationMasterProtocol ：</strong>应用程序的ApplicationMaster通过该RPC协议向ResourceManager注册、申请资源和释放资源。在该协议中，ApplicationMaster扮演RPC Client的角色，而ResourceManager扮演RPC Server的角色，换句话说，ResourceManager与ApplicationMaster之间采用了“pull模型”</li>
+<li><strong>ApplicationClientProtocol ：</strong>应用程序的客户端通过该RPC协议向ResouceManager提交应用程序、查询应用程序状态和控制应用程序等。在该协议中，应用程序客户端扮演RPC Client的角色，而ResourceManager扮演RPC Server的角色</li>
+</ul>
+<h2 id="ResourceManager主要完成以下几个功能-："><a href="#ResourceManager主要完成以下几个功能-：" class="headerlink" title="ResourceManager主要完成以下几个功能 ："></a>ResourceManager主要完成以下几个功能 ：</h2><ul>
+<li>与客户端交互，处理来自客户端的请求</li>
+<li>启动和管理AppicationMaster，并在它运行失败时重新启动它</li>
+<li>管理NodeManager，接收来自NodeManager的资源汇报信息，并向NodeManager下达管理指令</li>
+<li>资源管理与调度，接收来自AppMaster的资源申请请求，并为之分配资源</li>
+</ul>
+<h1 id="ResouceManager内部架构"><a href="#ResouceManager内部架构" class="headerlink" title="ResouceManager内部架构"></a>ResouceManager内部架构</h1><h2 id="ResourceManager主要由以下几个部分组成-："><a href="#ResourceManager主要由以下几个部分组成-：" class="headerlink" title="ResourceManager主要由以下几个部分组成 ："></a>ResourceManager主要由以下几个部分组成 ：</h2><ul>
+<li><strong>用户交互模块。</strong>ResourceManager分别针对普通用户、管理员和Web提供了三种对外服务，<em>具体实现分别对应ClientRMService、AdminService和WebApp</em><ul>
+<li><strong>ClientRMService。</strong>ClientRMService是为普通用户提供的服务，它处理来自客户端各种RPC请求，比如提交应用程序、终止应用程序、获取应用程序运行状态等</li>
+<li><strong>AdminService。</strong>ResourceManager为管理员提供了一套独立的服务接口，以防止大量的普通用户请求使管理员发送的管理命令饿死，管理员可通过这些接口管理集群，比如动态更新节点列表、更新ACL列表、更新队列信息等</li>
+<li><strong>WebApp。</strong>为了更加友好地展示集群资源使用情况和应用程序运行状态等信息，YARN对外提供了一个WEB界面，这一部分是YARN仿照Haml开发的一个轻量级嵌入式Web框架</li>
+</ul>
+</li>
+<li><strong>NM管理模块。*</strong>该模块主要涉及以下组件 ：*<ul>
+<li><strong>NMLivelinessMonitor。</strong>监控NM是否活着，如果一个NodeManager在一定时间内未汇报心跳信息，则认为它死掉了，需将其从集群中移除</li>
+<li><strong>NodesListManager。</strong>维护正常节点和异常节点列表，管理exclude(类似于黑名单)和include(类似于白名单)节点列表，这两个列表均是在配置文件中设置的，可以动态加载</li>
+<li><strong>ResourceTrackerService。</strong>处理来自NodeManager的请求，主要包括注册和心跳两种请求，其中，注册时NodeManager启动时发生的行为，请求包中包含节点ID、可用的资源上限等信息；而心跳时周期性行为，包含各个Container运行状态，运行的Application列表、节点资源状况等信息，作为请求的应答，ResourceTrackerService可为NodeManager返回待释放的Container列表、Application列表等信息</li>
+</ul>
+</li>
+<li><strong>AM管理模块。*</strong>该模块主要涉及以下组件 ：*<ul>
+<li><strong>AMLivelinessMonitor。</strong>监控AM是否活着，如果一个ApplicationMaster在一定时间内未汇报心跳信息，则认为它死掉了，它上面所有正在运行的Container将被置为失败状态，而AM本身会被重新分配到另外一个节点上执行</li>
+<li><strong>ApplicationMasterLauncher。</strong>与某个NodeManager通信，要求它为某个应用程序启动ApplicationMaster</li>
+<li><strong>ApplicationMasterService。</strong>处理来自ApplicationMaster的请求，主要包括注册和心跳两种请求，其中，注册是ApplicationMaster启动时发生的行为，注册请求包中包含ApplicationMaster启动节点；对外RPC端口号和trackingURL等信息；而心跳而是周期性行为，汇报信息包含所需资源描述、待释放的Container列表、黑名单列表等，而AMS则为之返回新分配的Container、失败的Container、待抢占的Container列表等信息</li>
+</ul>
+</li>
+<li><strong>Application管理模块。*</strong>该模块主要涉及以下组件 ：*<ul>
+<li><strong>ApplicationACLsManager。</strong>管理应用程序访问权限，包含两部分权限 ：查看权限和修改权限。查看权限主要用于查看应用程序基本信息，而修改权限则主要用于修改应用程序优先级、杀死应用程序等</li>
+<li><strong>RMAppManager。</strong>管理应用程序的启动和关闭</li>
+<li><strong>ContainerAllocationExpirer。</strong>当AM收到RM新分配的一个Container后，必须在一定的时间内在对应的NM上启动该Container，否则RM将强制回收该Container，而一个已经分配的Container是否该被回收则是由ContainerAllocationExpirer决定和执行的</li>
+</ul>
+</li>
+<li><strong>状态机管理模块。</strong>ResourceManager使用有限状态机维护有状态对象的生命周期，状态机的引入使得YARN设计架构更加清晰。<em>ResourceManager共维护了四类状态机，分别是RMApp、RMAppAttempt、RMContainer和RMNode</em><ul>
+<li><strong>RMApp。</strong>RMApp维护了一个应用程序的整个运行周期，包括从启动到运行结束整个过程。由于一个Application的生命周期可能会启动多个Application运行实例，因此可认为，RMApp维护的是同一个Application启动的所有运行实例的生命周期</li>
+<li><strong>RMAppAttempt。</strong>一个应用程序可能启动多个实例，即一个实例运行失败后，可能再次启动一个重新运行，而每次启动称为一个运行尝试，用“RMAppAttempt”描述，RMAppAttempt维护了一次运行尝试的整个生命周期</li>
+<li><strong>RMContainer。</strong>RMContainer维护了一个Container的运行周期，包括从创建到运行结束整个过程。RM将资源封装成Container发送给应用程序的ApplicationMaster，而ApplicationMaster则会在Container描述的运行环境中启动任务，因此，从这个层面上讲，Container和任务的生命周期是一致的</li>
+<li><strong>RMNode。</strong>RMNode维护了一个NodeManager的生命周期，包括启动到运行结束整个过程</li>
+</ul>
+</li>
+<li><strong>安全管理模块。</strong>ResourceManager自带了非常全面的权限管理机制，主要由ClientTOAMSecretManager、ContainerTokenSecretManager、ApplicationTokenSecretManager等模块完成</li>
+<li><strong>资源分配模块。</strong>该模块主要涉及一个组件 – ResourceScheduler。ResourceScheduler是资源调度器，它按照一定的约束条件将集群中的资源分配给各个应用程序，当前主要考虑内存和CPU资源。ResourceScheduler是一个插拔式模块，YARN自带了一个批处理资源调度器 – FIFO和两个多用户调度器 – Fair Scheduler和Capacity Scheduler</li>
+</ul>
+<h1 id="ResouceManager内部架构图"><a href="#ResouceManager内部架构图" class="headerlink" title="ResouceManager内部架构图"></a>ResouceManager内部架构图</h1><p><img src="blog1.png" alt="ResourceManager内部架构图"></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Hadoop/" rel="tag"># Hadoop</a>
+              <a href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/" rel="tag"># 大数据</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2019/10/28/Yarn%E5%BA%95%E5%B1%82%E5%9F%BA%E7%A1%80%E5%BA%93/" rel="next" title="Yarn底层基础库">
+                  <i class="fa fa-chevron-left"></i> Yarn底层基础库
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/2019/10/29/ResourceManager%E7%AE%A1%E7%90%86/" rel="prev" title="ResourceManager管理">
+                  ResourceManager管理 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#ResourceManager基本职能"><span class="nav-number">1.</span> <span class="nav-text">ResourceManager基本职能</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ResourceManager需通过两个RPC协议与NodeManager和AppMaster交互-具体如下"><span class="nav-number">1.1.</span> <span class="nav-text">ResourceManager需通过两个RPC协议与NodeManager和AppMaster交互,具体如下 :</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ResourceManager主要完成以下几个功能-："><span class="nav-number">1.2.</span> <span class="nav-text">ResourceManager主要完成以下几个功能 ：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ResouceManager内部架构"><span class="nav-number">2.</span> <span class="nav-text">ResouceManager内部架构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ResourceManager主要由以下几个部分组成-："><span class="nav-number">2.1.</span> <span class="nav-text">ResourceManager主要由以下几个部分组成 ：</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ResouceManager内部架构图"><span class="nav-number">3.</span> <span class="nav-text">ResouceManager内部架构图</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="site-author-image" itemprop="image" alt="SmallBird"
+    src="/images/xiaoniao.jpg">
+  <p class="site-author-name" itemprop="name">SmallBird</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">12</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/SmallBird6" title="GitHub &amp;rarr; https:&#x2F;&#x2F;github.com&#x2F;SmallBird6" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-globe"></i>
+      友情链接
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://smallbird6.gitee.io/smallbirdblog" title="http:&#x2F;&#x2F;smallbird6.gitee.io&#x2F;smallbirdblog" rel="noopener" target="_blank">SmallBird</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">SmallBird</span>
+</div>
+  <div class="theme-info">主题 – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

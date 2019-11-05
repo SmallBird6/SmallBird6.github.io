@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/xiaoniao.jpg">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/xiaoniao.jpg">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":true,"style":"default"},
+    back2top: {"enable":true,"sidebar":true,"scrollpercent":true},
+    bookmark: {"enable":true,"color":"#222","save":"manual"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="下载安装包Mysql安装包下载地址解压安装包,配置环境变量解压地址 : D:\Mysql\mysql-8.0.18-winx64">
+<meta name="keywords" content="Mysql,数据库">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Mysql8安装(Window系统)">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;10&#x2F;31&#x2F;Mysql8%E5%AE%89%E8%A3%85-Window%E7%B3%BB%E7%BB%9F&#x2F;index.html">
+<meta property="og:site_name" content="SmallBird&#96;s Blog">
+<meta property="og:description" content="下载安装包Mysql安装包下载地址解压安装包,配置环境变量解压地址 : D:\Mysql\mysql-8.0.18-winx64">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;10&#x2F;31&#x2F;Mysql8%E5%AE%89%E8%A3%85-Window%E7%B3%BB%E7%BB%9F&#x2F;blog1.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;10&#x2F;31&#x2F;Mysql8%E5%AE%89%E8%A3%85-Window%E7%B3%BB%E7%BB%9F&#x2F;blog2.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;10&#x2F;31&#x2F;Mysql8%E5%AE%89%E8%A3%85-Window%E7%B3%BB%E7%BB%9F&#x2F;blog3.png">
+<meta property="og:updated_time" content="2019-10-31T06:59:00.450Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;10&#x2F;31&#x2F;Mysql8%E5%AE%89%E8%A3%85-Window%E7%B3%BB%E7%BB%9F&#x2F;blog1.png">
+
+<link rel="canonical" href="http://yoursite.com/2019/10/31/Mysql8%E5%AE%89%E8%A3%85-Window%E7%B3%BB%E7%BB%9F/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>Mysql8安装(Window系统) | SmallBird`s Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">SmallBird`s Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">今春看又过，何日是归年?</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-首页">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-分类">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-标签">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-归档">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-关于">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/31/Mysql8%E5%AE%89%E8%A3%85-Window%E7%B3%BB%E7%BB%9F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/xiaoniao.jpg">
+      <meta itemprop="name" content="SmallBird">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="SmallBird`s Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Mysql8安装(Window系统)
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2019-10-31 14:57:04 / 修改时间：14:59:00" itemprop="dateCreated datePublished" datetime="2019-10-31T14:57:04+08:00">2019-10-31</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Mysql/" itemprop="url" rel="index">
+                    <span itemprop="name">Mysql</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="下载安装包"><a href="#下载安装包" class="headerlink" title="下载安装包"></a>下载安装包</h1><p><a href="https://dev.mysql.com/downloads/mysql/" target="_blank" rel="noopener">Mysql安装包下载地址</a></p><h1 id="解压安装包-配置环境变量"><a href="#解压安装包-配置环境变量" class="headerlink" title="解压安装包,配置环境变量"></a>解压安装包,配置环境变量</h1><p>解压地址 : D:\Mysql\mysql-8.0.18-winx64</p><a id="more"></a>
+
+<h2 id="环境变量配置"><a href="#环境变量配置" class="headerlink" title="环境变量配置 :"></a>环境变量配置 :</h2><h3 id="MYSQL-HOME"><a href="#MYSQL-HOME" class="headerlink" title="MYSQL_HOME"></a>MYSQL_HOME</h3><p><img src="blog1.png" alt="blog1"></p>
+<h3 id="PATH"><a href="#PATH" class="headerlink" title="PATH"></a>PATH</h3><p><img src="blog2.png" alt="blog2"></p>
+<h1 id="my-ini配置文件"><a href="#my-ini配置文件" class="headerlink" title="my.ini配置文件"></a>my.ini配置文件</h1><p>MYSQL_HOME路径下新建文件<code>my.ini</code>,写入 : </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">[mysql]</span><br><span class="line">; 设置mysql客户端默认字符集</span><br><span class="line">default-character-set=utf8</span><br><span class="line">[mysqld]</span><br><span class="line">;设置3306端口</span><br><span class="line">port = 3306</span><br><span class="line">; 设置mysql的安装目录(注: 写自己的安装目录)</span><br><span class="line">basedir=$&#123;MYSQL_HOME&#125;</span><br><span class="line">; 设置mysql数据库的数据的存放目录(注: 写自己的安装目录)</span><br><span class="line">datadir=$&#123;MYSQL_HOME&#125;\data</span><br><span class="line">; 允许最大连接数</span><br><span class="line">max_connections=200</span><br><span class="line">; 服务端使用的字符集默认为8比特编码的latin1字符集</span><br><span class="line">character-set-server=utf8</span><br><span class="line">; 创建新表时将使用的默认存储引擎</span><br><span class="line">default-storage-engine=INNODB</span><br></pre></td></tr></table></figure>
+
+<h1 id="管理员身份运行CMD"><a href="#管理员身份运行CMD" class="headerlink" title="管理员身份运行CMD"></a>管理员身份运行CMD</h1><p>打开“开始”菜单 –&gt; 进入“所有程序–附件”中 –&gt; 找到到命令提示符 –&gt; 右键点击命令提示符 –&gt; 选择“以管理员权限运行”</p>
+<p><img src="blog3.png" alt="blog3"></p>
+<h1 id="安装并启动Mysql"><a href="#安装并启动Mysql" class="headerlink" title="安装并启动Mysql"></a>安装并启动Mysql</h1><h2 id="进入Mysql安装目录bin目录下"><a href="#进入Mysql安装目录bin目录下" class="headerlink" title="进入Mysql安装目录bin目录下"></a>进入Mysql安装目录bin目录下</h2><h2 id="安装Mysql"><a href="#安装Mysql" class="headerlink" title="安装Mysql"></a>安装Mysql</h2><p><code>mysqld install</code></p>
+<h2 id="初始化data目录"><a href="#初始化data目录" class="headerlink" title="初始化data目录"></a>初始化data目录</h2><p><code>mysqld --initialize-insecure</code></p>
+<h2 id="启动mysql"><a href="#启动mysql" class="headerlink" title="启动mysql"></a>启动mysql</h2><p><code>net start mysql</code></p>
+<h2 id="登录mysql-第一次登陆无须输入密码"><a href="#登录mysql-第一次登陆无须输入密码" class="headerlink" title="登录mysql(第一次登陆无须输入密码)"></a>登录mysql(第一次登陆无须输入密码)</h2><p><code>mysql -u root -p</code></p>
+<h2 id="修改ROOT用户密码"><a href="#修改ROOT用户密码" class="headerlink" title="修改ROOT用户密码"></a>修改ROOT用户密码</h2><p><code>alter user ‘root’@‘localhost’ identified with mysql_native_password by ‘new-password’;</code></p>
+<h2 id="为root用户授予所有权限"><a href="#为root用户授予所有权限" class="headerlink" title="为root用户授予所有权限"></a>为root用户授予所有权限</h2><p>从MySQL 8开始,不可以(隐式)使用GRANT命令创建用户,改用CREATE USER,然后使用GRANT声明：</p>
+<p><code>CREATE USER &#39;root&#39;@&#39;%&#39; IDENTIFIED BY &#39;root&#39;;</code></p>
+<p><code>GRANT ALL PRIVILEGES ON *.* TO &#39;root&#39;@&#39;%&#39; WITH GRANT OPTION;</code></p>
+<h2 id="刷新权限"><a href="#刷新权限" class="headerlink" title="刷新权限"></a>刷新权限</h2><p><code>flush privileges;</code></p>
+<h1 id="错误处理"><a href="#错误处理" class="headerlink" title="错误处理"></a>错误处理</h1><h2 id="删除Mysql"><a href="#删除Mysql" class="headerlink" title="删除Mysql"></a>删除Mysql</h2><p><code>mysqld --remove mysql</code></p>
+<h2 id="驱动类"><a href="#驱动类" class="headerlink" title="驱动类"></a>驱动类</h2><p><code>com.mysql.cj.jdbc.Driver</code></p>
+<h2 id="时区问题报错"><a href="#时区问题报错" class="headerlink" title="时区问题报错"></a>时区问题报错</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java.sql.SQLException: The server time zone value &apos;�й���׼ʱ��&apos; is unrecognized or represents more than one time zone. You must configure either the server or JDBC driver (via the serverTimezone configuration property) to use a more specifc time zone value if you want to utilize time zone support.</span><br></pre></td></tr></table></figure>
+
+<p>错误信息 : java.sql.SQLException: 服务器时区值’?? u±e×??±??未被识别或代表多个时区。如果希望利用时区支持，必须配置服务器或JDBC驱动程序(通过serverTimezone配置属性)，以使用更特殊的时区值</p>
+<p>解决办法 : JDBC连接的URL后面加上serverTimezone = GMT，如果需要使用GMT + 8时区，需要写成GMT％2B8</p>
+<p>更改后URL代码 : <code>jdbc:mysql://192.168.98.105:3306/henghe_iris?useUnicode=true&amp;characterEncoding=utf-8&amp;allowMultiQueries=true&amp;rewriteBatchedStatements=true&amp;serverTimezone=GMT</code></p>
+<h2 id="Navicat连接MySql8出现2059错误"><a href="#Navicat连接MySql8出现2059错误" class="headerlink" title="Navicat连接MySql8出现2059错误"></a>Navicat连接MySql8出现2059错误</h2><p>错误原因 : 首先出现2059这个错误的原因是因为在mysql8之前的版本中加密规则为mysql_native_password。但是在mysql8以后的加密规则为caching_sha2_password</p>
+<p>解决办法 : 将mysql用户登录的加密规则进行修改。修改为mysql_native_password</p>
+<p>执行命令 : <code>ALTER USER &#39;root&#39;@&#39;localhost&#39; IDENTIFIED BY &#39;root&#39; PASSWORD EXPIRE NEVER;</code></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Mysql/" rel="tag"># Mysql</a>
+              <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag"># 数据库</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2019/10/29/Kubernetes-Kubernetes%E6%90%AD%E5%BB%BAHadoop%E6%9C%8D%E5%8A%A1/" rel="next" title="Kubernetes-Kubernetes搭建Hadoop服务">
+                  <i class="fa fa-chevron-left"></i> Kubernetes-Kubernetes搭建Hadoop服务
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#下载安装包"><span class="nav-number">1.</span> <span class="nav-text">下载安装包</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#解压安装包-配置环境变量"><span class="nav-number">2.</span> <span class="nav-text">解压安装包,配置环境变量</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#环境变量配置"><span class="nav-number">2.1.</span> <span class="nav-text">环境变量配置 :</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#MYSQL-HOME"><span class="nav-number">2.1.1.</span> <span class="nav-text">MYSQL_HOME</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#PATH"><span class="nav-number">2.1.2.</span> <span class="nav-text">PATH</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#my-ini配置文件"><span class="nav-number">3.</span> <span class="nav-text">my.ini配置文件</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#管理员身份运行CMD"><span class="nav-number">4.</span> <span class="nav-text">管理员身份运行CMD</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#安装并启动Mysql"><span class="nav-number">5.</span> <span class="nav-text">安装并启动Mysql</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#进入Mysql安装目录bin目录下"><span class="nav-number">5.1.</span> <span class="nav-text">进入Mysql安装目录bin目录下</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装Mysql"><span class="nav-number">5.2.</span> <span class="nav-text">安装Mysql</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#初始化data目录"><span class="nav-number">5.3.</span> <span class="nav-text">初始化data目录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#启动mysql"><span class="nav-number">5.4.</span> <span class="nav-text">启动mysql</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#登录mysql-第一次登陆无须输入密码"><span class="nav-number">5.5.</span> <span class="nav-text">登录mysql(第一次登陆无须输入密码)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#修改ROOT用户密码"><span class="nav-number">5.6.</span> <span class="nav-text">修改ROOT用户密码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#为root用户授予所有权限"><span class="nav-number">5.7.</span> <span class="nav-text">为root用户授予所有权限</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#刷新权限"><span class="nav-number">5.8.</span> <span class="nav-text">刷新权限</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#错误处理"><span class="nav-number">6.</span> <span class="nav-text">错误处理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#删除Mysql"><span class="nav-number">6.1.</span> <span class="nav-text">删除Mysql</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#驱动类"><span class="nav-number">6.2.</span> <span class="nav-text">驱动类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#时区问题报错"><span class="nav-number">6.3.</span> <span class="nav-text">时区问题报错</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Navicat连接MySql8出现2059错误"><span class="nav-number">6.4.</span> <span class="nav-text">Navicat连接MySql8出现2059错误</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="site-author-image" itemprop="image" alt="SmallBird"
+    src="/images/xiaoniao.jpg">
+  <p class="site-author-name" itemprop="name">SmallBird</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">12</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/SmallBird6" title="GitHub &amp;rarr; https:&#x2F;&#x2F;github.com&#x2F;SmallBird6" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-globe"></i>
+      友情链接
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://smallbird6.gitee.io/smallbirdblog" title="http:&#x2F;&#x2F;smallbird6.gitee.io&#x2F;smallbirdblog" rel="noopener" target="_blank">SmallBird</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">SmallBird</span>
+</div>
+  <div class="theme-info">主题 – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

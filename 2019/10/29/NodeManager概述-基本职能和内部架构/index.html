@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/xiaoniao.jpg">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/xiaoniao.jpg">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":true,"style":"default"},
+    back2top: {"enable":true,"sidebar":true,"scrollpercent":true},
+    bookmark: {"enable":true,"color":"#222","save":"manual"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="概述NodeManager是运行在单个节点上的代理,它需要与应用程序的的ApplicationMaster和集群管理者ResourceManager交互: 从ApplicationMaster上接收有关Container的命令并执行之(比如启动,停止Container); 向ResourceManager汇报各个Container运行状态和节点健康状况,并领取有关Container的命令(比如清理">
+<meta name="keywords" content="Hadoop,大数据">
+<meta property="og:type" content="article">
+<meta property="og:title" content="NodeManager概述-基本职能和内部架构">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;10&#x2F;29&#x2F;NodeManager%E6%A6%82%E8%BF%B0-%E5%9F%BA%E6%9C%AC%E8%81%8C%E8%83%BD%E5%92%8C%E5%86%85%E9%83%A8%E6%9E%B6%E6%9E%84&#x2F;index.html">
+<meta property="og:site_name" content="SmallBird&#96;s Blog">
+<meta property="og:description" content="概述NodeManager是运行在单个节点上的代理,它需要与应用程序的的ApplicationMaster和集群管理者ResourceManager交互: 从ApplicationMaster上接收有关Container的命令并执行之(比如启动,停止Container); 向ResourceManager汇报各个Container运行状态和节点健康状况,并领取有关Container的命令(比如清理">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;10&#x2F;29&#x2F;NodeManager%E6%A6%82%E8%BF%B0-%E5%9F%BA%E6%9C%AC%E8%81%8C%E8%83%BD%E5%92%8C%E5%86%85%E9%83%A8%E6%9E%B6%E6%9E%84&#x2F;NodeManager1.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;10&#x2F;29&#x2F;NodeManager%E6%A6%82%E8%BF%B0-%E5%9F%BA%E6%9C%AC%E8%81%8C%E8%83%BD%E5%92%8C%E5%86%85%E9%83%A8%E6%9E%B6%E6%9E%84&#x2F;NodeManager2.png">
+<meta property="og:updated_time" content="2019-10-29T01:36:53.230Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;10&#x2F;29&#x2F;NodeManager%E6%A6%82%E8%BF%B0-%E5%9F%BA%E6%9C%AC%E8%81%8C%E8%83%BD%E5%92%8C%E5%86%85%E9%83%A8%E6%9E%B6%E6%9E%84&#x2F;NodeManager1.png">
+
+<link rel="canonical" href="http://yoursite.com/2019/10/29/NodeManager%E6%A6%82%E8%BF%B0-%E5%9F%BA%E6%9C%AC%E8%81%8C%E8%83%BD%E5%92%8C%E5%86%85%E9%83%A8%E6%9E%B6%E6%9E%84/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>NodeManager概述-基本职能和内部架构 | SmallBird`s Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">SmallBird`s Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">今春看又过，何日是归年?</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-首页">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-分类">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-标签">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-归档">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-关于">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/29/NodeManager%E6%A6%82%E8%BF%B0-%E5%9F%BA%E6%9C%AC%E8%81%8C%E8%83%BD%E5%92%8C%E5%86%85%E9%83%A8%E6%9E%B6%E6%9E%84/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/xiaoniao.jpg">
+      <meta itemprop="name" content="SmallBird">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="SmallBird`s Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          NodeManager概述-基本职能和内部架构
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2019-10-29 09:34:41 / 修改时间：09:36:53" itemprop="dateCreated datePublished" datetime="2019-10-29T09:34:41+08:00">2019-10-29</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Hadoop/" itemprop="url" rel="index">
+                    <span itemprop="name">Hadoop</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>NodeManager是运行在单个节点上的代理,它需要与应用程序的的ApplicationMaster和集群管理者ResourceManager交互: 从ApplicationMaster上接收有关Container的命令并执行之(比如启动,停止Container); 向ResourceManager汇报各个Container运行状态和节点健康状况,并领取有关Container的命令(比如清理Container)执行之</p><a id="more"></a>
+<p>NodeManager是YARN中单个节点上的代理,它管理Hadoop集群中单个计算节点,功能包括与ResourceManager保持通信,管理Container的生命周期,监控每个Container的资源使用(内存,CPU等)情况,追踪节点健康状况,管理日志和不同应用程序用到的附属服务</p>
+<h1 id="NodeManager基本职能"><a href="#NodeManager基本职能" class="headerlink" title="NodeManager基本职能"></a>NodeManager基本职能</h1><p>NodeManager需通过两个RPC协议与ResourceManager服务和各个应用程序的ApplicationMaster交互<br><img src="NodeManager1.png" alt="NodeManager1.png"></p>
+<h2 id="ResourceTrackerProtocol协议"><a href="#ResourceTrackerProtocol协议" class="headerlink" title="ResourceTrackerProtocol协议"></a>ResourceTrackerProtocol协议</h2><p>NodeManager通过该RPC协议向ResourceManager注册,汇报节点健康状况和Container运行状态,并领取ResourceManager下达的命令,包括重新初始化,清理Container占用资源等.在该RPC协议中,ResourceManager扮演RPC Server的角色,而NodeManager扮演RPC Client的角色</p>
+<h3 id="ResourceTrackerProtocol协议主要提供了以下两个RPC函数"><a href="#ResourceTrackerProtocol协议主要提供了以下两个RPC函数" class="headerlink" title="ResourceTrackerProtocol协议主要提供了以下两个RPC函数"></a>ResourceTrackerProtocol协议主要提供了以下两个RPC函数</h3><p><strong>(1) registerNodeManager</strong></p>
+<p>NodeManager启动时通过该RPC函数向ResourceManager注册,注册信息由RegisterNodeManagerRequest封装的,包括如下三部分内容 :</p>
+<ul>
+<li>httpPort : 该NodeManager对外提供的HTTP端口号,ResourceManager会在界面上提供一个可直接访问NodeManager Web界面的超链接</li>
+<li>nodeId : 该NodeManager所在的host和对外的RPC端口号</li>
+<li>totalResource : 该NodeManager所在节点总的可分配资源,当前支持内存和虚拟CPU两种资源,管理员可通过参数yarn.nodemanager.resource.cpu-vcores和yarn.nodemanager.resource.memory-mb配置</li>
+</ul>
+<p>ResourceManager将通过registerNodeManager函数向NodeManager返回一个RegisterNodeManagerResponse类型的对象,主要包含以下信息 :</p>
+<ul>
+<li>MasterKey : 新生成的Container Token和Node Token的Master Key</li>
+<li>NodeAction : ResourceManager向该NodeManager返回的下一步操作,主要包括NORMAL,RESYNC,SHUTDOWN三种,分别表示正常,重新同步信息和停止运行</li>
+<li>rmIdentifier : ResourceManager的标示符,NodeManager通过该标识符判断ApplicationMaster发送的Container来自原始的还是新启动的ResourceManager</li>
+<li>diagnosticsMessage : NodeManager注册失败时,将收到一段诊断信息,告知具体的失败原因</li>
+</ul>
+<p><strong>(2) nodeHeartbeat</strong></p>
+<p>NodeManager启动后,定期通过该RPC函数向ResourceManager汇报Container运行信息和节点健康状况,并领取新的命令,比如杀死一个Container</p>
+<h2 id="ContainerManagementProtocol协议"><a href="#ContainerManagementProtocol协议" class="headerlink" title="ContainerManagementProtocol协议"></a>ContainerManagementProtocol协议</h2><p>应用程序的ApplicationMaster通过该RPC协议向NodeManager发起针对Container的相关操作,包括启动Container,杀死Container,获取Container</p>
+<p>ContainerManagementProtocol协议主要提供了以下三个RPC函数 : </p>
+<ul>
+<li>startContainer : ApplicationMaster通过该RPC要求NodeManager启动一个Contaienr.该函数有一个StartContainerRequest类型的参数,封装了Container启动所需的本地资源,环境变量,执行命令,Token等信息.如果Container启动成功,则该函数返回一个StartContainerResponse对象</li>
+<li>stopContainer : ApplicationMaster通过该RPC要求NodeManager停止(杀死)一个Container.该函数有一个StopContainerRequest类型的参数,用于指定待杀死的Container ID.如果Container被成功杀死,则该函数返回一个StopContainerResponse对象</li>
+<li>getContainerStatus : ApplicationMaster通过该RPC获取一个Container的运行状态.该函数参数类型为GetContainerStatusRequest,封装了目标Container的ID,返回值为封装了Container当前运行状态的类型为GetContainerStatusResponse的对象</li>
+</ul>
+<h1 id="NodeManager内部架构"><a href="#NodeManager内部架构" class="headerlink" title="NodeManager内部架构"></a>NodeManager内部架构</h1><p><strong>NodeManager内部组织结构和主要模块</strong></p>
+<ul>
+<li>NodeStatusUpdater : NodeStatusUpdater是NodeManager与ResourceManager通信的唯一通道</li>
+<li>ContainerManager : ContainerManager是NodeManager中最核心组件之一,它由多个子组件构成,每个子组件负责一部分功能,协作共同管理运行在该节点上的所有Container.<em>各个子组件如下</em><ul>
+<li>RPC Server : 该RPC Server实现了ContainerManagementProtocol协议,是ApplicationMaster与NodeManager通信的唯一通道</li>
+<li>ResourceLocalizationService : 负责Container所需资源的本地化.它能够按照描述从HDFS上下载Container所需的文件资源,并尽量将它们分摊到各个磁盘上以防止出现访问热点.此外,它会为下载的文件添加访问控制限制,并为之施加合适的磁盘空间使用份额</li>
+<li>ContainersLauncher : 维护了一个线程池以并行完成Container相关操作,比如启动或者杀死Container,其中启动Container请求是由ApplicationMaster发起的,而杀死Container请求则可能来自ApplicationMaster或者ResourceManager</li>
+<li>AuxServices : NodeManager允许用户通过配置附属服务的方式扩展自己的功能,这使得每个节点可以定制一些特定框架需要的服务</li>
+<li>ContainersMonitor : ContainersMonitor负责监控Container的资源使用量</li>
+<li>LogHandler : 一个可插拔组件,用户可通过它控制Container日志的保存方式,即是写到本地磁盘上还是将其打包后上传到一个文件系统中</li>
+<li>ContainerEventDispatcher : Container事件调度器,负责将ContainerEvent类型的事件调度给对应Application的状态机ApplicationImpl</li>
+<li>ApplicationEventDispatcher : Application事件调度器,负责将ApplicationEvent类型的事件调度给对应Application的状态机ApplicationImpl</li>
+</ul>
+</li>
+<li>ContainerExecutor : ContainerExecutor可与底层操作系统交互,安全存放Container需要的文件和目录,进而以一种安全的方式启动和清除Container对应的进程</li>
+<li>NodeHealthCheckerService : NodeHealthCheckerService通过周期性地运行一个自定义脚本和向磁盘写文件检查节点的健康状况,并将之通过NodeStatusUpdater传递给ResourceManager</li>
+<li>DeletionService : NodeManager将文件删除功能服务化,即提供一个专门的文件删除服务异步删除失效文件,这样可避免同步删除文件带来的性能开销</li>
+<li>Security : 安全模块是NodeManager中的一个重要模块,<em>包含两部分</em><ul>
+<li>ApplicationACLsManager : NodeManager需要为所有面向用户的API提供安全检查,如在Web UI上只能将Container日志显示给授权用户.该组件为每个应用程序维护了一个ACL列表,一旦收到类似请求后会利用该列表对其进行验证</li>
+<li>ContainerTokenSecretManager : 检查收到的各种访问请求的合法性,确保这些请求操作已被ResourceManager授权</li>
+</ul>
+</li>
+<li>WebServer : 通过Web界面向用户展示该节点上所有应用程序运行状态,Container列表,节点健康状态和Container产生的日志等信息</li>
+</ul>
+<p><img src="NodeManager2.png" alt="NodeManager2.png"></p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/Hadoop/" rel="tag"># Hadoop</a>
+              <a href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/" rel="tag"># 大数据</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2019/10/29/ResourceManager%E7%AE%A1%E7%90%86/" rel="next" title="ResourceManager管理">
+                  <i class="fa fa-chevron-left"></i> ResourceManager管理
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+                <a href="/2019/10/29/Kubernetes-%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5/" rel="prev" title="Kubernetes-基础概念">
+                  Kubernetes-基础概念 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#概述"><span class="nav-number">1.</span> <span class="nav-text">概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#NodeManager基本职能"><span class="nav-number">2.</span> <span class="nav-text">NodeManager基本职能</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ResourceTrackerProtocol协议"><span class="nav-number">2.1.</span> <span class="nav-text">ResourceTrackerProtocol协议</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ResourceTrackerProtocol协议主要提供了以下两个RPC函数"><span class="nav-number">2.1.1.</span> <span class="nav-text">ResourceTrackerProtocol协议主要提供了以下两个RPC函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ContainerManagementProtocol协议"><span class="nav-number">2.2.</span> <span class="nav-text">ContainerManagementProtocol协议</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#NodeManager内部架构"><span class="nav-number">3.</span> <span class="nav-text">NodeManager内部架构</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="site-author-image" itemprop="image" alt="SmallBird"
+    src="/images/xiaoniao.jpg">
+  <p class="site-author-name" itemprop="name">SmallBird</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">12</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/SmallBird6" title="GitHub &amp;rarr; https:&#x2F;&#x2F;github.com&#x2F;SmallBird6" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-globe"></i>
+      友情链接
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://smallbird6.gitee.io/smallbirdblog" title="http:&#x2F;&#x2F;smallbird6.gitee.io&#x2F;smallbirdblog" rel="noopener" target="_blank">SmallBird</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">SmallBird</span>
+</div>
+  <div class="theme-info">主题 – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
