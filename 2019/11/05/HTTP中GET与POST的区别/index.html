@@ -50,28 +50,32 @@
   };
 </script>
 
-  <meta property="og:type" content="website">
-<meta property="og:title" content="SmallBird&#96;s Blog">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;page&#x2F;2&#x2F;index.html">
+  <meta name="description" content="[转载文章]GET和POST是HTTP请求的两种基本方法最直观的区别就是GET把参数包含在URL中，POST通过request body传递参数">
+<meta name="keywords" content="Java,HTTP">
+<meta property="og:type" content="article">
+<meta property="og:title" content="HTTP中GET与POST的区别">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;05&#x2F;HTTP%E4%B8%ADGET%E4%B8%8EPOST%E7%9A%84%E5%8C%BA%E5%88%AB&#x2F;index.html">
 <meta property="og:site_name" content="SmallBird&#96;s Blog">
+<meta property="og:description" content="[转载文章]GET和POST是HTTP请求的两种基本方法最直观的区别就是GET把参数包含在URL中，POST通过request body传递参数">
 <meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-11-05T06:24:31.224Z">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://yoursite.com/page/2/">
+<link rel="canonical" href="http://yoursite.com/2019/11/05/HTTP%E4%B8%ADGET%E4%B8%8EPOST%E7%9A%84%E5%8C%BA%E5%88%AB/">
 
 
 <script id="page-configurations">
   // https://hexo.io/docs/variables.html
   CONFIG.page = {
     sidebar: "",
-    isHome: true,
-    isPost: false,
+    isHome: false,
+    isPost: true,
     isPage: false,
     isArchive: false
   };
 </script>
 
-  <title>SmallBird`s Blog</title>
+  <title>HTTP中GET与POST的区别 | SmallBird`s Blog</title>
   
 
 
@@ -179,11 +183,11 @@
             
 
   <div class="posts-expand">
-        
+      
   
   
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/28/Yarn%E5%BA%95%E5%B1%82%E5%9F%BA%E7%A1%80%E5%BA%93/">
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/05/HTTP%E4%B8%ADGET%E4%B8%8EPOST%E7%9A%84%E5%8C%BA%E5%88%AB/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/xiaoniao.jpg">
@@ -196,8 +200,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/10/28/Yarn%E5%BA%95%E5%B1%82%E5%9F%BA%E7%A1%80%E5%BA%93/" class="post-title-link" itemprop="url">Yarn底层基础库</a>
+          HTTP中GET与POST的区别
         </h1>
 
         <div class="post-meta">
@@ -208,7 +211,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2019-10-28 19:04:41 / 修改时间：19:15:49" itemprop="dateCreated datePublished" datetime="2019-10-28T19:04:41+08:00">2019-10-28</time>
+              <time title="创建时间：2019-11-05 14:15:01 / 修改时间：14:24:31" itemprop="dateCreated datePublished" datetime="2019-11-05T14:15:01+08:00">2019-11-05</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -216,13 +219,20 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Hadoop/" itemprop="url" rel="index">
-                    <span itemprop="name">Hadoop</span>
+                  <a href="/categories/Java/" itemprop="url" rel="index">
+                    <span itemprop="name">Java</span>
                   </a>
                 </span>
             </span>
 
           
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
 
         </div>
       </header>
@@ -233,190 +243,87 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p><em>YARN基础库是其他一切模块的基础,它的设计直接决定了YARN的稳定性和扩展性,YARN借用了MRV1的一些底层基础库,比如RPC库等,但因为引入了很多新的软件设计方式,所以它的基础库更多,包括直接使用了开源序列化框架Protocol Buffers和Apache Avro,自定义的服务库、事件库和状态机等</em></p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/10/28/Yarn%E5%BA%95%E5%B1%82%E5%9F%BA%E7%A1%80%E5%BA%93/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
+        <p><strong>[转载文章]</strong></p><p>GET和POST是HTTP请求的两种基本方法</p><p>最直观的区别就是GET把参数包含在URL中，POST通过request body传递参数</p><a id="more"></a>
+
+
+<p><strong>当你在面试中被问到这个问题,你轻轻松松的给出了一个“标准答案” :</strong></p>
+<ul>
+<li>GET在浏览器回退时是无害的，而POST会再次提交请求</li>
+<li>GET产生的URL地址可以被Bookmark，而POST不可以</li>
+<li>GET请求会被浏览器主动cache，而POST不会，除非手动设置</li>
+<li>GET请求只能进行url编码，而POST支持多种编码方式</li>
+<li>GET请求参数会被完整保留在浏览器历史记录里，而POST中的参数不会被保留</li>
+<li>GET请求在URL中传送的参数是有长度限制的，而POST么有</li>
+<li>对参数的数据类型，GET只接受ASCII字符，而POST没有限制</li>
+<li>GET比POST更不安全，因为参数直接暴露在URL上，所以不能用来传递敏感信息</li>
+<li>GET参数通过URL传递，POST放在Request body中</li>
+<li>（本标准答案参考自w3schools）</li>
+</ul>
+<p>“很遗憾，这不是我们要的回答！”，请告诉我真相。。。</p>
+<p>如果我告诉你GET和POST本质上没有区别你信吗？</p>
+<p>让我们扒下GET和POST的外衣，坦诚相见吧！</p>
+<p>GET和POST是什么？<code>HTTP协议中的两种发送请求的方法</code></p>
+<p>HTTP是什么？<code>HTTP是基于TCP/IP的关于数据如何在万维网中如何通信的协议</code></p>
+<p>HTTP的底层是TCP/IP。所以GET和POST的底层也是TCP/IP，也就是说，GET/POST都是TCP链接。GET和POST能做的事情是一样一样的。你要给GET加上request body，给POST带上url参数，技术上是完全行的通的</p>
+<p><strong>那么，“标准答案”里的那些区别是怎么回事？</strong></p>
+<p>在我大万维网世界中，TCP就像汽车，我们用TCP来运输数据，它很可靠，从来不会发生丢件少件的现象。但是如果路上跑的全是看起来一模一样的汽车，那这个世界看起来是一团混乱，送急件的汽车可能被前面满载货物的汽车拦堵在路上，整个交通系统一定会瘫痪。为了避免这种情况发生，交通规则HTTP诞生了。HTTP给汽车运输设定了好几个服务类别，有GET, POST, PUT, DELETE等等，HTTP规定，当执行GET请求的时候，要给汽车贴上GET的标签（设置method为GET），而且要求把传送的数据放在车顶上（url中）以方便记录。如果是POST请求，就要在车上贴上POST的标签，并把货物放在车厢里。当然，你也可以在GET的时候往车厢内偷偷藏点货物，但是这是很不光彩；也可以在POST的时候在车顶上也放一些数据，让人觉得傻乎乎的。HTTP只是个行为准则，而TCP才是GET和POST怎么实现的基本。</p>
+<p><strong>但是，我们只看到HTTP对GET和POST参数的传送渠道（url还是requrest body）提出了要求。“标准答案”里关于参数大小的限制又是从哪来的呢?</strong></p>
+<p>在我大万维网世界中，还有另一个重要的角色：运输公司。不同的浏览器（发起http请求）和服务器（接受http请求）就是不同的运输公司。 虽然理论上，你可以在车顶上无限的堆货物（url中无限加参数）。但是运输公司可不傻，装货和卸货也是有很大成本的，他们会限制单次运输量来控制风险，数据量太大对浏览器和服务器都是很大负担。业界不成文的规定是，（大多数）浏览器通常都会限制url长度在2K个字节，而（大多数）服务器最多处理64K大小的url。超过的部分，恕不处理。如果你用GET服务，在request body偷偷藏了数据，不同服务器的处理方式也是不同的，有些服务器会帮你卸货，读出数据，有些服务器直接忽略，所以，虽然GET可以带request body，也不能保证一定能被接收到哦。</p>
+<p>好了，现在你知道，GET和POST本质上就是TCP链接，并无差别。但是由于HTTP的规定和浏览器/服务器的限制，导致他们在应用过程中体现出一些不同。</p>
+<p>你以为本文就这么结束了？</p>
+<p>我们的大BOSS还等着出场呢。。。</p>
+<p>这位BOSS有多神秘？当你试图在网上找“GET和POST的区别”的时候，那些你会看到的搜索结果里，从没有提到他。他究竟是什么呢。。。</p>
+<p><strong>GET和POST还有一个重大区别，简单的说：</strong></p>
+<p>GET产生一个TCP数据包；POST产生两个TCP数据包</p>
+<p><strong>长的说：</strong></p>
+<p>对于GET方式的请求，浏览器会把http header和data一并发送出去，服务器响应200（返回数据）；</p>
+<p>而对于POST，浏览器先发送header，服务器响应100 continue，浏览器再发送data，服务器响应200 ok（返回数据）。</p>
+<p>也就是说，GET只需要汽车跑一趟就把货送到了，而POST得跑两趟，第一趟，先去和服务器打个招呼“嗨，我等下要送一批货来，你们打开门迎接我”，然后再回头把货送过去。</p>
+<p><em>因为POST需要两步，时间上消耗的要多一点，看起来GET比POST更有效。因此Yahoo团队有推荐用GET替换POST来优化网站性能。但这是一个坑！跳入需谨慎。为什么？</em></p>
+<ol>
+<li><p>GET与POST都有自己的语义，不能随便混用。</p>
+</li>
+<li><p>据研究，在网络环境好的情况下，发一次包的时间和发两次包的时间差别基本可以无视。而在网络环境差的情况下，两次包的TCP在验证数据包完整性上，有非常大的优点。</p>
+</li>
+<li><p>并不是所有浏览器都会在POST中发送两次包，Firefox就只发送一次。</p>
+</li>
+</ol>
+<p>作者：Larry<br>链接：<a href="https://zhuanlan.zhihu.com/p/22536382" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/22536382</a><br>来源：知乎<br>著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处</p>
+
     </div>
 
     
     
     
+
       <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
+          <div class="post-tags">
+              <a href="/tags/Java/" rel="tag"># Java</a>
+              <a href="/tags/HTTP/" rel="tag"># HTTP</a>
+          </div>
 
         
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/28/Hadoop-RPC%E6%9C%BA%E5%88%B6%E8%AF%A6%E8%A7%A3/">
 
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/xiaoniao.jpg">
-      <meta itemprop="name" content="SmallBird">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="SmallBird`s Blog">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/10/28/Hadoop-RPC%E6%9C%BA%E5%88%B6%E8%AF%A6%E8%A7%A3/" class="post-title-link" itemprop="url">Hadoop-RPC机制详解</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2019-10-28 16:20:42 / 修改时间：18:37:50" itemprop="dateCreated datePublished" datetime="2019-10-28T16:20:42+08:00">2019-10-28</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Hadoop/" itemprop="url" rel="index">
-                    <span itemprop="name">Hadoop</span>
-                  </a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p><em>网络通信模块是分布式系统中最底层的模块,他直接支撑了上层分布式环境下复杂的进程间通信逻辑,是所有分布式系统的基础。远程过程调用(RPC)是一种常用的分布式网络通信协议，他允许运行于一台计算机的程序调用另一台计算机的子程序，同时将网络的通信细节隐藏起来，使得用户无需额外地为这个交互作用编程，大大的简化了分布式程序开发</em></p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/10/28/Hadoop-RPC%E6%9C%BA%E5%88%B6%E8%AF%A6%E8%A7%A3/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2019/10/31/Mysql8%E5%AE%89%E8%A3%85-Window%E7%B3%BB%E7%BB%9F/" rel="next" title="Mysql8安装(Window系统)">
+                  <i class="fa fa-chevron-left"></i> Mysql8安装(Window系统)
+                </a>
             </div>
-          <!--/noindex-->
-        
-      
-    </div>
 
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
+            <span class="post-nav-divider"></span>
 
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/28/hello-world/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/xiaoniao.jpg">
-      <meta itemprop="name" content="SmallBird">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="SmallBird`s Blog">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2019/10/28/hello-world/" class="post-title-link" itemprop="url">Hello World</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2019-10-28 16:20:42 / 修改时间：18:33:19" itemprop="dateCreated datePublished" datetime="2019-10-28T16:20:42+08:00">2019-10-28</time>
-            </span>
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-folder-o"></i>
-              </span>
-              <span class="post-meta-item-text">分类于</span>
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/%E4%B8%AA%E4%BA%BA%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA/" itemprop="url" rel="index">
-                    <span itemprop="name">个人博客搭建</span>
-                  </a>
-                </span>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <h1 id="博客准备和搭建"><a href="#博客准备和搭建" class="headerlink" title="博客准备和搭建"></a>博客准备和搭建</h1><h2 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h2><h3 id="安装Git"><a href="#安装Git" class="headerlink" title="安装Git"></a>安装Git</h3><h3 id="安装Node-js"><a href="#安装Node-js" class="headerlink" title="安装Node.js"></a>安装Node.js</h3><p><a href="https://nodejs.org/en/" target="_blank" rel="noopener">下载Node.Js</a></p><p>Window用户使用安装程序进行安装.安装时,勾选<strong>Add to PATH</strong>选项</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/10/28/hello-world/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
+            <div class="post-nav-prev post-nav-item">
             </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
+          </div>
       </footer>
+    
   </article>
   
   
   
 
   </div>
-
-  
-  <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/"><i class="fa fa-angle-left" aria-label="上一页"></i></a><a class="page-number" href="/">1</a><span class="page-number current">2</span>
-  </nav>
-
 
 
           </div>
