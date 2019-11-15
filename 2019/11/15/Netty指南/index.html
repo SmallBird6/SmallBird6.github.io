@@ -50,15 +50,15 @@
   };
 </script>
 
-  <meta name="description" content="Netty 指南">
+  <meta name="description" content="Netty 指南为什么选择Netty?Netty是业界最流行的NIO框架之一,它的健壮性,功能,性能,可定制性和可扩展性在同类框架中都是首屈一指的,它已经得到成百上千的商用项目验证,例如Hadoop的RPC框架Avro就使用了Netty作为底层通信框架,其他还有业界主流的RPC框架,也使用Netty来构建高性能的异步通信能力">
 <meta name="keywords" content="Java,Netty">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Netty指南">
 <meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;15&#x2F;Netty%E6%8C%87%E5%8D%97&#x2F;index.html">
 <meta property="og:site_name" content="SmallBird&#96;s Blog">
-<meta property="og:description" content="Netty 指南">
+<meta property="og:description" content="Netty 指南为什么选择Netty?Netty是业界最流行的NIO框架之一,它的健壮性,功能,性能,可定制性和可扩展性在同类框架中都是首屈一指的,它已经得到成百上千的商用项目验证,例如Hadoop的RPC框架Avro就使用了Netty作为底层通信框架,其他还有业界主流的RPC框架,也使用Netty来构建高性能的异步通信能力">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-11-15T08:21:46.551Z">
+<meta property="og:updated_time" content="2019-11-15T10:17:04.331Z">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="http://yoursite.com/2019/11/15/Netty%E6%8C%87%E5%8D%97/">
@@ -211,7 +211,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2019-11-15 16:20:07 / 修改时间：16:21:46" itemprop="dateCreated datePublished" datetime="2019-11-15T16:20:07+08:00">2019-11-15</time>
+              <time title="创建时间：2019-11-15 16:20:07 / 修改时间：18:17:04" itemprop="dateCreated datePublished" datetime="2019-11-15T16:20:07+08:00">2019-11-15</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -243,7 +243,19 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="Netty-指南"><a href="#Netty-指南" class="headerlink" title="Netty 指南"></a>Netty 指南</h1>
+        <h1 id="Netty-指南"><a href="#Netty-指南" class="headerlink" title="Netty 指南"></a>Netty 指南</h1><h2 id="为什么选择Netty"><a href="#为什么选择Netty" class="headerlink" title="为什么选择Netty?"></a>为什么选择Netty?</h2><p>Netty是业界最流行的NIO框架之一,它的健壮性,功能,性能,可定制性和可扩展性在同类框架中都是首屈一指的,它已经得到成百上千的商用项目验证,例如Hadoop的RPC框架Avro就使用了Netty作为底层通信框架,其他还有业界主流的RPC框架,也使用Netty来构建高性能的异步通信能力</p><a id="more"></a>
+<p><strong>通过对Netty的分析,它的优点如下:</strong></p>
+<ul>
+<li>API使用简单,开发门槛低</li>
+<li>功能强大,预置了多种编解码功能,支持多种主流协议</li>
+<li>定制能力强,可以通过ChannelHandler对通信框架进行灵活地扩展</li>
+<li>性能高,通过与其他业界主流的NIO框架对比,Netty的综合性能最优</li>
+<li>成熟,稳定,Netty修复了已经发现的所有JDK NIO BUG,业务开发人员不需要在为NIO的BUG而烦恼</li>
+<li>社区活跃,版本迭代周期短,发现的BUG可以被及时修复,同时,更多的新功能会加入</li>
+<li>经历了大规模的商用应用考研,质量得到验证</li>
+</ul>
+<p>Netty逐渐成为了Java NIO编程的首选框架</p>
+<h2 id="Netty入门开发指南"><a href="#Netty入门开发指南" class="headerlink" title="Netty入门开发指南"></a>Netty入门开发指南</h2>
     </div>
 
     
@@ -306,7 +318,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Netty-指南"><span class="nav-number">1.</span> <span class="nav-text">Netty 指南</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Netty-指南"><span class="nav-number">1.</span> <span class="nav-text">Netty 指南</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么选择Netty"><span class="nav-number">1.1.</span> <span class="nav-text">为什么选择Netty?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Netty入门开发指南"><span class="nav-number">1.2.</span> <span class="nav-text">Netty入门开发指南</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
