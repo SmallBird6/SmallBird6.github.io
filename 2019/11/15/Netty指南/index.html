@@ -58,7 +58,7 @@
 <meta property="og:site_name" content="SmallBird&#96;s Blog">
 <meta property="og:description" content="Netty 指南为什么选择Netty?Netty是业界最流行的NIO框架之一,它的健壮性,功能,性能,可定制性和可扩展性在同类框架中都是首屈一指的,它已经得到成百上千的商用项目验证,例如Hadoop的RPC框架Avro就使用了Netty作为底层通信框架,其他还有业界主流的RPC框架,也使用Netty来构建高性能的异步通信能力">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-11-15T10:17:04.331Z">
+<meta property="og:updated_time" content="2019-11-19T06:44:45.763Z">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="http://yoursite.com/2019/11/15/Netty%E6%8C%87%E5%8D%97/">
@@ -209,10 +209,16 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2019-11-15 16:20:07 / 修改时间：18:17:04" itemprop="dateCreated datePublished" datetime="2019-11-15T16:20:07+08:00">2019-11-15</time>
+              <time title="创建时间：2019-11-15 16:20:07" itemprop="dateCreated datePublished" datetime="2019-11-15T16:20:07+08:00">2019-11-15</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-11-19 14:44:45" itemprop="dateModified" datetime="2019-11-19T14:44:45+08:00">2019-11-19</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
@@ -255,7 +261,10 @@
 <li>经历了大规模的商用应用考研,质量得到验证</li>
 </ul>
 <p>Netty逐渐成为了Java NIO编程的首选框架</p>
-<h2 id="Netty入门开发指南"><a href="#Netty入门开发指南" class="headerlink" title="Netty入门开发指南"></a>Netty入门开发指南</h2>
+<h2 id="Netty简介"><a href="#Netty简介" class="headerlink" title="Netty简介"></a>Netty简介</h2><p>Netty是一个异步事件驱动驱动的网络应用程序框架,用于快速开发可维护的高性能协议服务器和客户端</p>
+<p>Netty是一个NIO客户端服务器框架,可以快速轻松地开发网络应用程序,例如协议服务器和客户端.它极大地简化了TCP和UDP套接字服务器等网络编程</p>
+<p>“快速简便”并不意味着最终的应用程序将遭受可维护性或性能问题的困扰.Netty经过精心设计,结合了许多协议(例如FTP,SMTP,HTTP以及各种基于二进制和文本的旧式协议)的实施经验.结果,Netty成功地找到了一种无需妥协即可轻松实现开发,性能,稳定性和灵活性的方法</p>
+
     </div>
 
     
@@ -318,7 +327,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Netty-指南"><span class="nav-number">1.</span> <span class="nav-text">Netty 指南</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么选择Netty"><span class="nav-number">1.1.</span> <span class="nav-text">为什么选择Netty?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Netty入门开发指南"><span class="nav-number">1.2.</span> <span class="nav-text">Netty入门开发指南</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Netty-指南"><span class="nav-number">1.</span> <span class="nav-text">Netty 指南</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么选择Netty"><span class="nav-number">1.1.</span> <span class="nav-text">为什么选择Netty?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Netty简介"><span class="nav-number">1.2.</span> <span class="nav-text">Netty简介</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
