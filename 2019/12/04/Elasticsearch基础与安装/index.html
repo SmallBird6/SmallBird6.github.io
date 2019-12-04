@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.0.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/xiaoniao.jpg">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/xiaoniao.jpg">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
+
+
+<script id="hexo-configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '7.5.0',
+    exturl: false,
+    sidebar: {"position":"left","display":"post","offset":12,"onmobile":false},
+    copycode: {"enable":true,"show_result":true,"style":"default"},
+    back2top: {"enable":true,"sidebar":true,"scrollpercent":true},
+    bookmark: {"enable":true,"color":"#222","save":"manual"},
+    fancybox: false,
+    mediumzoom: false,
+    lazyload: false,
+    pangu: false,
+    algolia: {
+      appID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    },
+    localsearch: {"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},
+    path: '',
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    translation: {
+      copy_button: '复制',
+      copy_success: '复制成功',
+      copy_failure: '复制失败'
+    },
+    sidebarPadding: 40
+  };
+</script>
+
+  <meta name="description" content="Elasticsearch介绍Elasticsearch概述Elasticsearch是一个基于Lucene的搜索服务器.它提供了一个分布式多用户能力的全文搜索引擎,基于RESTfulweb接口.Elasticsearch是用Java开发的,并作为Apache许可条款下的开放源码发布,是当前流行的企业级搜索引擎.设计用于云计算中,能够达到实时搜索,稳定,可靠,快速,安装使用方便.构建在全文检索开源">
+<meta name="keywords" content="大数据,Elasticsearch">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Elasticsearch基础与安装">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;04&#x2F;Elasticsearch%E5%9F%BA%E7%A1%80%E4%B8%8E%E5%AE%89%E8%A3%85&#x2F;index.html">
+<meta property="og:site_name" content="SmallBird&#96;s Blog">
+<meta property="og:description" content="Elasticsearch介绍Elasticsearch概述Elasticsearch是一个基于Lucene的搜索服务器.它提供了一个分布式多用户能力的全文搜索引擎,基于RESTfulweb接口.Elasticsearch是用Java开发的,并作为Apache许可条款下的开放源码发布,是当前流行的企业级搜索引擎.设计用于云计算中,能够达到实时搜索,稳定,可靠,快速,安装使用方便.构建在全文检索开源">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2019-12-04T10:02:26.253Z">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://yoursite.com/2019/12/04/Elasticsearch%E5%9F%BA%E7%A1%80%E4%B8%8E%E5%AE%89%E8%A3%85/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome: false,
+    isPost: true,
+    isPage: false,
+    isArchive: false
+  };
+</script>
+
+  <title>Elasticsearch基础与安装 | SmallBird`s Blog</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-meta">
+
+    <div>
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">SmallBird`s Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+        <p class="site-subtitle">今春看又过，何日是归年?</p>
+  </div>
+
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+</div>
+
+
+<nav class="site-nav">
+  
+  <ul id="menu" class="menu">
+        <li class="menu-item menu-item-首页">
+
+    <a href="/" rel="section"><i class="fa fa-fw fa-home"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-分类">
+
+    <a href="/categories/" rel="section"><i class="fa fa-fw fa-th"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-标签">
+
+    <a href="/tags/" rel="section"><i class="fa fa-fw fa-tags"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-归档">
+
+    <a href="/archives/" rel="section"><i class="fa fa-fw fa-archive"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-关于">
+
+    <a href="/about/" rel="section"><i class="fa fa-fw fa-user"></i>关于</a>
+
+  </li>
+  </ul>
+
+</nav>
+</div>
+    </header>
+
+    
+  <a role="button" class="book-mark-link book-mark-link-fixed"></a>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content">
+            
+
+  <div class="posts-expand">
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/04/Elasticsearch%E5%9F%BA%E7%A1%80%E4%B8%8E%E5%AE%89%E8%A3%85/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/xiaoniao.jpg">
+      <meta itemprop="name" content="SmallBird">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="SmallBird`s Blog">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Elasticsearch基础与安装
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2019-12-04 16:12:16 / 修改时间：18:02:26" itemprop="dateCreated datePublished" datetime="2019-12-04T16:12:16+08:00">2019-12-04</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/Elasticsearch/" itemprop="url" rel="index">
+                    <span itemprop="name">Elasticsearch</span>
+                  </a>
+                </span>
+            </span>
+
+          
+            <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv" style="display: none;">
+              <span class="post-meta-item-icon">
+                <i class="fa fa-eye"></i>
+              </span>
+              <span class="post-meta-item-text">阅读次数：</span>
+              <span id="busuanzi_value_page_pv"></span>
+            </span>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="Elasticsearch介绍"><a href="#Elasticsearch介绍" class="headerlink" title="Elasticsearch介绍"></a>Elasticsearch介绍</h1><h2 id="Elasticsearch概述"><a href="#Elasticsearch概述" class="headerlink" title="Elasticsearch概述"></a>Elasticsearch概述</h2><p>Elasticsearch是一个基于Lucene的搜索服务器.它提供了一个分布式多用户能力的全文搜索引擎,基于RESTfulweb接口.Elasticsearch是用Java开发的,并作为Apache许可条款下的开放源码发布,是当前流行的企业级搜索引擎.设计用于云计算中,能够达到实时搜索,稳定,可靠,快速,安装使用方便.构建在全文检索开源软件Lucene之上的Elasticsearch,不仅能对海量规模的数据完成分布式索引与检索,还能提供数据聚合分析.据国际权威的数据库产品评测机构DB Engines的统计,在2016年1月,Elasticsearch已超过Solr等,成为排名第一的搜索引擎类应用<br>概括来说: 基于RESTful标准的高扩展高可用的实时数据分析的全文搜索工具</p><a id="more"></a>
+<h2 id="Elasticsearch基本概念"><a href="#Elasticsearch基本概念" class="headerlink" title="Elasticsearch基本概念"></a>Elasticsearch基本概念</h2><h3 id="Cluster"><a href="#Cluster" class="headerlink" title="Cluster"></a>Cluster</h3><p><strong>ElasticSearch集群实际上是一个分布式系统，它需要具备两个特性:</strong></p>
+<p>1.高可用性</p>
+<ul>
+<li>服务可用性：允许有节点停止服务；</li>
+<li>数据可用性：部分节点丢失，不会丢失数据</li>
+</ul>
+<p>2.可扩展性</p>
+<ul>
+<li>随着请求量的不断提升，数据量的不断增长，系统可以将数据分布到其他节点，实现水平扩展</li>
+</ul>
+<p><strong>集群健康值</strong></p>
+<ul>
+<li>green：所有主要分片和复制分片都可用</li>
+<li>yellow：所有主要分片可用，但不是所有复制分片都可用</li>
+<li>red：不是所有的主要分片都可用</li>
+</ul>
+<h3 id="Node"><a href="#Node" class="headerlink" title="Node"></a>Node</h3><p><strong>节点是什么:</strong></p>
+<ul>
+<li>节点是一个ElasticSearch的实例，其本质就是一个Java进程；</li>
+<li>一台机器上可以运行多个ElasticSearch实例，但是建议在生产环境中一台机器上只运行一个ElasticSearch实例；</li>
+</ul>
+<p>Node 是组成集群的一个单独的服务器，用于存储数据并提供集群的搜索和索引功能。与集群一样，节点也有一个唯一名字，默认在节点启动时会生成一个uuid作为节点名</p>
+<p>该名字也可以手动指定。单个集群可以由任意数量的节点组成。如果只启动了一个节点，则会形成一个单节点的集群</p>
+<h3 id="Shard"><a href="#Shard" class="headerlink" title="Shard"></a>Shard</h3><p><code>Primary Shard(主分片)</code></p>
+<p>ES中的shard用来解决节点的容量上限问题,，通过主分片，可以将数据分布到集群内的所有节点之上</p>
+<p>主分片数是在索引创建时指定，后续不允许修改，除非Reindex</p>
+<p>一个索引中的数据保存在多个分片中(默认为一个)，相当于水平分表。一个分片便是一个Lucene 的实例，它本身就是一个完整的搜索引擎。我们的文档被存储和索引到分片内，但是应用程序是直接与索引而不是与分片进行交互</p>
+<p><strong>分片的设定</strong></p>
+<p>对于生产环境中分片的设定，需要提前做好容量规划，因为主分片数是在索引创建时预先设定的，后续无法修改。</p>
+<p><em>分片数设置过小</em></p>
+<ul>
+<li>导致后续无法增加节点进行水平扩展。</li>
+<li>导致分片的数据量太大，数据在重新分配时耗时；</li>
+</ul>
+<p><em>分片数设置过大</em></p>
+<ul>
+<li>影响搜索结果的相关性打分，影响统计结果的准确性；</li>
+<li>单个节点上过多的分片，会导致资源浪费，同时也会影响性能；</li>
+</ul>
+<h3 id="Replica"><a href="#Replica" class="headerlink" title="Replica"></a>Replica</h3><p><strong>副本有两个重要作用:</strong></p>
+<ol>
+<li>服务高可用：由于数据只有一份,如果一个node挂了,那存在上面的数据就都丢了,有了replicas,只要不是存储这条数据的node全挂了,数据就不会丢。因此分片副本不会与主分片分配到同一个节点</li>
+<li>扩展性能：通过在所有replicas上并行搜索提高搜索性能.由于replicas上的数据是近实时的(near realtime),因此所有replicas都能提供搜索功能,通过设置合理的replicas数量可以极高的提高搜索吞吐量</li>
+</ol>
+<h3 id="Index"><a href="#Index" class="headerlink" title="Index"></a>Index</h3><p>索引是具有某种相似特征文档的集合.例如,你可以有一个顾客数据索引,产品目录索引和订单数据索引.索引有一个名称(必须是小写得)标识,该名称用于对其中的文档执行索引,搜索,更新和删除操作时引用索引 {相当于关系数据库中的数据库}</p>
+<h3 id="Type"><a href="#Type" class="headerlink" title="Type"></a>Type</h3><p>索引和文档之间有个类型的概念 {相当于关系数据库中的Table}</p>
+<blockquote>
+<p>V6.0之前,单Index多Type</p>
+</blockquote>
+<blockquote>
+<p>V6.0-V7.0, 单Index单Type</p>
+</blockquote>
+<blockquote>
+<p>V7.0, 不建议使用Type</p>
+</blockquote>
+<blockquote>
+<p>V8.0, 完全不支持使用Type</p>
+</blockquote>
+<h3 id="Document"><a href="#Document" class="headerlink" title="Document"></a>Document</h3><p>Index里面单条的记录称为Document {相当于关系数据库中的行}</p>
+<h3 id="概念之间关系"><a href="#概念之间关系" class="headerlink" title="概念之间关系"></a>概念之间关系</h3><ul>
+<li>一个节点对应一个ES实例；</li>
+<li>一个节点可以有多个index（索引）;</li>
+<li>一个index可以有多个shard（分片）；</li>
+<li>一个分片是一个lucene index（此处的index是lucene自己的概念，与ES的index不是一回事）</li>
+</ul>
+<h3 id="文档源数据"><a href="#文档源数据" class="headerlink" title="文档源数据"></a>文档源数据</h3><p><code>_index</code> 文档所属索引名称</p>
+<p><code>_type</code> 文档所属类型名</p>
+<p><code>_id</code> Doc的主键。在写入的时候，可以指定该Doc的ID值，如果不指定，则系统自动生成一个唯一的UUID值</p>
+<p><code>_version</code> 文档的版本信息。Elasticsearch通过使用version来保证对文档的变更能以正确的顺序执行，避免乱序造成的数据丢失</p>
+<p><code>_seq_no</code> 严格递增的顺序号，每个文档一个，Shard级别严格递增，保证后写入的Doc的_seq_no大于先写入的Doc的_seq_no</p>
+<p><code>primary_term</code> primary_term也和<code>_seq_no</code> 一样是一个整数，每当Primary Shard发生重新分配时，比如重启，Primary选举等，_primary_term会递增1</p>
+<p><code>found</code> 查询的ID正确那么ture, 如果 Id 不正确，就查不到数据，found字段就是false</p>
+<p><code>_source</code> 文档的原始JSON数据</p>
+<h1 id="Elasticsearch安装"><a href="#Elasticsearch安装" class="headerlink" title="Elasticsearch安装"></a>Elasticsearch安装</h1><h2 id="下载安装包并解压"><a href="#下载安装包并解压" class="headerlink" title="下载安装包并解压"></a>下载安装包并解压</h2><ol>
+<li><a href="https://www.elastic.co/cn/downloads/elasticsearch" target="_blank" rel="noopener">官网下载安装包</a></li>
+<li>命令下载: {curl -L -O <a href="https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.2.0-linux-x86_64.tar.gz}" target="_blank" rel="noopener">https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.2.0-linux-x86_64.tar.gz}</a></li>
+<li>解压安装包: tar -zxvf elasticsearch-7.2.0-linux-x86_64.tar.gz</li>
+</ol>
+<h2 id="修改配置文件"><a href="#修改配置文件" class="headerlink" title="修改配置文件"></a>修改配置文件</h2><p><strong>elasticsearch.yml</strong></p>
+<ul>
+<li>cluster.name: 集群名字</li>
+<li>node.name: 节点名称</li>
+<li>network.host: 节点IP</li>
+<li>http.port: 端口号</li>
+<li>discovery.zen.ping.unicast.hosts: 集群节点</li>
+</ul>
+<h2 id="创建用户并启动"><a href="#创建用户并启动" class="headerlink" title="创建用户并启动"></a>创建用户并启动</h2><p><strong>创建用户:</strong> adduser es -p es<br><strong>更改elasticsearch安装包所属用户:</strong> chown -R es ./elasticsearch</p>
+<p><strong>切换用户:</strong> su es</p>
+<p><strong>启动:</strong> ${ES_HOME}/bin/elasticsearch<br><strong>验证:</strong> curl localhost:9200</p>
+<h2 id="启动错误处理"><a href="#启动错误处理" class="headerlink" title="启动错误处理"></a>启动错误处理</h2><h3 id="java-lang-RuntimeException-can-not-run-elasticsearch-as-root"><a href="#java-lang-RuntimeException-can-not-run-elasticsearch-as-root" class="headerlink" title="java.lang.RuntimeException: can not run elasticsearch as root"></a>java.lang.RuntimeException: can not run elasticsearch as root</h3><p>出于系统安全考虑设置的条件。由于ElasticSearch可以接收用户输入的脚本并且执行，为了系统安全考虑，建议创建一个单独的用户用来运行ElasticSearch</p>
+<h3 id="ERROR-3-bootstrap-checks-failed"><a href="#ERROR-3-bootstrap-checks-failed" class="headerlink" title="ERROR: [3] bootstrap checks failed"></a>ERROR: [3] bootstrap checks failed</h3><p><strong>[1]: max file descriptors [4096] for elasticsearch process is too low, increase to at least [65535]</strong></p>
+<p>文件描述符太低解决办法 :<br>切换root用户编辑文件/etc/security/limits.conf添加:<br>esuser soft nofile 65536 # soft表示为超过这个值就会有warnning<br>esuser hard nofile 65536 # hard则表示不能超过这个值 </p>
+<p>代表线程数 ,如果有错误[max number of threads [1024] for user [hadoop] is too low, increase to at least [2048]]需要添加此配置<br>esuser soft nproc 4096<br>esuser hard nproc 4096</p>
+<p>修改之后重新登陆新用户才能生效</p>
+<p><strong>[2]: max virtual memory areas vm.max_map_count [65530] is too low, increase to at least [262144]</strong></p>
+<p>进程的虚拟内存空间不足解决办法 :<br>切换root用户编辑文件/etc/sysctl.conf添加:<br>vm.max_map_count=655360<br>执行一下命令生效 : sysctl -p</p>
+<p><strong>[3]: the default discovery settings are unsuitable for production use; at least one of [discovery.seed_hosts, discovery.seed_providers, cluster.initial_master_nodes] must be configured</strong></p>
+<p>默认发现设置不适合生产使用; 必须至少配置[discovery.seed_hosts, discovery.seed_providers, cluster.initial_master_nodes]的一个<br>解决办法 :<br>打开配置文件elasticsearch.yml修改:<br>cluster.initial_master_nodes: [“node-1”, “node-2”] 修改为 cluster.initial_master_nodes: [“node-1”]</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/" rel="tag"># 大数据</a>
+              <a href="/tags/Elasticsearch/" rel="tag"># Elasticsearch</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-next post-nav-item">
+                <a href="/2019/11/15/Netty%E6%8C%87%E5%8D%97/" rel="next" title="Netty指南">
+                  <i class="fa fa-chevron-left"></i> Netty指南
+                </a>
+            </div>
+
+            <span class="post-nav-divider"></span>
+
+            <div class="post-nav-prev post-nav-item">
+            </div>
+          </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+  </div>
+
+
+          </div>
+          
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Elasticsearch介绍"><span class="nav-number">1.</span> <span class="nav-text">Elasticsearch介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Elasticsearch概述"><span class="nav-number">1.1.</span> <span class="nav-text">Elasticsearch概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Elasticsearch基本概念"><span class="nav-number">1.2.</span> <span class="nav-text">Elasticsearch基本概念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Cluster"><span class="nav-number">1.2.1.</span> <span class="nav-text">Cluster</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Node"><span class="nav-number">1.2.2.</span> <span class="nav-text">Node</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Shard"><span class="nav-number">1.2.3.</span> <span class="nav-text">Shard</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Replica"><span class="nav-number">1.2.4.</span> <span class="nav-text">Replica</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Index"><span class="nav-number">1.2.5.</span> <span class="nav-text">Index</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Type"><span class="nav-number">1.2.6.</span> <span class="nav-text">Type</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Document"><span class="nav-number">1.2.7.</span> <span class="nav-text">Document</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#概念之间关系"><span class="nav-number">1.2.8.</span> <span class="nav-text">概念之间关系</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#文档源数据"><span class="nav-number">1.2.9.</span> <span class="nav-text">文档源数据</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Elasticsearch安装"><span class="nav-number">2.</span> <span class="nav-text">Elasticsearch安装</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#下载安装包并解压"><span class="nav-number">2.1.</span> <span class="nav-text">下载安装包并解压</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#修改配置文件"><span class="nav-number">2.2.</span> <span class="nav-text">修改配置文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#创建用户并启动"><span class="nav-number">2.3.</span> <span class="nav-text">创建用户并启动</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#启动错误处理"><span class="nav-number">2.4.</span> <span class="nav-text">启动错误处理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#java-lang-RuntimeException-can-not-run-elasticsearch-as-root"><span class="nav-number">2.4.1.</span> <span class="nav-text">java.lang.RuntimeException: can not run elasticsearch as root</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ERROR-3-bootstrap-checks-failed"><span class="nav-number">2.4.2.</span> <span class="nav-text">ERROR: [3] bootstrap checks failed</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <img class="site-author-image" itemprop="image" alt="SmallBird"
+    src="/images/xiaoniao.jpg">
+  <p class="site-author-name" itemprop="name">SmallBird</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives">
+          <span class="site-state-item-count">15</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author motion-element">
+      <span class="links-of-author-item">
+        <a href="https://github.com/SmallBird6" title="GitHub &amp;rarr; https:&#x2F;&#x2F;github.com&#x2F;SmallBird6" rel="noopener" target="_blank"><i class="fa fa-fw fa-github"></i>GitHub</a>
+      </span>
+  </div>
+
+
+  <div class="links-of-blogroll motion-element">
+    <div class="links-of-blogroll-title">
+      <i class="fa fa-fw fa-globe"></i>
+      友情链接
+    </div>
+    <ul class="links-of-blogroll-list">
+        <li class="links-of-blogroll-item">
+          <a href="http://smallbird6.gitee.io/smallbirdblog" title="http:&#x2F;&#x2F;smallbird6.gitee.io&#x2F;smallbirdblog" rel="noopener" target="_blank">SmallBird</a>
+        </li>
+    </ul>
+  </div>
+
+      </div>
+        <div class="back-to-top motion-element">
+          <i class="fa fa-arrow-up"></i>
+          <span>0%</span>
+        </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">SmallBird</span>
+</div>
+  <div class="theme-info">主题 – <a href="https://theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Gemini</a>
+  </div>
+
+        
+<div class="busuanzi-count">
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <span class="post-meta-item" id="busuanzi_container_site_uv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv" style="display: none;">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+<script src="/js/utils.js"></script><script src="/js/motion.js"></script>
+<script src="/js/schemes/pisces.js"></script>
+<script src="/js/next-boot.js"></script><script src="/js/bookmark.js"></script>
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
