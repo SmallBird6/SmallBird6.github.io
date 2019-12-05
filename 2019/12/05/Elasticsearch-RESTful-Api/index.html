@@ -50,18 +50,22 @@
   };
 </script>
 
-  <meta name="description" content="Netty 指南为什么选择Netty?Netty是业界最流行的NIO框架之一,它的健壮性,功能,性能,可定制性和可扩展性在同类框架中都是首屈一指的,它已经得到成百上千的商用项目验证,例如Hadoop的RPC框架Avro就使用了Netty作为底层通信框架,其他还有业界主流的RPC框架,也使用Netty来构建高性能的异步通信能力">
-<meta name="keywords" content="Java,Netty">
+  <meta name="description" content="RESTful APIRest Representational State Transfer : 表述性状态转变 它首次出现在2000年Roy Fielding的博士论文中,Roy Fielding是HTTP规范的主要编写者之一.他在论文中提到：”我这篇文章的写作目的，就是想在符合架构原理的前提下,理解和评估以网络为基础的应用软件的架构设计,得到一个功能强、性能好、适宜通信的架构 REST指的是">
+<meta name="keywords" content="Elasticsearch,大数据">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Netty指南">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;15&#x2F;Netty%E6%8C%87%E5%8D%97&#x2F;index.html">
+<meta property="og:title" content="Elasticsearch RESTful Api">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;05&#x2F;Elasticsearch-RESTful-Api&#x2F;index.html">
 <meta property="og:site_name" content="SmallBird&#96;s Blog">
-<meta property="og:description" content="Netty 指南为什么选择Netty?Netty是业界最流行的NIO框架之一,它的健壮性,功能,性能,可定制性和可扩展性在同类框架中都是首屈一指的,它已经得到成百上千的商用项目验证,例如Hadoop的RPC框架Avro就使用了Netty作为底层通信框架,其他还有业界主流的RPC框架,也使用Netty来构建高性能的异步通信能力">
+<meta property="og:description" content="RESTful APIRest Representational State Transfer : 表述性状态转变 它首次出现在2000年Roy Fielding的博士论文中,Roy Fielding是HTTP规范的主要编写者之一.他在论文中提到：”我这篇文章的写作目的，就是想在符合架构原理的前提下,理解和评估以网络为基础的应用软件的架构设计,得到一个功能强、性能好、适宜通信的架构 REST指的是">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-11-19T06:44:45.763Z">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;05&#x2F;Elasticsearch-RESTful-Api&#x2F;Restful.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;05&#x2F;Elasticsearch-RESTful-Api&#x2F;restapi.png">
+<meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;05&#x2F;Elasticsearch-RESTful-Api&#x2F;http.png">
+<meta property="og:updated_time" content="2019-12-05T09:54:03.046Z">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;05&#x2F;Elasticsearch-RESTful-Api&#x2F;Restful.png">
 
-<link rel="canonical" href="http://yoursite.com/2019/11/15/Netty%E6%8C%87%E5%8D%97/">
+<link rel="canonical" href="http://yoursite.com/2019/12/05/Elasticsearch-RESTful-Api/">
 
 
 <script id="page-configurations">
@@ -75,7 +79,7 @@
   };
 </script>
 
-  <title>Netty指南 | SmallBird`s Blog</title>
+  <title>Elasticsearch RESTful Api | SmallBird`s Blog</title>
   
 
 
@@ -187,7 +191,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/15/Netty%E6%8C%87%E5%8D%97/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/05/Elasticsearch-RESTful-Api/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/xiaoniao.jpg">
@@ -200,7 +204,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Netty指南
+          Elasticsearch RESTful Api
         </h1>
 
         <div class="post-meta">
@@ -209,24 +213,18 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2019-11-15 16:20:07" itemprop="dateCreated datePublished" datetime="2019-11-15T16:20:07+08:00">2019-11-15</time>
+              <time title="创建时间：2019-12-05 16:46:16 / 修改时间：17:54:03" itemprop="dateCreated datePublished" datetime="2019-12-05T16:46:16+08:00">2019-12-05</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-11-19 14:44:45" itemprop="dateModified" datetime="2019-11-19T14:44:45+08:00">2019-11-19</time>
-              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Netty/" itemprop="url" rel="index">
-                    <span itemprop="name">Netty</span>
+                  <a href="/categories/Elasticsearch/" itemprop="url" rel="index">
+                    <span itemprop="name">Elasticsearch</span>
                   </a>
                 </span>
             </span>
@@ -249,21 +247,197 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="Netty-指南"><a href="#Netty-指南" class="headerlink" title="Netty 指南"></a>Netty 指南</h1><h2 id="为什么选择Netty"><a href="#为什么选择Netty" class="headerlink" title="为什么选择Netty?"></a>为什么选择Netty?</h2><p>Netty是业界最流行的NIO框架之一,它的健壮性,功能,性能,可定制性和可扩展性在同类框架中都是首屈一指的,它已经得到成百上千的商用项目验证,例如Hadoop的RPC框架Avro就使用了Netty作为底层通信框架,其他还有业界主流的RPC框架,也使用Netty来构建高性能的异步通信能力</p><a id="more"></a>
-<p><strong>通过对Netty的分析,它的优点如下:</strong></p>
-<ul>
-<li>API使用简单,开发门槛低</li>
-<li>功能强大,预置了多种编解码功能,支持多种主流协议</li>
-<li>定制能力强,可以通过ChannelHandler对通信框架进行灵活地扩展</li>
-<li>性能高,通过与其他业界主流的NIO框架对比,Netty的综合性能最优</li>
-<li>成熟,稳定,Netty修复了已经发现的所有JDK NIO BUG,业务开发人员不需要在为NIO的BUG而烦恼</li>
-<li>社区活跃,版本迭代周期短,发现的BUG可以被及时修复,同时,更多的新功能会加入</li>
-<li>经历了大规模的商用应用考研,质量得到验证</li>
+        <h1 id="RESTful-API"><a href="#RESTful-API" class="headerlink" title="RESTful API"></a>RESTful API</h1><p><img src="Restful.png" alt="Restful.png"></p><h2 id="Rest"><a href="#Rest" class="headerlink" title="Rest"></a>Rest</h2><ul>
+<li>Representational State Transfer : 表述性状态转变</li>
+<li>它首次出现在2000年Roy Fielding的博士论文中,Roy Fielding是HTTP规范的主要编写者之一.他在论文中提到：”我这篇文章的写作目的，就是想在符合架构原理的前提下,理解和评估以网络为基础的应用软件的架构设计,得到一个功能强、性能好、适宜通信的架构</li>
+<li>REST指的是一组架构约束条件和原则.如果一个架构符合REST的约束条件和原则,我们就称它为RESTful架构</li>
+</ul><a id="more"></a>
+
+<h2 id="RESTful"><a href="#RESTful" class="headerlink" title="RESTful"></a>RESTful</h2><ul>
+<li>RESTful是一种常见的REST应用,是遵循REST风格的web服务,REST式的web服务是一种ROA(面向资源的架构)</li>
+<li>它使用典型的HTTP方法,诸如GET,POST.DELETE,PUT来实现资源的获取,添加,修改,删除等操作.即通过HTTP动词来实现资源的状态扭转</li>
 </ul>
-<p>Netty逐渐成为了Java NIO编程的首选框架</p>
-<h2 id="Netty简介"><a href="#Netty简介" class="headerlink" title="Netty简介"></a>Netty简介</h2><p>Netty是一个异步事件驱动驱动的网络应用程序框架,用于快速开发可维护的高性能协议服务器和客户端</p>
-<p>Netty是一个NIO客户端服务器框架,可以快速轻松地开发网络应用程序,例如协议服务器和客户端.它极大地简化了TCP和UDP套接字服务器等网络编程</p>
-<p>“快速简便”并不意味着最终的应用程序将遭受可维护性或性能问题的困扰.Netty经过精心设计,结合了许多协议(例如FTP,SMTP,HTTP以及各种基于二进制和文本的旧式协议)的实施经验.结果,Netty成功地找到了一种无需妥协即可轻松实现开发,性能,稳定性和灵活性的方法</p>
+<p><img src="restapi.png" alt="restapi.png"></p>
+<h2 id="HTTP响应状态码"><a href="#HTTP响应状态码" class="headerlink" title="HTTP响应状态码"></a>HTTP响应状态码</h2><p>根据http响应码,判断请求状态,进而做出提醒</p>
+<p><img src="http.png" alt="http.png"></p>
+<h1 id="Mapping详解"><a href="#Mapping详解" class="headerlink" title="Mapping详解"></a>Mapping详解</h1><p>Mapping是ES中的一个很重要的内容,它类似于传统关系型数据库中的Table的Schema,用于定义一个索引(Index)的某个类型(Type)的数据的结构</p>
+<p>在ES中,我们无需手动创建type和mapping.在默认配置下,ES可以根据插入的数据自动地创建type及其mapping,也可以通过配置文件关闭ES的自动创建mapping功能</p>
+<p><strong>mapping中主要包括字段名,字段数据类型和字段索引类型这三个方面的定义</strong></p>
+<p><code>字段名</code>: 与传统数据库字段名作用一样,就是给字段起个唯一的名字,好让系统和用户能识别</p>
+<p><code>字段数据类型</code>:  定义该字段保存的数据的类型,不符合数据类型定义的数据不能保存到ES中</p>
+<p><em>ES所支持的数据类型</em></p>
+<table>
+<thead>
+<tr>
+<th>数据类型大类</th>
+<th>数据类型小类</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>String</td>
+<td>string</td>
+</tr>
+<tr>
+<td>Whole number</td>
+<td>byte,short,integer,long</td>
+</tr>
+<tr>
+<td>Floating point</td>
+<td>float,double</td>
+</tr>
+<tr>
+<td>Boolean</td>
+<td>boolean</td>
+</tr>
+<tr>
+<td>Date</td>
+<td>date</td>
+</tr>
+</tbody></table>
+<p><code>字段索引类型</code>: 索引是ES中的核心,ES之所以能够实现实时搜索,完全归功于Lucene这个优秀的Java开源索引.在传统数据库中,如果字段上建立索引,我们仍然能够以它作为查询条件进行查询,只不过查询速度慢点.而在ES中,字段如果不建立索引,则就不能以这个字段作为查询条件来搜索</p>
+<p><em>mapping中string类型字段可以配置的索引类型</em></p>
+<table>
+<thead>
+<tr>
+<th>索引类型</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>analyzed</td>
+<td>首先分析这个字符串,然后再建立索引.换言之,以全文形式索引此字段</td>
+</tr>
+<tr>
+<td>not_analyzed</td>
+<td>索引这个字段,使之可以被搜索,但是索引内容和指定值一样.不分析此字段</td>
+</tr>
+<tr>
+<td>no</td>
+<td>不索引这个字段.这个字段不能被搜索到</td>
+</tr>
+</tbody></table>
+<p>如果索引类型设置为analyzed,在表示ES会先对这个字段进行分析(一般来说,就是自然语言中的分词)</p>
+<h1 id="Elasticsearch-RESTful-API使用"><a href="#Elasticsearch-RESTful-API使用" class="headerlink" title="Elasticsearch RESTful API使用"></a>Elasticsearch RESTful API使用</h1><h2 id="查看集群健康信息"><a href="#查看集群健康信息" class="headerlink" title="查看集群健康信息"></a>查看集群健康信息</h2><p><code>curl -XGET &quot;localhost:9200/_cat/health?v&quot;</code></p>
+<p><em>返回结果:</em></p>
+<table>
+<thead>
+<tr>
+<th>epoch</th>
+<th>timestamp</th>
+<th>cluster</th>
+<th>status</th>
+<th>node.total</th>
+<th>node.data</th>
+<th>shards</th>
+<th>pri</th>
+<th>relo</th>
+<th>init</th>
+<th>unassign</th>
+<th>pending_tasks</th>
+<th>max_task_wait_time</th>
+<th>active_shards_percent</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1575537821</td>
+<td>09:23:41</td>
+<td>HengheElasticsearch</td>
+<td>green</td>
+<td>2</td>
+<td>2</td>
+<td>10</td>
+<td>5</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+<td>-</td>
+<td>100.0%</td>
+</tr>
+</tbody></table>
+<p><em>结果字段意义:</em></p>
+<ul>
+<li>cluster: 集群名.elasticsearch.yml配置文件中配置的cluster.name值</li>
+<li>status: 集群状态.集群共有green(一切正常),yellow(所有数据可用,但是某些复制没有被分配)或red(某些数据不可用)中的三种状态</li>
+<li>node.total: 集群中的节点数</li>
+<li>node.data: 集群中的数据节点数</li>
+<li>shards: 集群中总的分片数量</li>
+<li>pri: 主分片数量,英文全称为private</li>
+<li>relo: 复制分片总数</li>
+<li>unassign: 未指定的分片数量</li>
+</ul>
+<h2 id="查看集群中的节点信息"><a href="#查看集群中的节点信息" class="headerlink" title="查看集群中的节点信息"></a>查看集群中的节点信息</h2><p><code>curl -XGET &quot;localhost:9200/_cat/nodes?v&quot;</code></p>
+<p><em>返回结果:</em></p>
+<table>
+<thead>
+<tr>
+<th>ip</th>
+<th>heap.percent</th>
+<th>ram.percent</th>
+<th>cpu</th>
+<th>load_1m</th>
+<th>load_5m</th>
+<th>load_15m</th>
+<th>node.role</th>
+<th>master</th>
+<th>name</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>192.168.101.33</td>
+<td>48</td>
+<td>69</td>
+<td>4</td>
+<td>0.39</td>
+<td>0.44</td>
+<td>0.46</td>
+<td>mdi</td>
+<td>*</td>
+<td>henghe-033</td>
+</tr>
+<tr>
+<td>192.168.101.34</td>
+<td>46</td>
+<td>34</td>
+<td>1</td>
+<td>0.23</td>
+<td>0.25</td>
+<td>0.22</td>
+<td>mdi</td>
+<td>-</td>
+<td>henghe-034</td>
+</tr>
+</tbody></table>
+<h2 id="查看集群中的索引信息"><a href="#查看集群中的索引信息" class="headerlink" title="查看集群中的索引信息"></a>查看集群中的索引信息</h2><p><code>curl -XGET &quot;localhost:9200/_cat/indices?v&quot;</code></p>
+<p><em>返回结果:</em></p>
+<table>
+<thead>
+<tr>
+<th>health</th>
+<th>status</th>
+<th>index</th>
+<th>uuid</th>
+<th>pri</th>
+<th>rep</th>
+<th>docs.count</th>
+<th>docs.deleted</th>
+<th>store.size</th>
+<th>pri.store.size</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>green</td>
+<td>open</td>
+<td>index</td>
+<td>VULTFuhATu-2CJtghd51lQ</td>
+<td>5</td>
+<td>1</td>
+<td>0</td>
+<td>0</td>
+<td>2.5kb</td>
+<td>1.2kb</td>
+</tr>
+</tbody></table>
 
     </div>
 
@@ -273,25 +447,22 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/Java/" rel="tag"># Java</a>
-              <a href="/tags/Netty/" rel="tag"># Netty</a>
+              <a href="/tags/Elasticsearch/" rel="tag"># Elasticsearch</a>
+              <a href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/" rel="tag"># 大数据</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/2019/11/05/HTTP%E4%B8%ADGET%E4%B8%8EPOST%E7%9A%84%E5%8C%BA%E5%88%AB/" rel="next" title="HTTP中GET与POST的区别">
-                  <i class="fa fa-chevron-left"></i> HTTP中GET与POST的区别
+                <a href="/2019/12/05/Elasticsearch-Java-API/" rel="next" title="Elasticsearch Java API">
+                  <i class="fa fa-chevron-left"></i> Elasticsearch Java API
                 </a>
             </div>
 
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/2019/12/04/Elasticsearch%E5%9F%BA%E7%A1%80%E4%B8%8E%E5%AE%89%E8%A3%85/" rel="prev" title="Elasticsearch基础与安装">
-                  Elasticsearch基础与安装 <i class="fa fa-chevron-right"></i>
-                </a>
             </div>
           </div>
       </footer>
@@ -330,7 +501,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Netty-指南"><span class="nav-number">1.</span> <span class="nav-text">Netty 指南</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么选择Netty"><span class="nav-number">1.1.</span> <span class="nav-text">为什么选择Netty?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Netty简介"><span class="nav-number">1.2.</span> <span class="nav-text">Netty简介</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#RESTful-API"><span class="nav-number">1.</span> <span class="nav-text">RESTful API</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Rest"><span class="nav-number">1.1.</span> <span class="nav-text">Rest</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#RESTful"><span class="nav-number">1.2.</span> <span class="nav-text">RESTful</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HTTP响应状态码"><span class="nav-number">1.3.</span> <span class="nav-text">HTTP响应状态码</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Mapping详解"><span class="nav-number">2.</span> <span class="nav-text">Mapping详解</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Elasticsearch-RESTful-API使用"><span class="nav-number">3.</span> <span class="nav-text">Elasticsearch RESTful API使用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#查看集群健康信息"><span class="nav-number">3.1.</span> <span class="nav-text">查看集群健康信息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查看集群中的节点信息"><span class="nav-number">3.2.</span> <span class="nav-text">查看集群中的节点信息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查看集群中的索引信息"><span class="nav-number">3.3.</span> <span class="nav-text">查看集群中的索引信息</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
