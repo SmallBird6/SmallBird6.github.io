@@ -50,13 +50,13 @@
   };
 </script>
 
-  <meta name="description" content="Elasticsearch Java APIMaven依赖12345&amp;lt;dependency&amp;gt;    &amp;lt;groupId&amp;gt;org.elasticsearch.client&amp;lt;&#x2F;groupId&amp;gt;    &amp;lt;artifactId&amp;gt;transport&amp;lt;&#x2F;artifactId&amp;gt;    &amp;lt;version&amp;gt;6.6.1&amp;lt;&#x2F;version&amp;gt">
+  <meta name="description" content="Elasticsearch Java API">
 <meta name="keywords" content="Elasticsearch,大数据">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Elasticsearch Java API">
 <meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;05&#x2F;Elasticsearch-Java-API&#x2F;index.html">
 <meta property="og:site_name" content="SmallBird&#96;s Blog">
-<meta property="og:description" content="Elasticsearch Java APIMaven依赖12345&amp;lt;dependency&amp;gt;    &amp;lt;groupId&amp;gt;org.elasticsearch.client&amp;lt;&#x2F;groupId&amp;gt;    &amp;lt;artifactId&amp;gt;transport&amp;lt;&#x2F;artifactId&amp;gt;    &amp;lt;version&amp;gt;6.6.1&amp;lt;&#x2F;version&amp;gt">
+<meta property="og:description" content="Elasticsearch Java API">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:updated_time" content="2019-12-05T08:19:15.343Z">
 <meta name="twitter:card" content="summary">
@@ -243,7 +243,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="Elasticsearch-Java-API"><a href="#Elasticsearch-Java-API" class="headerlink" title="Elasticsearch Java API"></a>Elasticsearch Java API</h1><h2 id="Maven依赖"><a href="#Maven依赖" class="headerlink" title="Maven依赖"></a>Maven依赖</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;org.elasticsearch.client&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;transport&lt;/artifactId&gt;</span><br><span class="line">    &lt;version&gt;6.6.1&lt;/version&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure><a id="more"></a>
+        <h1 id="Elasticsearch-Java-API"><a href="#Elasticsearch-Java-API" class="headerlink" title="Elasticsearch Java API"></a>Elasticsearch Java API</h1><a id="more"></a><h2 id="Maven依赖"><a href="#Maven依赖" class="headerlink" title="Maven依赖"></a>Maven依赖</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;org.elasticsearch.client&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;transport&lt;/artifactId&gt;</span><br><span class="line">    &lt;version&gt;6.6.1&lt;/version&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
 
 <h2 id="createClient"><a href="#createClient" class="headerlink" title="createClient"></a>createClient</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">public final static String HOST = &quot;192.168.101.32&quot;;</span><br><span class="line"></span><br><span class="line">// http请求的端口是9200，客户端是9300</span><br><span class="line">public final static int PORT = 9300;</span><br><span class="line"></span><br><span class="line">public TransportClient getConnection() throws Exception &#123;</span><br><span class="line">    //设置集群名称</span><br><span class="line">    Settings settings = Settings.builder().put(&quot;cluster.name&quot;, &quot;elasticsearch&quot;).build();</span><br><span class="line">    //创建Client</span><br><span class="line">    TransportClient client = new PreBuiltTransportClient(settings)</span><br><span class="line">            .addTransportAddresses(new TransportAddress(InetAddress.getByName(HOST), PORT));</span><br><span class="line">    return client;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
