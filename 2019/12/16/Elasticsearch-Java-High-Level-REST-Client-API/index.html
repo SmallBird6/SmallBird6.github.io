@@ -50,18 +50,18 @@
   };
 </script>
 
-  <meta name="description" content="[转载文章]GET和POST是HTTP请求的两种基本方法">
-<meta name="keywords" content="Java,HTTP">
+  <meta name="description" content="Java High Level REST Client">
+<meta name="keywords" content="Elasticsearch,大数据">
 <meta property="og:type" content="article">
-<meta property="og:title" content="HTTP中GET与POST的区别">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;05&#x2F;HTTP%E4%B8%ADGET%E4%B8%8EPOST%E7%9A%84%E5%8C%BA%E5%88%AB&#x2F;index.html">
+<meta property="og:title" content="Elasticsearch Java High Level REST Client API">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;16&#x2F;Elasticsearch-Java-High-Level-REST-Client-API&#x2F;index.html">
 <meta property="og:site_name" content="SmallBird&#96;s Blog">
-<meta property="og:description" content="[转载文章]GET和POST是HTTP请求的两种基本方法">
+<meta property="og:description" content="Java High Level REST Client">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-11-05T06:24:31.224Z">
+<meta property="og:updated_time" content="2019-12-16T09:21:18.017Z">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://yoursite.com/2019/11/05/HTTP%E4%B8%ADGET%E4%B8%8EPOST%E7%9A%84%E5%8C%BA%E5%88%AB/">
+<link rel="canonical" href="http://yoursite.com/2019/12/16/Elasticsearch-Java-High-Level-REST-Client-API/">
 
 
 <script id="page-configurations">
@@ -75,7 +75,7 @@
   };
 </script>
 
-  <title>HTTP中GET与POST的区别 | SmallBird`s Blog</title>
+  <title>Elasticsearch Java High Level REST Client API | SmallBird`s Blog</title>
   
 
 
@@ -187,7 +187,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/05/HTTP%E4%B8%ADGET%E4%B8%8EPOST%E7%9A%84%E5%8C%BA%E5%88%AB/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/12/16/Elasticsearch-Java-High-Level-REST-Client-API/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/xiaoniao.jpg">
@@ -200,7 +200,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          HTTP中GET与POST的区别
+          Elasticsearch Java High Level REST Client API
         </h1>
 
         <div class="post-meta">
@@ -211,7 +211,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2019-11-05 14:15:01 / 修改时间：14:24:31" itemprop="dateCreated datePublished" datetime="2019-11-05T14:15:01+08:00">2019-11-05</time>
+              <time title="创建时间：2019-12-16 16:36:37 / 修改时间：17:21:18" itemprop="dateCreated datePublished" datetime="2019-12-16T16:36:37+08:00">2019-12-16</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -219,8 +219,8 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Java/" itemprop="url" rel="index">
-                    <span itemprop="name">Java</span>
+                  <a href="/categories/Elasticsearch/" itemprop="url" rel="index">
+                    <span itemprop="name">Elasticsearch</span>
                   </a>
                 </span>
             </span>
@@ -243,52 +243,21 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p><strong>[转载文章]</strong></p><p>GET和POST是HTTP请求的两种基本方法</p><a id="more"></a>
+        <h1 id="Java-High-Level-REST-Client"><a href="#Java-High-Level-REST-Client" class="headerlink" title="Java High Level REST Client"></a>Java High Level REST Client</h1><a id="more"></a><p>Java High Level REST Client在Java Low Level REST client之上工作。它的主要目标是公开API特定的方法，这些方法接受请求对象作为参数并返回响应对象，以便请求编组和响应反编组由客户机本身处理</p>
+<p>可以同步或异步地调用每个API。同步方法返回一个响应对象，而异步方法(名称以async后缀结尾)则需要一个监听器参数，一旦接收到响应或错误，监听器参数(在低级客户机管理的线程池中)就会被通知</p>
+<p>Java High Level REST Client依赖于Elasticsearch核心项目。它接受与TransportClient相同的请求参数，并返回相同的响应对象</p>
+<h1 id="Getting-Started"><a href="#Getting-Started" class="headerlink" title="Getting Started"></a>Getting Started</h1><blockquote>
+<p><a href="[https://artifacts.elastic.co/javadoc/org/elasticsearch/client/elasticsearch-rest-high-level-client/7.5.0/index.html](https://artifacts.elastic.co/javadoc/org/elasticsearch/client/elasticsearch-rest-high-level-client/7.5.0/index.html">JavaDoc</a></p>
+</blockquote>
+<h2 id="Maven-Repository"><a href="#Maven-Repository" class="headerlink" title="Maven Repository"></a>Maven Repository</h2><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;org.elasticsearch.client&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;elasticsearch-rest-high-level-client&lt;/artifactId&gt;</span><br><span class="line">    &lt;version&gt;7.5.0&lt;/version&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
 
-<p>最直观的区别就是GET把参数包含在URL中，POST通过request body传递参数</p>
-<p><strong>当你在面试中被问到这个问题,你轻轻松松的给出了一个“标准答案” :</strong></p>
-<ul>
-<li>GET在浏览器回退时是无害的，而POST会再次提交请求</li>
-<li>GET产生的URL地址可以被Bookmark，而POST不可以</li>
-<li>GET请求会被浏览器主动cache，而POST不会，除非手动设置</li>
-<li>GET请求只能进行url编码，而POST支持多种编码方式</li>
-<li>GET请求参数会被完整保留在浏览器历史记录里，而POST中的参数不会被保留</li>
-<li>GET请求在URL中传送的参数是有长度限制的，而POST么有</li>
-<li>对参数的数据类型，GET只接受ASCII字符，而POST没有限制</li>
-<li>GET比POST更不安全，因为参数直接暴露在URL上，所以不能用来传递敏感信息</li>
-<li>GET参数通过URL传递，POST放在Request body中</li>
-<li>（本标准答案参考自w3schools）</li>
-</ul>
-<p>“很遗憾，这不是我们要的回答！”，请告诉我真相。。。</p>
-<p>如果我告诉你GET和POST本质上没有区别你信吗？</p>
-<p>让我们扒下GET和POST的外衣，坦诚相见吧！</p>
-<p>GET和POST是什么？<code>HTTP协议中的两种发送请求的方法</code></p>
-<p>HTTP是什么？<code>HTTP是基于TCP/IP的关于数据如何在万维网中如何通信的协议</code></p>
-<p>HTTP的底层是TCP/IP。所以GET和POST的底层也是TCP/IP，也就是说，GET/POST都是TCP链接。GET和POST能做的事情是一样一样的。你要给GET加上request body，给POST带上url参数，技术上是完全行的通的</p>
-<p><strong>那么，“标准答案”里的那些区别是怎么回事？</strong></p>
-<p>在我大万维网世界中，TCP就像汽车，我们用TCP来运输数据，它很可靠，从来不会发生丢件少件的现象。但是如果路上跑的全是看起来一模一样的汽车，那这个世界看起来是一团混乱，送急件的汽车可能被前面满载货物的汽车拦堵在路上，整个交通系统一定会瘫痪。为了避免这种情况发生，交通规则HTTP诞生了。HTTP给汽车运输设定了好几个服务类别，有GET, POST, PUT, DELETE等等，HTTP规定，当执行GET请求的时候，要给汽车贴上GET的标签（设置method为GET），而且要求把传送的数据放在车顶上（url中）以方便记录。如果是POST请求，就要在车上贴上POST的标签，并把货物放在车厢里。当然，你也可以在GET的时候往车厢内偷偷藏点货物，但是这是很不光彩；也可以在POST的时候在车顶上也放一些数据，让人觉得傻乎乎的。HTTP只是个行为准则，而TCP才是GET和POST怎么实现的基本。</p>
-<p><strong>但是，我们只看到HTTP对GET和POST参数的传送渠道（url还是requrest body）提出了要求。“标准答案”里关于参数大小的限制又是从哪来的呢?</strong></p>
-<p>在我大万维网世界中，还有另一个重要的角色：运输公司。不同的浏览器（发起http请求）和服务器（接受http请求）就是不同的运输公司。 虽然理论上，你可以在车顶上无限的堆货物（url中无限加参数）。但是运输公司可不傻，装货和卸货也是有很大成本的，他们会限制单次运输量来控制风险，数据量太大对浏览器和服务器都是很大负担。业界不成文的规定是，（大多数）浏览器通常都会限制url长度在2K个字节，而（大多数）服务器最多处理64K大小的url。超过的部分，恕不处理。如果你用GET服务，在request body偷偷藏了数据，不同服务器的处理方式也是不同的，有些服务器会帮你卸货，读出数据，有些服务器直接忽略，所以，虽然GET可以带request body，也不能保证一定能被接收到哦。</p>
-<p>好了，现在你知道，GET和POST本质上就是TCP链接，并无差别。但是由于HTTP的规定和浏览器/服务器的限制，导致他们在应用过程中体现出一些不同。</p>
-<p>你以为本文就这么结束了？</p>
-<p>我们的大BOSS还等着出场呢。。。</p>
-<p>这位BOSS有多神秘？当你试图在网上找“GET和POST的区别”的时候，那些你会看到的搜索结果里，从没有提到他。他究竟是什么呢。。。</p>
-<p><strong>GET和POST还有一个重大区别，简单的说：</strong></p>
-<p>GET产生一个TCP数据包；POST产生两个TCP数据包</p>
-<p><strong>长的说：</strong></p>
-<p>对于GET方式的请求，浏览器会把http header和data一并发送出去，服务器响应200（返回数据）；</p>
-<p>而对于POST，浏览器先发送header，服务器响应100 continue，浏览器再发送data，服务器响应200 ok（返回数据）。</p>
-<p>也就是说，GET只需要汽车跑一趟就把货送到了，而POST得跑两趟，第一趟，先去和服务器打个招呼“嗨，我等下要送一批货来，你们打开门迎接我”，然后再回头把货送过去。</p>
-<p><em>因为POST需要两步，时间上消耗的要多一点，看起来GET比POST更有效。因此Yahoo团队有推荐用GET替换POST来优化网站性能。但这是一个坑！跳入需谨慎。为什么？</em></p>
-<ol>
-<li><p>GET与POST都有自己的语义，不能随便混用。</p>
-</li>
-<li><p>据研究，在网络环境好的情况下，发一次包的时间和发两次包的时间差别基本可以无视。而在网络环境差的情况下，两次包的TCP在验证数据包完整性上，有非常大的优点。</p>
-</li>
-<li><p>并不是所有浏览器都会在POST中发送两次包，Firefox就只发送一次。</p>
-</li>
-</ol>
-<p>作者：Larry<br>链接：<a href="https://zhuanlan.zhihu.com/p/22536382" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/22536382</a><br>来源：知乎<br>著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处</p>
+<h2 id="Initialization"><a href="#Initialization" class="headerlink" title="Initialization"></a>Initialization</h2><p>RestHighLevelClient实例需要一个REST低级客户端生成器来构建</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String ELASTICSEARCH_IP1 = <span class="string">"192.168.101.32"</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String ELASTICSEARCH_IP2 = <span class="string">"192.168.101.33"</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String ELASTICSEARCH_IP3 = <span class="string">"192.168.101.34"</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> ELASTICSEARCH_PORT = <span class="number">9200</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> String ELASTICSEARCH_SCHEME = <span class="string">"HTTP"</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> RestHighLevelClient <span class="title">createClient</span> <span class="params">()</span> </span>&#123;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">        RestHighLevelClient restHighLevelClient = <span class="keyword">new</span> RestHighLevelClient(</span><br><span class="line">                RestClient.builder(</span><br><span class="line">                        <span class="keyword">new</span> HttpHost(ELASTICSEARCH_IP1, ELASTICSEARCH_PORT, ELASTICSEARCH_SCHEME),</span><br><span class="line">                        <span class="keyword">new</span> HttpHost(ELASTICSEARCH_IP2, ELASTICSEARCH_PORT, ELASTICSEARCH_SCHEME),</span><br><span class="line">                        <span class="keyword">new</span> HttpHost(ELASTICSEARCH_IP3, ELASTICSEARCH_PORT, ELASTICSEARCH_SCHEME)</span><br><span class="line">                )</span><br><span class="line">        );</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> restHighLevelClient;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>关闭连接</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">closeClient</span> <span class="params">(RestHighLevelClient client)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line"></span><br><span class="line">        client.close();</span><br><span class="line"></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+
 
     </div>
 
@@ -298,25 +267,22 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/Java/" rel="tag"># Java</a>
-              <a href="/tags/HTTP/" rel="tag"># HTTP</a>
+              <a href="/tags/Elasticsearch/" rel="tag"># Elasticsearch</a>
+              <a href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/" rel="tag"># 大数据</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/2019/10/31/Mysql8%E5%AE%89%E8%A3%85-Window%E7%B3%BB%E7%BB%9F/" rel="next" title="Mysql8安装(Window系统)">
-                  <i class="fa fa-chevron-left"></i> Mysql8安装(Window系统)
+                <a href="/2019/12/05/Elasticsearch-RESTful-Api/" rel="next" title="Elasticsearch RESTful API使用">
+                  <i class="fa fa-chevron-left"></i> Elasticsearch RESTful API使用
                 </a>
             </div>
 
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/2019/11/15/Netty%E6%8C%87%E5%8D%97/" rel="prev" title="Netty指南">
-                  Netty指南 <i class="fa fa-chevron-right"></i>
-                </a>
             </div>
           </div>
       </footer>
@@ -355,6 +321,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Java-High-Level-REST-Client"><span class="nav-number">1.</span> <span class="nav-text">Java High Level REST Client</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Getting-Started"><span class="nav-number">2.</span> <span class="nav-text">Getting Started</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Maven-Repository"><span class="nav-number">2.1.</span> <span class="nav-text">Maven Repository</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Initialization"><span class="nav-number">2.2.</span> <span class="nav-text">Initialization</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
