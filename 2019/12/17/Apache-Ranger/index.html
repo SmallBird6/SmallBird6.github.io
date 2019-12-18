@@ -12,7 +12,7 @@
 
 <link rel="stylesheet" href="/css/main.css">
 
-
+<link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&display=swap&subset=latin,latin-ext">
 <link rel="stylesheet" href="/lib/font-awesome/css/font-awesome.min.css">
 
 
@@ -58,7 +58,7 @@
 <meta property="og:site_name" content="SmallBird&#96;s Blog">
 <meta property="og:description" content="随着Hadoop生态系统越来越成熟,其现在能够支持完整的数据湖(Data Lake,是指来自多个不同来源的结构化或者非结构化数据,有选择地收集在多个数据库或者存储系统上)架构.企业在Hadoop系统上可以在多客户环境中运行多个工作负载.由于需要支持多用户访问企业数据湖,而数据对于企业来说是重要的资产,为了保护这些各种不同类型的用户的数据,专门应对大数据的分布式用户安全架构应运而生">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-12-17T11:16:51.562Z">
+<meta property="og:updated_time" content="2019-12-18T03:25:32.201Z">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="http://yoursite.com/2019/12/17/Apache-Ranger/">
@@ -209,10 +209,16 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2019-12-17 14:38:03 / 修改时间：19:16:51" itemprop="dateCreated datePublished" datetime="2019-12-17T14:38:03+08:00">2019-12-17</time>
+              <time title="创建时间：2019-12-17 14:38:03" itemprop="dateCreated datePublished" datetime="2019-12-17T14:38:03+08:00">2019-12-17</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2019-12-18 11:25:32" itemprop="dateModified" datetime="2019-12-18T11:25:32+08:00">2019-12-18</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
@@ -245,7 +251,8 @@
       
         <p>随着Hadoop生态系统越来越成熟,其现在能够支持完整的数据湖(Data Lake,是指来自多个不同来源的结构化或者非结构化数据,有选择地收集在多个数据库或者存储系统上)架构.企业在Hadoop系统上可以在多客户环境中运行多个工作负载.由于需要支持多用户访问企业数据湖,而数据对于企业来说是重要的资产,为了保护这些各种不同类型的用户的数据,专门应对大数据的分布式用户安全架构应运而生</p><a id="more"></a>
 <h1 id="Apache-Ranger概述"><a href="#Apache-Ranger概述" class="headerlink" title="Apache Ranger概述"></a>Apache Ranger概述</h1><p>Apache Ranger是用于Hadoop的集中式安全管理解决方案,使管理员能够为HDFS和其他Hadoop平台组件创建和实施安全策略,并且为Hadoop的各个零部件提供细粒度的安全权限机制</p>
-<h2 id="Ranger技术概况"><a href="#Ranger技术概况" class="headerlink" title="Ranger技术概况"></a>Ranger技术概况</h2><p>Apache Ranger是一个集中式安全管理框架,提供集中管理的安全策略和监控用户访问,而且它可以对Hadoop生态系统上的组件如Hive,Hbase等进行细粒度的数据访问控制,并解决授权和审计问题.通过操作Ranger Web UI控制台,管理员可以轻松地通过配置策略来控制用户访问权限.Ranger还提供全面的日志审计,使用户不仅能够清晰地看到请求信息和数据的权限状态</p>
+<h2 id="Ranger技术概况"><a href="#Ranger技术概况" class="headerlink" title="Ranger技术概况"></a>Ranger技术概况</h2><p>Apache Ranger是一个集中式安全管理框架,提供集中管理的安全策略和监控用户访问,而且它可以对Hadoop生态系统上的组件如Hive,Hbase等进行细粒度的数据访问控制,并解决授权和审计问题.通过操作Ranger Web UI控制台,管理员可以轻松地通过配置策略来控制用户访问权限.Ranger还提供全面的日志审计,使用户不仅能够清晰地看到请求信息和数据的权限状态,而且还能够通过基于Web UI管理控制台来配置访问权限.正如你看到任何一个企业级安全项目解决方案一样,Ranger通过LDAP/AD(轻量目录访问协议)支持同步用户和组的信息</p>
+<p>为了实现用户和组的信息同步,Ranger集成了一个独立的守护进程模块,负责与LDAP/AD同步,并将策略分发到集群中的节点.轻量级代理程序嵌入在需要数据保护的单个Hadoop组件中,并使用这些组件中内置的安全挂钩.此代理还作为NameNode的一部分运行,为HDFS提供访问控制,并收集存储在审核日志中的请求详细信息.策略实施在本地层次节点上执行,这意味着Ranger在运行时间上没有显著的性能影响</p>
 
     </div>
 
