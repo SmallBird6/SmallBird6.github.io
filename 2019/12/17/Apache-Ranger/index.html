@@ -51,14 +51,14 @@
 </script>
 
   <meta name="description" content="随着Hadoop生态系统越来越成熟,其现在能够支持完整的数据湖(Data Lake,是指来自多个不同来源的结构化或者非结构化数据,有选择地收集在多个数据库或者存储系统上)架构.企业在Hadoop系统上可以在多客户环境中运行多个工作负载.由于需要支持多用户访问企业数据湖,而数据对于企业来说是重要的资产,为了保护这些各种不同类型的用户的数据,专门应对大数据的分布式用户安全架构应运而生">
-<meta name="keywords" content="大数据,Ranger">
+<meta name="keywords" content="Ranger,大数据">
 <meta property="og:type" content="article">
 <meta property="og:title" content="大数据安全之Apache Ranger">
 <meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;12&#x2F;17&#x2F;Apache-Ranger&#x2F;index.html">
 <meta property="og:site_name" content="SmallBird&#96;s Blog">
 <meta property="og:description" content="随着Hadoop生态系统越来越成熟,其现在能够支持完整的数据湖(Data Lake,是指来自多个不同来源的结构化或者非结构化数据,有选择地收集在多个数据库或者存储系统上)架构.企业在Hadoop系统上可以在多客户环境中运行多个工作负载.由于需要支持多用户访问企业数据湖,而数据对于企业来说是重要的资产,为了保护这些各种不同类型的用户的数据,专门应对大数据的分布式用户安全架构应运而生">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-12-19T03:32:07.647Z">
+<meta property="og:updated_time" content="2019-12-19T03:36:00.463Z">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="http://yoursite.com/2019/12/17/Apache-Ranger/">
@@ -217,7 +217,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-19 11:32:07" itemprop="dateModified" datetime="2019-12-19T11:32:07+08:00">2019-12-19</time>
+                <time title="修改时间：2019-12-19 11:36:00" itemprop="dateModified" datetime="2019-12-19T11:36:00+08:00">2019-12-19</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -262,7 +262,7 @@
 <h3 id="解压安装包"><a href="#解压安装包" class="headerlink" title="解压安装包"></a>解压安装包</h3><p><code>tar -zxvf ranger-2.0.0-admin.tar.gz -C /opt</code></p>
 <p><code>mv /opt/ranger-2.0.0-admin /opt/ranger-admin</code></p>
 <h3 id="Solr安装"><a href="#Solr安装" class="headerlink" title="Solr安装"></a>Solr安装</h3><p>修改配置文件 : <code>vim /opt/ranger-admin/contrib/solr_for_audit_setup/install.properties</code></p>
-<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">SOLR_INSTALL</span>=<span class="string">true</span></span><br><span class="line"><span class="comment"># solr线上下载路径SOLR_DOWNLOAD_URL=http://archive.apache.org/dist/lucene/solr/8.3.0/solr-8.3.0.tgz</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">SOLR_INSTALL</span>=<span class="string">true</span></span><br><span class="line"><span class="comment"># solr线上下载路径</span></span><br><span class="line"><span class="attr">SOLR_DOWNLOAD_URL</span>=<span class="string">http://archive.apache.org/dist/lucene/solr/8.3.0/solr-8.3.0.tgz</span></span><br></pre></td></tr></table></figure>
 
 <p>执行初始化脚本 : <code>sh /opt/ranger-admin/contrib/solr_for_audit_setup/setup.sh</code></p>
 <p>启动Solr : <code>sh /opt/solr/ranger_audit_server/scripts/start_solr.sh</code></p>
@@ -287,8 +287,8 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/" rel="tag"># 大数据</a>
               <a href="/tags/Ranger/" rel="tag"># Ranger</a>
+              <a href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/" rel="tag"># 大数据</a>
           </div>
 
         
