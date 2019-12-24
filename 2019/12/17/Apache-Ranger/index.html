@@ -58,7 +58,7 @@
 <meta property="og:site_name" content="SmallBird&#96;s Blog">
 <meta property="og:description" content="随着Hadoop生态系统越来越成熟,其现在能够支持完整的数据湖(Data Lake,是指来自多个不同来源的结构化或者非结构化数据,有选择地收集在多个数据库或者存储系统上)架构.企业在Hadoop系统上可以在多客户环境中运行多个工作负载.由于需要支持多用户访问企业数据湖,而数据对于企业来说是重要的资产,为了保护这些各种不同类型的用户的数据,专门应对大数据的分布式用户安全架构应运而生">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-12-20T03:05:51.389Z">
+<meta property="og:updated_time" content="2019-12-24T11:10:55.495Z">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="http://yoursite.com/2019/12/17/Apache-Ranger/">
@@ -217,7 +217,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-20 11:05:51" itemprop="dateModified" datetime="2019-12-20T11:05:51+08:00">2019-12-20</time>
+                <time title="修改时间：2019-12-24 19:10:55" itemprop="dateModified" datetime="2019-12-24T19:10:55+08:00">2019-12-24</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -294,6 +294,13 @@
 <li><p>Password : admin</p>
 </li>
 </ul>
+<h2 id="Ranger-Usersync安装"><a href="#Ranger-Usersync安装" class="headerlink" title="Ranger Usersync安装"></a>Ranger Usersync安装</h2><h3 id="解压安装包-1"><a href="#解压安装包-1" class="headerlink" title="解压安装包"></a>解压安装包</h3><p><code>tar -zxvf ranger-2.1.0-SNAPSHOT-usersync.tar.gz</code></p>
+<p><code>mv /opt/ranger-2.1.0-SNAPSHOT-usersync /opt/ranger-usersync</code></p>
+<h3 id="Usersync安装"><a href="#Usersync安装" class="headerlink" title="Usersync安装"></a>Usersync安装</h3><p>修改配置文件 : <code>vim /opt/ranger-usersync/install.properties</code></p>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Ranger Admin</span></span><br><span class="line"><span class="attr">POLICY_MGR_URL</span> = <span class="string">http://192.168.101.32:6080</span></span><br><span class="line"></span><br><span class="line"><span class="attr">SYNC_SOURCE</span> = <span class="string">unix</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 更新间隔</span></span><br><span class="line"><span class="attr">SYNC_INTERVAL</span> = <span class="string">1</span></span><br><span class="line"></span><br><span class="line"><span class="attr">unix_user</span>=<span class="string">usersync</span></span><br><span class="line"><span class="attr">unix_group</span>=<span class="string">usersync</span></span><br></pre></td></tr></table></figure>
+
+<p>执行初始化脚本 : <code>sh /opt/ranger-usersync/setup.sh</code></p>
+<p>启动Usersync : <code>ranger-usersync start</code></p>
 
     </div>
 
@@ -357,7 +364,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Apache-Ranger概述"><span class="nav-number">1.</span> <span class="nav-text">Apache Ranger概述</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Ranger技术概况"><span class="nav-number">1.1.</span> <span class="nav-text">Ranger技术概况</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Apache-Ranger安装"><span class="nav-number">2.</span> <span class="nav-text">Apache Ranger安装</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Ranger编译"><span class="nav-number">2.1.</span> <span class="nav-text">Ranger编译</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#编译准备"><span class="nav-number">2.1.1.</span> <span class="nav-text">编译准备</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#编译"><span class="nav-number">2.1.2.</span> <span class="nav-text">编译</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Ranger-Admin安装"><span class="nav-number">2.2.</span> <span class="nav-text">Ranger Admin安装</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#数据库初始化"><span class="nav-number">2.2.1.</span> <span class="nav-text">数据库初始化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解压安装包"><span class="nav-number">2.2.2.</span> <span class="nav-text">解压安装包</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Solr安装"><span class="nav-number">2.2.3.</span> <span class="nav-text">Solr安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Admin安装"><span class="nav-number">2.2.4.</span> <span class="nav-text">Admin安装</span></a></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Apache-Ranger概述"><span class="nav-number">1.</span> <span class="nav-text">Apache Ranger概述</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Ranger技术概况"><span class="nav-number">1.1.</span> <span class="nav-text">Ranger技术概况</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Apache-Ranger安装"><span class="nav-number">2.</span> <span class="nav-text">Apache Ranger安装</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Ranger编译"><span class="nav-number">2.1.</span> <span class="nav-text">Ranger编译</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#编译准备"><span class="nav-number">2.1.1.</span> <span class="nav-text">编译准备</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#编译"><span class="nav-number">2.1.2.</span> <span class="nav-text">编译</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Ranger-Admin安装"><span class="nav-number">2.2.</span> <span class="nav-text">Ranger Admin安装</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#数据库初始化"><span class="nav-number">2.2.1.</span> <span class="nav-text">数据库初始化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解压安装包"><span class="nav-number">2.2.2.</span> <span class="nav-text">解压安装包</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Solr安装"><span class="nav-number">2.2.3.</span> <span class="nav-text">Solr安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Admin安装"><span class="nav-number">2.2.4.</span> <span class="nav-text">Admin安装</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Ranger-Usersync安装"><span class="nav-number">2.3.</span> <span class="nav-text">Ranger Usersync安装</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#解压安装包-1"><span class="nav-number">2.3.1.</span> <span class="nav-text">解压安装包</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Usersync安装"><span class="nav-number">2.3.2.</span> <span class="nav-text">Usersync安装</span></a></li></ol></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
