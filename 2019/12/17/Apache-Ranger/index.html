@@ -58,7 +58,7 @@
 <meta property="og:site_name" content="SmallBird&#96;s Blog">
 <meta property="og:description" content="随着Hadoop生态系统越来越成熟,其现在能够支持完整的数据湖(Data Lake,是指来自多个不同来源的结构化或者非结构化数据,有选择地收集在多个数据库或者存储系统上)架构.企业在Hadoop系统上可以在多客户环境中运行多个工作负载.由于需要支持多用户访问企业数据湖,而数据对于企业来说是重要的资产,为了保护这些各种不同类型的用户的数据,专门应对大数据的分布式用户安全架构应运而生">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2019-12-30T12:23:49.014Z">
+<meta property="og:updated_time" content="2019-12-30T12:27:53.551Z">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="http://yoursite.com/2019/12/17/Apache-Ranger/">
@@ -217,7 +217,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2019-12-30 20:23:49" itemprop="dateModified" datetime="2019-12-30T20:23:49+08:00">2019-12-30</time>
+                <time title="修改时间：2019-12-30 20:27:53" itemprop="dateModified" datetime="2019-12-30T20:27:53+08:00">2019-12-30</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -311,20 +311,14 @@
 <p>执行之后,HDFS配置目录下会增加<code>ranger-hdfs-audit.xml</code>,<code>ranger-hdfs-security.xml</code>,<code>ranger-policymgr-ssl.xml</code>三个配置文件</p>
 </blockquote>
 <blockquote>
-<p><code>hdfs-site.xml</code>会增加配置</p>
-<property>
-    <name>dfs.permissions.enabled</name>
-    <value>true</value>
-</property>
-<property>
-    <name>dfs.namenode.inode.attributes.provider.class</name>
-    <value>org.apache.ranger.authorization.hadoop.RangerHdfsAuthorizer</value>
-</property>
+<p><code>hdfs-site.xml</code>增加配置项</p>
 </blockquote>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>dfs.permissions.enabled<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">value</span>&gt;</span>true<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">property</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>dfs.namenode.inode.attributes.provider.class<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">value</span>&gt;</span>org.apache.ranger.authorization.hadoop.RangerHdfsAuthorizer<span class="tag">&lt;/<span class="name">value</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">property</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
 <blockquote>
 <p>LIB包下会增加<code>ranger-hdfs-plugin-shim-1.2.0.jar</code>,<code>ranger-plugin-classloader-1.2.0.jar</code>和文件夹<code>ranger-hdfs-plugin-impl</code></p>
 </blockquote>
-<p>最后重启HDFS</p>
+<p><strong>重启HDFS</strong></p>
 
     </div>
 
