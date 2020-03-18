@@ -58,7 +58,7 @@
 <meta property="og:site_name" content="SmallBird&#96;s Blog">
 <meta property="og:description" content="Kerberos概述Kerberos技术概况">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-03-18T06:33:58.956Z">
+<meta property="og:updated_time" content="2020-03-18T10:16:16.071Z">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="http://yoursite.com/2020/03/18/Kerberos%E8%AE%A4%E8%AF%81/">
@@ -211,7 +211,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2020-03-18 10:54:13 / 修改时间：14:33:58" itemprop="dateCreated datePublished" datetime="2020-03-18T10:54:13+08:00">2020-03-18</time>
+              <time title="创建时间：2020-03-18 10:54:13 / 修改时间：18:16:16" itemprop="dateCreated datePublished" datetime="2020-03-18T10:54:13+08:00">2020-03-18</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -290,6 +290,14 @@
 </li>
 <li>KVNO ：Key Version Number，密钥版本号。当用户更改密码或管理员更新应用服务器的密钥时，这种修改将会使版本号增加</li>
 </ol>
+<h1 id="Kerberos使用"><a href="#Kerberos使用" class="headerlink" title="Kerberos使用"></a>Kerberos使用</h1><h2 id="名词解释"><a href="#名词解释" class="headerlink" title="名词解释"></a>名词解释</h2><ol>
+<li>KDC ：Key Distribution Center，密钥分配中心。Kerberos认证服务的密钥分配中心，负责Kerberos密钥的分发和存储，KDC中自带一个数据库用于Realm和Principal等数据的存储</li>
+<li>Principal ：Principal是Kerberos中参与认证的基本实体。通常来说Principal的含义有两种，一种用于表示Kerberos数据中的用户，一种用于表示一台特定的主机，可以认为Principal是代表了用户或主机的身份信息</li>
+<li>Principal的命名格式 ：通常Principal的命名格式为Name/Instance@Realm。其中Name代表了用户名或主机名，Instance是对Name指代用户或主机的进一步描述，可以是用户所在的主机或类型等信息。Instance可以省略，在未省略的情况下需要与Name使用”/“隔开</li>
+<li>Principal的认证 ：Kerberos中支持的用户认证方式有两种，一是由用户输入密码进行认证，二是将Principal导出至Keytab文件后使用Keytab文件面密码认证。对于一个Principal来说只能选择其中一种方式进行认证。由于Hadoop及其各组件中使用的机制原因，对于服务端的Kerberos认证只能使用Keytab文件进行认证</li>
+<li>Realm ：作用域，指认证系统所管理的范围，用于指定认证服务所影响的用户、主机以及服务的边界。用户与服务并不一定要属于同一个Realm，如果双方所属不同的Realm，并且这两个Realm直接存在信赖关系，就能实现交叉认证。一般来说，当一个用户或服务属于一个Realm时，它与认证服务器直接存在一个共享的Realm密钥。Realm的名称也是KDC中存储Principal的域数据库名。Realm在使用时对字母的大小写敏感，因此一般使用大写字母来区分，同时建议使用网络环境的DNS作为Realm。在输入Principal时，Realm可以省略，省略后默认使用本地的Realm。在未省略时使用”@”号与Name或Instance分隔</li>
+<li>Keytab ：保存了一个或多个Principal及其信息的密钥文件，由KDC管理员到处生成，用户可以直接进行免密码认证，因此需要注意密钥文件的文件权限</li>
+</ol>
 
     </div>
 
@@ -353,7 +361,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Kerberos概述"><span class="nav-number">1.</span> <span class="nav-text">Kerberos概述</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Kerberos技术概况"><span class="nav-number">1.1.</span> <span class="nav-text">Kerberos技术概况</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Kerberos架构"><span class="nav-number">1.2.</span> <span class="nav-text">Kerberos架构</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Kerberos概述"><span class="nav-number">1.</span> <span class="nav-text">Kerberos概述</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Kerberos技术概况"><span class="nav-number">1.1.</span> <span class="nav-text">Kerberos技术概况</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Kerberos架构"><span class="nav-number">1.2.</span> <span class="nav-text">Kerberos架构</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Kerberos使用"><span class="nav-number">2.</span> <span class="nav-text">Kerberos使用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#名词解释"><span class="nav-number">2.1.</span> <span class="nav-text">名词解释</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
