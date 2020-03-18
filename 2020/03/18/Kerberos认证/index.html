@@ -50,18 +50,18 @@
   };
 </script>
 
-  <meta name="description" content="Netty 指南为什么选择Netty?">
-<meta name="keywords" content="Java,Netty">
+  <meta name="description" content="Kerberos概述Kerberos技术概况">
+<meta name="keywords" content="大数据,Kerberos">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Netty指南">
-<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;11&#x2F;15&#x2F;Netty%E6%8C%87%E5%8D%97&#x2F;index.html">
+<meta property="og:title" content="Kerberos认证">
+<meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;03&#x2F;18&#x2F;Kerberos%E8%AE%A4%E8%AF%81&#x2F;index.html">
 <meta property="og:site_name" content="SmallBird&#96;s Blog">
-<meta property="og:description" content="Netty 指南为什么选择Netty?">
+<meta property="og:description" content="Kerberos概述Kerberos技术概况">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-03-11T09:53:00.045Z">
+<meta property="og:updated_time" content="2020-03-18T06:33:58.956Z">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://yoursite.com/2019/11/15/Netty%E6%8C%87%E5%8D%97/">
+<link rel="canonical" href="http://yoursite.com/2020/03/18/Kerberos%E8%AE%A4%E8%AF%81/">
 
 
 <script id="page-configurations">
@@ -75,7 +75,7 @@
   };
 </script>
 
-  <title>Netty指南 | SmallBird`s Blog</title>
+  <title>Kerberos认证 | SmallBird`s Blog</title>
   
 
 
@@ -187,7 +187,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/11/15/Netty%E6%8C%87%E5%8D%97/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/03/18/Kerberos%E8%AE%A4%E8%AF%81/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/xiaoniao.jpg">
@@ -200,7 +200,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          Netty指南
+          Kerberos认证
         </h1>
 
         <div class="post-meta">
@@ -209,24 +209,18 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
+              
 
-              <time title="创建时间：2019-11-15 16:20:07" itemprop="dateCreated datePublished" datetime="2019-11-15T16:20:07+08:00">2019-11-15</time>
+              <time title="创建时间：2020-03-18 10:54:13 / 修改时间：14:33:58" itemprop="dateCreated datePublished" datetime="2020-03-18T10:54:13+08:00">2020-03-18</time>
             </span>
-              <span class="post-meta-item">
-                <span class="post-meta-item-icon">
-                  <i class="fa fa-calendar-check-o"></i>
-                </span>
-                <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-03-11 17:53:00" itemprop="dateModified" datetime="2020-03-11T17:53:00+08:00">2020-03-11</time>
-              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Netty/" itemprop="url" rel="index">
-                    <span itemprop="name">Netty</span>
+                  <a href="/categories/Kerberos/" itemprop="url" rel="index">
+                    <span itemprop="name">Kerberos</span>
                   </a>
                 </span>
             </span>
@@ -249,21 +243,53 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="Netty-指南"><a href="#Netty-指南" class="headerlink" title="Netty 指南"></a>Netty 指南</h1><h2 id="为什么选择Netty"><a href="#为什么选择Netty" class="headerlink" title="为什么选择Netty?"></a>为什么选择Netty?</h2><a id="more"></a><p>Netty是业界最流行的NIO框架之一,它的健壮性,功能,性能,可定制性和可扩展性在同类框架中都是首屈一指的,它已经得到成百上千的商用项目验证,例如Hadoop的RPC框架Avro就使用了Netty作为底层通信框架,其他还有业界主流的RPC框架,也使用Netty来构建高性能的异步通信能力</p>
-<p><strong>通过对Netty的分析,它的优点如下:</strong></p>
+        <h1 id="Kerberos概述"><a href="#Kerberos概述" class="headerlink" title="Kerberos概述"></a>Kerberos概述</h1><h2 id="Kerberos技术概况"><a href="#Kerberos技术概况" class="headerlink" title="Kerberos技术概况"></a>Kerberos技术概况</h2><a id="more"></a><p>Kerberos技术是一种计算机网络授权协议，用于在非安全的网络环境下对个人通信进行加密认证。Kerberos协议认证过程的实现不依赖于主机操作系统的认证，无需基于主机地址的信任，不要求网络上所有主机的物理安全，并且是以假定网络上传送的数据包可以被任意的读取，修改和插入数据为前提设计的</p>
+<p><strong>Kerberos设计的目标如下：</strong></p>
 <ul>
-<li>API使用简单,开发门槛低</li>
-<li>功能强大,预置了多种编解码功能,支持多种主流协议</li>
-<li>定制能力强,可以通过ChannelHandler对通信框架进行灵活地扩展</li>
-<li>性能高,通过与其他业界主流的NIO框架对比,Netty的综合性能最优</li>
-<li>成熟,稳定,Netty修复了已经发现的所有JDK NIO BUG,业务开发人员不需要在为NIO的BUG而烦恼</li>
-<li>社区活跃,版本迭代周期短,发现的BUG可以被及时修复,同时,更多的新功能会加入</li>
-<li>经历了大规模的商用应用考研,质量得到验证</li>
+<li>用户的密码不能在网络上传输</li>
+<li>用户的密码绝不能以任何形式存储在客户机上，使用后必须立刻销毁</li>
+<li>用户的密码不应该以未加密的形式被存储</li>
+<li>用户在一次工作会话期间只会被要求输入一次密码，因此用户能够在这次会话期间透明的访问所有服务而无需重新输入密码</li>
+<li>认证信息的管理集中在认证服务器上，应用服务器上不能保留用户的身份验证信息，以此来实现以下的功能<ul>
+<li>管理员可以通过修改认证服务器的设置来对指定用户的账户进行修改，而不用修改应用服务器</li>
+<li>当用户修改密码时，将在所有服务器上生效</li>
+<li>没有需要保护的冗余信息</li>
+<li>不仅用户需要向应用服务器证明他们的身份，应用服务器在返回时也需要向客户端证明他们的真实性，实现双向验证</li>
+<li>在完成身份的验证后，客户端和服务器必须能够建立一个加密的连接，因此Kerberos需要为生成和交换加密密钥提供支持</li>
 </ul>
-<p>Netty逐渐成为了Java NIO编程的首选框架</p>
-<h2 id="Netty简介"><a href="#Netty简介" class="headerlink" title="Netty简介"></a>Netty简介</h2><p>Netty是一个异步事件驱动驱动的网络应用程序框架,用于快速开发可维护的高性能协议服务器和客户端</p>
-<p>Netty是一个NIO客户端服务器框架,可以快速轻松地开发网络应用程序,例如协议服务器和客户端.它极大地简化了TCP和UDP套接字服务器等网络编程</p>
-<p>“快速简便”并不意味着最终的应用程序将遭受可维护性或性能问题的困扰.Netty经过精心设计,结合了许多协议(例如FTP,SMTP,HTTP以及各种基于二进制和文本的旧式协议)的实施经验.结果,Netty成功地找到了一种无需妥协即可轻松实现开发,性能,稳定性和灵活性的方法</p>
+</li>
+</ul>
+<p>Kerberos通过定义用户和服务端所使用的认证身份(Principal)来进行访问控制，用户通过Kerberos客户端使用自己的Principal向认证服务器进行身份的认证，认证成功后服务器会将表示用户身份的票据(Ticket<br>)返回用户，在之后的通信过程中Kerberos客户端使用已认证的票据进行安全的通信</p>
+<h2 id="Kerberos架构"><a href="#Kerberos架构" class="headerlink" title="Kerberos架构"></a>Kerberos架构</h2><p>Kerberos的总体架构，由Kerberos服务器KDC、客户端(Client)和应用服务器{Server}组成，其中KDC包含了Authentication Service和Ticket Granting Service两种服务</p>
+<ol>
+<li>KDC ：Key Distribution Center，即密钥分发中心。就是通常所说的认证服务器，它是参与用户和服务认证的基本对象。由于他有密钥分配的功能并且可以作为服务接入，因此被称为密钥分发中心，简称KDC。KDC通常是一台单独的物理服务器，他可以从逻辑上分为3个部分：数据库(Database)、认证服务(Authentication Service)和票据授权服务(Ticket Granting Service)</li>
+<li>Database ：数据库，用于存放用户和服务的记录，Kerberos的数据库中使用Principal来命名和引用一条记录。Kerberos数据库中的记录包含以下内容 ：<ul>
+<li>记录所关联的Principal</li>
+<li>加密密钥和相关的KVNO</li>
+<li>与Principal关联的票据的最长有效期</li>
+<li>与Principal关联的票据的最长更新周期</li>
+<li>描述票据的参数或标志</li>
+<li>密码过期时间</li>
+<li>Principal的过期时间</li>
+</ul>
+</li>
+<li>Application Server ：应用服务器，例如指所有提供Hadoop以及相关服务的主机，应用服务器上需要安装Kerberos客户端，在相关服务中开启对Kerberos协议的支持，并且对服务所使用的Principl进行配置</li>
+<li>Client ：客户机，用户使用客户机来获得应用服务器提供的各项服务，客户机上需要安装Kerberos客户端。在使用时，用户需要先向KDC进行身份的认证，才能从应用服务器获得相应的服务</li>
+<li>AS ：Authentication Service，认证服务。认证服务是KDC中用于回复客户端最初的认证请求的部分，如果用户没有认证过，必须输入密码。在回应认证请求时，AS会授予一个特殊的被称为票据授权的票据(Ticket Granting Ticket)，简称TGT。如果用户确实是他们所声称的身份，他们就可以使用TGT在无须再次输入密码的情况下获得其他服务的票据</li>
+<li>TGS ：Ticket Granting Service，票据授权服务。票据授权服务是KDC中负责根据用户提交的有效TGT分配服务票据(Service Ticket)的组件，同时TGS保证向应用服务器请求资源的身份的真实性。TGS可以被视为一个应用服务器，提供服务票据的功能</li>
+<li>ST ：Service Ticket，服务票据，由KDC的TGS发放，任何一个应用(Application)都需要一张有效的服务票据才能访问。如果能正确接受ST，说明Client和Server之间的信任关系已经被建立。ST通常为一张数字加密的证书</li>
+<li>TGT ：Ticket Granting Ticket，票据授权票据，由KDC的AS发放。获得这样一张票据后，在申请其他应用的服务票据时，就不需要向KDC提交身份认证信息。TGT具有一定的有效期，到期后需要更新来续约</li>
+<li>Ticket ：票据。票据是客户端提交给应用服务器用于证明其身份真实性的。票据由认证服务器颁发，并使用所需要的服务端密钥加密。由于服务端密钥只存在于认证服务器与应用服务器之间，获取到该票据的客户端也无法知道服务端密钥，因为也无法对票据进行修改。一张票据中包含了以下信息 ： <ul>
+<li>请求用户的Principal(一般来说是用户名)</li>
+<li>用户所请求的服务Principal</li>
+<li>可以使用该票据的客户端IP地址(可选)</li>
+<li>票据的生效日期与时间(使用时间戳格式)</li>
+<li>票据的有效时间</li>
+<li>会话密钥(Session Key)<br>每张票据都会有过期时间(通常为10小时)，这是必要的。虽然认证服务器的管理员可以控制不再发布新的票据，但无法阻止用户使用已经发布的票据。因为认证服务器无法对已经发布的票据进行控制，所以过期时间的设置可以防止票据被滥用</li>
+</ul>
+</li>
+<li>KVNO ：Key Version Number，密钥版本号。当用户更改密码或管理员更新应用服务器的密钥时，这种修改将会使版本号增加</li>
+</ol>
 
     </div>
 
@@ -273,25 +299,22 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/Java/" rel="tag"># Java</a>
-              <a href="/tags/Netty/" rel="tag"># Netty</a>
+              <a href="/tags/%E5%A4%A7%E6%95%B0%E6%8D%AE/" rel="tag"># 大数据</a>
+              <a href="/tags/Kerberos/" rel="tag"># Kerberos</a>
           </div>
 
         
 
           <div class="post-nav">
             <div class="post-nav-next post-nav-item">
-                <a href="/2019/11/05/HTTP%E4%B8%ADGET%E4%B8%8EPOST%E7%9A%84%E5%8C%BA%E5%88%AB/" rel="next" title="HTTP中GET与POST的区别">
-                  <i class="fa fa-chevron-left"></i> HTTP中GET与POST的区别
+                <a href="/2020/02/10/Hadoop3-1-3%E5%AE%89%E8%A3%85%E8%AE%B0%E5%BD%95/" rel="next" title="Hadoop3.1.3安装记录(HA)">
+                  <i class="fa fa-chevron-left"></i> Hadoop3.1.3安装记录(HA)
                 </a>
             </div>
 
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/2019/12/04/Elasticsearch%E5%9F%BA%E7%A1%80%E4%B8%8E%E5%AE%89%E8%A3%85/" rel="prev" title="Elasticsearch基础与安装">
-                  Elasticsearch基础与安装 <i class="fa fa-chevron-right"></i>
-                </a>
             </div>
           </div>
       </footer>
@@ -330,7 +353,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Netty-指南"><span class="nav-number">1.</span> <span class="nav-text">Netty 指南</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#为什么选择Netty"><span class="nav-number">1.1.</span> <span class="nav-text">为什么选择Netty?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Netty简介"><span class="nav-number">1.2.</span> <span class="nav-text">Netty简介</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Kerberos概述"><span class="nav-number">1.</span> <span class="nav-text">Kerberos概述</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Kerberos技术概况"><span class="nav-number">1.1.</span> <span class="nav-text">Kerberos技术概况</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Kerberos架构"><span class="nav-number">1.2.</span> <span class="nav-text">Kerberos架构</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
