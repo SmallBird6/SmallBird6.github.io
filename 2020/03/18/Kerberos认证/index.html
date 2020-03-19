@@ -58,7 +58,7 @@
 <meta property="og:site_name" content="SmallBird&#96;s Blog">
 <meta property="og:description" content="Kerberos概述Kerberos技术概况">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-03-18T10:16:16.071Z">
+<meta property="og:updated_time" content="2020-03-19T08:10:17.558Z">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="http://yoursite.com/2020/03/18/Kerberos%E8%AE%A4%E8%AF%81/">
@@ -209,10 +209,16 @@
                 <i class="fa fa-calendar-o"></i>
               </span>
               <span class="post-meta-item-text">发表于</span>
-              
 
-              <time title="创建时间：2020-03-18 10:54:13 / 修改时间：18:16:16" itemprop="dateCreated datePublished" datetime="2020-03-18T10:54:13+08:00">2020-03-18</time>
+              <time title="创建时间：2020-03-18 10:54:13" itemprop="dateCreated datePublished" datetime="2020-03-18T10:54:13+08:00">2020-03-18</time>
             </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-03-19 16:10:17" itemprop="dateModified" datetime="2020-03-19T16:10:17+08:00">2020-03-19</time>
+              </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
                 <i class="fa fa-folder-o"></i>
@@ -296,7 +302,32 @@
 <li>Principal的命名格式 ：通常Principal的命名格式为Name/Instance@Realm。其中Name代表了用户名或主机名，Instance是对Name指代用户或主机的进一步描述，可以是用户所在的主机或类型等信息。Instance可以省略，在未省略的情况下需要与Name使用”/“隔开</li>
 <li>Principal的认证 ：Kerberos中支持的用户认证方式有两种，一是由用户输入密码进行认证，二是将Principal导出至Keytab文件后使用Keytab文件面密码认证。对于一个Principal来说只能选择其中一种方式进行认证。由于Hadoop及其各组件中使用的机制原因，对于服务端的Kerberos认证只能使用Keytab文件进行认证</li>
 <li>Realm ：作用域，指认证系统所管理的范围，用于指定认证服务所影响的用户、主机以及服务的边界。用户与服务并不一定要属于同一个Realm，如果双方所属不同的Realm，并且这两个Realm直接存在信赖关系，就能实现交叉认证。一般来说，当一个用户或服务属于一个Realm时，它与认证服务器直接存在一个共享的Realm密钥。Realm的名称也是KDC中存储Principal的域数据库名。Realm在使用时对字母的大小写敏感，因此一般使用大写字母来区分，同时建议使用网络环境的DNS作为Realm。在输入Principal时，Realm可以省略，省略后默认使用本地的Realm。在未省略时使用”@”号与Name或Instance分隔</li>
-<li>Keytab ：保存了一个或多个Principal及其信息的密钥文件，由KDC管理员到处生成，用户可以直接进行免密码认证，因此需要注意密钥文件的文件权限</li>
+<li>Keytab ：保存了一个或多个Principal及其信息的密钥文件，由KDC管理员到处生成，用户可以直接进行免密码认证，因此需要注意密钥文件的文件权限<br>KDC与Keytab存在一种过期机制，当KDC导出一个Principal时，将会生成一个该Principal的KVNO，这个版本号会被保存在KDC以及导出的Keytab文件中，当用户使用Keytab认证时，如果Keytab中的KVNO标签与KDC中该Principal最后生成的KVNO不一致，将会认证失败。简单的说，如果使用KDC将一个Principal导出多次，那么最终只有最后导出的Keytab中的信息可以用于认证。因此，如果需要将某个Principal信息导出到多个不同的Keytab文件来使用，则需要使用ktutil工具将Keytab文件中的信息进行复制、合并</li>
+</ol>
+<h2 id="KDC常用操作"><a href="#KDC常用操作" class="headerlink" title="KDC常用操作"></a>KDC常用操作</h2><ol>
+<li>kadmin.local ：打开KDC控制台，需要root权限</li>
+<li>[addprinc <principal>] ：添加Principal，在KDC控制台使用，执行后需要两次输入该Principal的密码</principal></li>
+<li>[delprinc <principal>] ：删除Principal，在KDC控制台使用，执行后需要确认是否删除</principal></li>
+<li>[xst -k <keytab file path> <principal>] ：导出指定Principal到指定Keytab文件，在KDC控制台使用。如果指定的Keytab文件已存在，则会将指定Principal信息合并到Keytab文件中</principal></keytab></li>
+<li>[modprinc -<parameter> <parameter value> <principal>] ：针对指定的Principal进行某项参数的修改，在KDC控制台使用。需要注意的是，使用modprinc命令修改的参数，优先级会比kdc.conf中的高</principal></parameter></parameter></li>
+<li>[getprinc <principal>] ：查看指定Principal的信息，包括每种密钥的加密类型、KVNO标签等，在KDC控制台使用</principal></li>
+<li>[listprincs] ：列出所有Principal，在KDC控制台使用</li>
+</ol>
+<h2 id="Client常用操作"><a href="#Client常用操作" class="headerlink" title="Client常用操作"></a>Client常用操作</h2><ol>
+<li>klist ：列出当前系统用户的Kerberos认证情况</li>
+<li>klist -kt <keytab file path> ：列出指定Keytab文件中包含的Principal信息，需要该文件的读权限</keytab></li>
+<li>kinit <principal> ：使用输入密码的方式认证指定的Principal</principal></li>
+<li>kinit -kt <keytab file path> <principal> ：使用指定Keytab中的指定Principal进行认证，需要该文件的读权限</principal></keytab></li>
+<li>kdestory ：注销当前已经认证的Principal</li>
+<li>ktutil ：进入Keytab工具控制台</li>
+<li>[list][l] ：列出当前ktutil中的密钥表</li>
+<li>[clear] [clear_list] ：清除当前密钥表</li>
+<li>[rkt <keytab file path>] ：读取一个Keytab中的所用Principal信息到密钥表，需要有该文件的读权限，在ktutil中使用</keytab></li>
+<li>[wkt <keytab file path>] ：将密钥表中的所有Principal信息写入指定文件中。如果文件已存在，则需要该文件的写权限，信息会附加至文件末，在ktutil中使用</keytab></li>
+<li>[addent -password -p <principal> -k <kvno> -e <enctype>] ：手动添加一条Principal信息到密钥表，执行后需要输入指定Principal的密码。由于手动添加的信息ktutil不会进行验证，因此不推荐使用</enctype></kvno></principal></li>
+<li>[delent <entity number>] ：从密钥表中删除指定行号的Principal信息，行号可使用list或者l命令查看，在ktutil中使用</entity></li>
+<li>[lr][list_request] ：列出所有ktutil中可用的命令，在ktutil中使用</li>
+<li>[quit][q][exit] ：退出ktutil控制台</li>
 </ol>
 
     </div>
@@ -361,7 +392,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Kerberos概述"><span class="nav-number">1.</span> <span class="nav-text">Kerberos概述</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Kerberos技术概况"><span class="nav-number">1.1.</span> <span class="nav-text">Kerberos技术概况</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Kerberos架构"><span class="nav-number">1.2.</span> <span class="nav-text">Kerberos架构</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Kerberos使用"><span class="nav-number">2.</span> <span class="nav-text">Kerberos使用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#名词解释"><span class="nav-number">2.1.</span> <span class="nav-text">名词解释</span></a></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Kerberos概述"><span class="nav-number">1.</span> <span class="nav-text">Kerberos概述</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Kerberos技术概况"><span class="nav-number">1.1.</span> <span class="nav-text">Kerberos技术概况</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Kerberos架构"><span class="nav-number">1.2.</span> <span class="nav-text">Kerberos架构</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Kerberos使用"><span class="nav-number">2.</span> <span class="nav-text">Kerberos使用</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#名词解释"><span class="nav-number">2.1.</span> <span class="nav-text">名词解释</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#KDC常用操作"><span class="nav-number">2.2.</span> <span class="nav-text">KDC常用操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Client常用操作"><span class="nav-number">2.3.</span> <span class="nav-text">Client常用操作</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
