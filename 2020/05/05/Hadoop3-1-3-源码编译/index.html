@@ -58,7 +58,7 @@
 <meta property="og:site_name" content="SmallBird&#96;s Blog">
 <meta property="og:description" content="Hadoop 3.1.3 源码编译准备工作(下载软件安装包)">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-05-05T12:08:59.114Z">
+<meta property="og:updated_time" content="2020-05-05T12:29:27.048Z">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="http://yoursite.com/2020/05/05/Hadoop3-1-3-%E6%BA%90%E7%A0%81%E7%BC%96%E8%AF%91/">
@@ -211,7 +211,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2020-05-05 20:07:53 / 修改时间：20:08:59" itemprop="dateCreated datePublished" datetime="2020-05-05T20:07:53+08:00">2020-05-05</time>
+              <time title="创建时间：2020-05-05 20:07:53 / 修改时间：20:29:27" itemprop="dateCreated datePublished" datetime="2020-05-05T20:07:53+08:00">2020-05-05</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -254,12 +254,12 @@
 <ol start="3">
 <li>protobuf-2.5.0.tar.gz</li>
 </ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">Download : https://github.com/protocolbuffers/protobuf/releases/tag/v2.5.0</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Download : https://github.com/protocolbuffers/protobuf/releases/tag/v2.5.0</span><br></pre></td></tr></table></figure>
 
 <ol start="4">
 <li>cmake-3.8.2.tar.gz (yum安装可能无法安装高版本，编译hadoop3.1.3至少需要cmake3.7以上)</li>
 </ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">Download : https://cmake.org/files/v3.13/</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Download : https://cmake.org/files/v3.13/</span><br></pre></td></tr></table></figure>
 
 <ol start="5">
 <li>hadoop-3.1.3-src.tar.gz (Hadoop源码)</li>
@@ -293,7 +293,7 @@
 <li><p>配置环境变量</p>
 </li>
 </ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">export PROTOC_HOME=/apps/protobuf</span><br><span class="line">export PATH=$PROTOC_HOME/bin:$PATH</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">export PROTOC_HOME=/apps/protobuf</span><br><span class="line">export PATH=$PROTOC_HOME/bin:$PATH</span><br></pre></td></tr></table></figure>
 
 <ol start="6">
 <li>验证 : <code>protoc --version</code></li>
@@ -304,7 +304,7 @@
 <li><p>执行编译命令</p>
 </li>
 </ol>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">// 正常编译</span><br><span class="line">mvn clean package -DskipTests -Pdist,native -Dtar</span><br><span class="line"></span><br><span class="line">// Yarn开启Kerberos 重新编译contaniner脚本</span><br><span class="line">mvn package -Pdist,native -DskipTests -Dtar -Dcontainer-executor.conf.dir=/etc</span><br><span class="line">/* </span><br><span class="line">1. container-executor默认是DefaultContainerExecutor，是以起Nodemanager的用户身份启动container的，切换为LinuxContainerExecutor会以提交application的用户身份来启动，它使用一个setuid可执行文件来启动和销毁container</span><br><span class="line">2. container-executor.conf.dir必须显示注明，它表示setuid可执行文件依赖的配置文件路径，默认会在$HADOOP_HOME/etc/hadoop下，不过由于该文件需要父目录和以上的目录的owner都为root，要不然会有以下报错，所以为了方便我们设置为/etc</span><br><span class="line">Caused by: org.apache.hadoop.util.Shell$ExitCodeException: File /usr/local/hadoop/hadoop-2.1.0-beta/etc/hadoop must be owned by root, but is owned by 500</span><br><span class="line">*/</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">// 正常编译</span><br><span class="line">mvn clean package -DskipTests -Pdist,native -Dtar</span><br><span class="line"></span><br><span class="line">// Yarn开启Kerberos 重新编译contaniner脚本</span><br><span class="line">mvn package -Pdist,native -DskipTests -Dtar -Dcontainer-executor.conf.dir=/etc</span><br><span class="line">/* </span><br><span class="line">1. container-executor默认是DefaultContainerExecutor，是以起Nodemanager的用户身份启动container的，切换为LinuxContainerExecutor会以提交application的用户身份来启动，它使用一个setuid可执行文件来启动和销毁container</span><br><span class="line">2. container-executor.conf.dir必须显示注明，它表示setuid可执行文件依赖的配置文件路径，默认会在$HADOOP_HOME/etc/hadoop下，不过由于该文件需要父目录和以上的目录的owner都为root，要不然会有以下报错，所以为了方便我们设置为/etc</span><br><span class="line">Caused by: org.apache.hadoop.util.Shell$ExitCodeException: File /usr/local/hadoop/hadoop-2.1.0-beta/etc/hadoop must be owned by root, but is owned by 500</span><br><span class="line">*/</span><br></pre></td></tr></table></figure>
 
     </div>
 
