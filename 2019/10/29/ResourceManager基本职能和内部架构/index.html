@@ -74,7 +74,7 @@
 <meta property="og:description" content="YARN也采用了Master&#x2F;Slave结构，其中，Master实现为ResourceManager，负责整个集群资源的管理与调度；Slave实现为NodeManager，负责单个节点的资源管理与任务启动ResourceManager是整个YARN集群中最重要的组件之一，它的设计直接决定了系统的可扩展性、可用性和容错性等特点，它的功能较多，包括ApplicationMaster管理（启动、停止等）">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;10&#x2F;29&#x2F;ResourceManager%E5%9F%BA%E6%9C%AC%E8%81%8C%E8%83%BD%E5%92%8C%E5%86%85%E9%83%A8%E6%9E%B6%E6%9E%84&#x2F;blog1.png">
-<meta property="og:updated_time" content="2020-03-11T09:53:00.046Z">
+<meta property="og:updated_time" content="2020-07-17T06:30:02.943Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;10&#x2F;29&#x2F;ResourceManager%E5%9F%BA%E6%9C%AC%E8%81%8C%E8%83%BD%E5%92%8C%E5%86%85%E9%83%A8%E6%9E%B6%E6%9E%84&#x2F;blog1.png">
 
@@ -234,7 +234,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-03-11 17:53:00" itemprop="dateModified" datetime="2020-03-11T17:53:00+08:00">2020-03-11</time>
+                <time title="修改时间：2020-07-17 14:30:02" itemprop="dateModified" datetime="2020-07-17T14:30:02+08:00">2020-07-17</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -266,7 +266,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p><em>YARN也采用了Master/Slave结构，其中，Master实现为ResourceManager，负责整个集群资源的管理与调度；Slave实现为NodeManager，负责单个节点的资源管理与任务启动ResourceManager是整个YARN集群中最重要的组件之一，它的设计直接决定了系统的可扩展性、可用性和容错性等特点，它的功能较多，包括ApplicationMaster管理（启动、停止等）、NodeManager管理、Application管理、状态机管理等</em></p><a id="more"></a>
+        <p>YARN也采用了Master/Slave结构，其中，Master实现为ResourceManager，负责整个集群资源的管理与调度；Slave实现为NodeManager，负责单个节点的资源管理与任务启动ResourceManager是整个YARN集群中最重要的组件之一，它的设计直接决定了系统的可扩展性、可用性和容错性等特点，它的功能较多，包括ApplicationMaster管理（启动、停止等）、NodeManager管理、Application管理、状态机管理等</p><a id="more"></a>
 <hr>
 <p>ResourceManager负责集群中所有资源的统一管理和分配，它接收来自各个节点的资源汇报信息，并把这些信息按照一定的策略分配给各个应用程序</p>
 <h1 id="ResourceManager基本职能"><a href="#ResourceManager基本职能" class="headerlink" title="ResourceManager基本职能"></a>ResourceManager基本职能</h1><h2 id="ResourceManager需通过两个RPC协议与NodeManager和AppMaster交互-具体如下"><a href="#ResourceManager需通过两个RPC协议与NodeManager和AppMaster交互-具体如下" class="headerlink" title="ResourceManager需通过两个RPC协议与NodeManager和AppMaster交互,具体如下 :"></a>ResourceManager需通过两个RPC协议与NodeManager和AppMaster交互,具体如下 :</h2><ul>

@@ -65,17 +65,17 @@
   };
 </script>
 
-  <meta name="description" content="概述">
+  <meta name="description" content="NodeManager是YARN中单个节点上的代理,它管理Hadoop集群中单个计算节点,功能包括与ResourceManager保持通信,管理Container的生命周期,监控每个Container的资源使用(内存,CPU等)情况,追踪节点健康状况,管理日志和不同应用程序用到的附属服务">
 <meta name="keywords" content="大数据,Hadoop">
 <meta property="og:type" content="article">
 <meta property="og:title" content="NodeManager概述-基本职能和内部架构">
 <meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;10&#x2F;29&#x2F;NodeManager%E6%A6%82%E8%BF%B0-%E5%9F%BA%E6%9C%AC%E8%81%8C%E8%83%BD%E5%92%8C%E5%86%85%E9%83%A8%E6%9E%B6%E6%9E%84&#x2F;index.html">
 <meta property="og:site_name" content="SmallBird&#96;s Blog">
-<meta property="og:description" content="概述">
+<meta property="og:description" content="NodeManager是YARN中单个节点上的代理,它管理Hadoop集群中单个计算节点,功能包括与ResourceManager保持通信,管理Container的生命周期,监控每个Container的资源使用(内存,CPU等)情况,追踪节点健康状况,管理日志和不同应用程序用到的附属服务">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;10&#x2F;29&#x2F;NodeManager%E6%A6%82%E8%BF%B0-%E5%9F%BA%E6%9C%AC%E8%81%8C%E8%83%BD%E5%92%8C%E5%86%85%E9%83%A8%E6%9E%B6%E6%9E%84&#x2F;NodeManager1.png">
 <meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;10&#x2F;29&#x2F;NodeManager%E6%A6%82%E8%BF%B0-%E5%9F%BA%E6%9C%AC%E8%81%8C%E8%83%BD%E5%92%8C%E5%86%85%E9%83%A8%E6%9E%B6%E6%9E%84&#x2F;NodeManager2.png">
-<meta property="og:updated_time" content="2020-03-11T09:53:00.045Z">
+<meta property="og:updated_time" content="2020-07-17T06:28:45.050Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;10&#x2F;29&#x2F;NodeManager%E6%A6%82%E8%BF%B0-%E5%9F%BA%E6%9C%AC%E8%81%8C%E8%83%BD%E5%92%8C%E5%86%85%E9%83%A8%E6%9E%B6%E6%9E%84&#x2F;NodeManager1.png">
 
@@ -235,7 +235,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-03-11 17:53:00" itemprop="dateModified" datetime="2020-03-11T17:53:00+08:00">2020-03-11</time>
+                <time title="修改时间：2020-07-17 14:28:45" itemprop="dateModified" datetime="2020-07-17T14:28:45+08:00">2020-07-17</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -267,7 +267,8 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><a id="more"></a><p>NodeManager是运行在单个节点上的代理,它需要与应用程序的的ApplicationMaster和集群管理者ResourceManager交互: 从ApplicationMaster上接收有关Container的命令并执行之(比如启动,停止Container); 向ResourceManager汇报各个Container运行状态和节点健康状况,并领取有关Container的命令(比如清理Container)执行之</p>
+        <p>NodeManager是YARN中单个节点上的代理,它管理Hadoop集群中单个计算节点,功能包括与ResourceManager保持通信,管理Container的生命周期,监控每个Container的资源使用(内存,CPU等)情况,追踪节点健康状况,管理日志和不同应用程序用到的附属服务</p><a id="more"></a>
+<h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>NodeManager是运行在单个节点上的代理,它需要与应用程序的的ApplicationMaster和集群管理者ResourceManager交互: 从ApplicationMaster上接收有关Container的命令并执行之(比如启动,停止Container); 向ResourceManager汇报各个Container运行状态和节点健康状况,并领取有关Container的命令(比如清理Container)去执行</p>
 <p>NodeManager是YARN中单个节点上的代理,它管理Hadoop集群中单个计算节点,功能包括与ResourceManager保持通信,管理Container的生命周期,监控每个Container的资源使用(内存,CPU等)情况,追踪节点健康状况,管理日志和不同应用程序用到的附属服务</p>
 <h1 id="NodeManager基本职能"><a href="#NodeManager基本职能" class="headerlink" title="NodeManager基本职能"></a>NodeManager基本职能</h1><p>NodeManager需通过两个RPC协议与ResourceManager服务和各个应用程序的ApplicationMaster交互<br><img src="NodeManager1.png" alt="NodeManager1.png"></p>
 <h2 id="ResourceTrackerProtocol协议"><a href="#ResourceTrackerProtocol协议" class="headerlink" title="ResourceTrackerProtocol协议"></a>ResourceTrackerProtocol协议</h2><p>NodeManager通过该RPC协议向ResourceManager注册,汇报节点健康状况和Container运行状态,并领取ResourceManager下达的命令,包括重新初始化,清理Container占用资源等.在该RPC协议中,ResourceManager扮演RPC Server的角色,而NodeManager扮演RPC Client的角色</p>
@@ -344,8 +345,8 @@
             <span class="post-nav-divider"></span>
 
             <div class="post-nav-prev post-nav-item">
-                <a href="/2019/10/29/Kubernetes-%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5/" rel="prev" title="Kubernetes-基础概念">
-                  Kubernetes-基础概念 <i class="fa fa-chevron-right"></i>
+                <a href="/2019/10/29/Kubernetes-%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5/" rel="prev" title="Kubernetes基础概念">
+                  Kubernetes基础概念 <i class="fa fa-chevron-right"></i>
                 </a>
             </div>
           </div>
