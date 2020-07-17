@@ -50,13 +50,13 @@
   };
 </script>
 
-  <meta name="description" content="Kubeadm安装kubeadm是Kubernetes官方提供的用于快速安装Kubernetes集群的工具，伴随Kubernetes每个版本的发布都会同步更新，kubeadm会对集群配置方面的一些实践做调整，通过实验kubeadm可以学习到Kubernetes官方在集群配置上一些新的最佳实践。 安装Docker ceDocker安装每个机器都需要装 环境准备编辑hosts对应关系cat &amp;lt;&amp;">
+  <meta name="description" content="Kubeadm安装">
 <meta name="keywords" content="Kubernetes">
 <meta property="og:type" content="article">
 <meta property="og:title" content="使用kubeadm方式安装K8S">
 <meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;10&#x2F;29&#x2F;%E4%BD%BF%E7%94%A8kubeadm%E6%96%B9%E5%BC%8F%E5%AE%89%E8%A3%85K8S&#x2F;index.html">
 <meta property="og:site_name" content="SmallBird&#96;s Blog">
-<meta property="og:description" content="Kubeadm安装kubeadm是Kubernetes官方提供的用于快速安装Kubernetes集群的工具，伴随Kubernetes每个版本的发布都会同步更新，kubeadm会对集群配置方面的一些实践做调整，通过实验kubeadm可以学习到Kubernetes官方在集群配置上一些新的最佳实践。 安装Docker ceDocker安装每个机器都需要装 环境准备编辑hosts对应关系cat &amp;lt;&amp;">
+<meta property="og:description" content="Kubeadm安装">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:updated_time" content="2020-03-11T09:53:00.052Z">
 <meta name="twitter:card" content="summary">
@@ -249,8 +249,8 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="Kubeadm安装"><a href="#Kubeadm安装" class="headerlink" title="Kubeadm安装"></a>Kubeadm安装</h1><p>kubeadm是Kubernetes官方提供的用于快速安装Kubernetes集群的工具，伴随Kubernetes每个版本的发布都会同步更新，kubeadm会对集群配置方面的一些实践做调整，通过实验kubeadm可以学习到Kubernetes官方在集群配置上一些新的最佳实践。</p>
-<h1 id="安装Docker-ce"><a href="#安装Docker-ce" class="headerlink" title="安装Docker ce"></a>安装Docker ce</h1><p><a href="">Docker安装</a><br>每个机器都需要装</p>
+        <h1 id="Kubeadm安装"><a href="#Kubeadm安装" class="headerlink" title="Kubeadm安装"></a>Kubeadm安装</h1><a id="more"></a><p>kubeadm是Kubernetes官方提供的用于快速安装Kubernetes集群的工具，伴随Kubernetes每个版本的发布都会同步更新，kubeadm会对集群配置方面的一些实践做调整，通过实验kubeadm可以学习到Kubernetes官方在集群配置上一些新的最佳实践。</p>
+<h1 id="安装Docker-ce"><a href="#安装Docker-ce" class="headerlink" title="安装Docker ce"></a>安装Docker ce</h1><p><a href>Docker安装</a><br>每个机器都需要装</p>
 <h1 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h1><h2 id="编辑hosts对应关系"><a href="#编辑hosts对应关系" class="headerlink" title="编辑hosts对应关系"></a>编辑hosts对应关系</h2><pre><code>cat &lt;&lt;EOF &gt;&gt;/etc/hosts
 192.168.37.61 Smile1
 192.168.37.62 Smile2
@@ -259,7 +259,7 @@ EOF</code></pre><h2 id="关闭防火墙"><a href="#关闭防火墙" class="heade
 systemctl disable firewalld.service</code></pre><h2 id="禁用SELINUX"><a href="#禁用SELINUX" class="headerlink" title="禁用SELINUX"></a>禁用SELINUX</h2><pre><code>sudo setenforce 0
 sed -i &quot;s/^SELINUX=enforcing/SELINUX=disabled/g&quot; /etc/selinux/config</code></pre><h2 id="关闭swap"><a href="#关闭swap" class="headerlink" title="关闭swap"></a>关闭swap</h2><pre><code>swapoff -a
 sed -i &apos;s/.*swap.*/#&amp;/&apos; /etc/fstab </code></pre><h2 id="配置内核参数添加如下内容"><a href="#配置内核参数添加如下内容" class="headerlink" title="配置内核参数添加如下内容"></a>配置内核参数添加如下内容</h2><p>cat &gt; /etc/sysctl.d/k8s.conf &lt;&lt;EOF<br>net.bridge.bridge-nf-call-ip6tables = 1<br>net.bridge.bridge-nf-call-iptables = 1<br>EOF</p>
-<h1 id="配置K8S的yum源"><a href="#配置K8S的yum源" class="headerlink" title="配置K8S的yum源"></a>配置K8S的yum源</h1><p>cat &lt;<EOF > /etc/yum.repos.d/kubernetes.repo<br>[kubernetes]<br>name=Kubernetes<br>baseurl=<a href="http://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64" target="_blank" rel="noopener">http://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64</a><br>enabled=1<br>gpgcheck=0<br>repo_gpgcheck=0<br>gpgkey=<a href="http://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg" target="_blank" rel="noopener">http://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg</a><br>      <a href="http://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg" target="_blank" rel="noopener">http://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg</a><br>EOF</p>
+<h1 id="配置K8S的yum源"><a href="#配置K8S的yum源" class="headerlink" title="配置K8S的yum源"></a>配置K8S的yum源</h1><p>cat &lt;<eof> /etc/yum.repos.d/kubernetes.repo<br>[kubernetes]<br>name=Kubernetes<br>baseurl=<a href="http://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64" target="_blank" rel="noopener">http://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64</a><br>enabled=1<br>gpgcheck=0<br>repo_gpgcheck=0<br>gpgkey=<a href="http://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg" target="_blank" rel="noopener">http://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg</a><br>      <a href="http://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg" target="_blank" rel="noopener">http://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg</a><br>EOF</eof></p>
 <h1 id="安装kubelet、kubeadm、kubectl"><a href="#安装kubelet、kubeadm、kubectl" class="headerlink" title="安装kubelet、kubeadm、kubectl"></a>安装kubelet、kubeadm、kubectl</h1><pre><code>yum makecache fast
 yum install -y kubelet kubeadm kubectl</code></pre><h1 id="调整启动方式"><a href="#调整启动方式" class="headerlink" title="调整启动方式"></a>调整启动方式</h1><p>kubelet的启动环境变量要与docker的cgroup-driver驱动一样</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker info | grep -i cgroup</span><br><span class="line">Cgroup Driver: cgroupfs  --&gt; 运行命令显示</span><br></pre></td></tr></table></figure>

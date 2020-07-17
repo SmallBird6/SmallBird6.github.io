@@ -50,13 +50,13 @@
   };
 </script>
 
-  <meta name="description" content="网络通信模块是分布式系统中最底层的模块,他直接支撑了上层分布式环境下复杂的进程间通信逻辑,是所有分布式系统的基础。远程过程调用(RPC)是一种常用的分布式网络通信协议，他允许运行于一台计算机的程序调用另一台计算机的子程序，同时将网络的通信细节隐藏起来，使得用户无需额外地为这个交互作用编程，大大的简化了分布式程序开发 作为一个分布式文件系统，Hadoop实现了自己的RPC通信协议，他是上层多个分布式">
+  <meta name="description" content="网络通信模块是分布式系统中最底层的模块,他直接支撑了上层分布式环境下复杂的进程间通信逻辑,是所有分布式系统的基础。远程过程调用(RPC)是一种常用的分布式网络通信协议，他允许运行于一台计算机的程序调用另一台计算机的子程序，同时将网络的通信细节隐藏起来，使得用户无需额外地为这个交互作用编程，大大的简化了分布式程序开发">
 <meta name="keywords" content="大数据,Hadoop">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Hadoop-RPC机制详解">
 <meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;10&#x2F;28&#x2F;Hadoop-RPC%E6%9C%BA%E5%88%B6%E8%AF%A6%E8%A7%A3&#x2F;index.html">
 <meta property="og:site_name" content="SmallBird&#96;s Blog">
-<meta property="og:description" content="网络通信模块是分布式系统中最底层的模块,他直接支撑了上层分布式环境下复杂的进程间通信逻辑,是所有分布式系统的基础。远程过程调用(RPC)是一种常用的分布式网络通信协议，他允许运行于一台计算机的程序调用另一台计算机的子程序，同时将网络的通信细节隐藏起来，使得用户无需额外地为这个交互作用编程，大大的简化了分布式程序开发 作为一个分布式文件系统，Hadoop实现了自己的RPC通信协议，他是上层多个分布式">
+<meta property="og:description" content="网络通信模块是分布式系统中最底层的模块,他直接支撑了上层分布式环境下复杂的进程间通信逻辑,是所有分布式系统的基础。远程过程调用(RPC)是一种常用的分布式网络通信协议，他允许运行于一台计算机的程序调用另一台计算机的子程序，同时将网络的通信细节隐藏起来，使得用户无需额外地为这个交互作用编程，大大的简化了分布式程序开发">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;10&#x2F;28&#x2F;Hadoop-RPC%E6%9C%BA%E5%88%B6%E8%AF%A6%E8%A7%A3&#x2F;tongbuyibu.png">
 <meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;10&#x2F;28&#x2F;Hadoop-RPC%E6%9C%BA%E5%88%B6%E8%AF%A6%E8%A7%A3&#x2F;RPCzongtijiagou.png">
@@ -254,7 +254,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p><em>网络通信模块是分布式系统中最底层的模块,他直接支撑了上层分布式环境下复杂的进程间通信逻辑,是所有分布式系统的基础。远程过程调用(RPC)是一种常用的分布式网络通信协议，他允许运行于一台计算机的程序调用另一台计算机的子程序，同时将网络的通信细节隐藏起来，使得用户无需额外地为这个交互作用编程，大大的简化了分布式程序开发</em></p>
+        <p><em>网络通信模块是分布式系统中最底层的模块,他直接支撑了上层分布式环境下复杂的进程间通信逻辑,是所有分布式系统的基础。远程过程调用(RPC)是一种常用的分布式网络通信协议，他允许运行于一台计算机的程序调用另一台计算机的子程序，同时将网络的通信细节隐藏起来，使得用户无需额外地为这个交互作用编程，大大的简化了分布式程序开发</em></p><a id="more"></a>
 <p><em>作为一个分布式文件系统，Hadoop实现了自己的RPC通信协议，他是上层多个分布式子系统(MapReduce,Yarn,HDFS等)公用的网络通信模块</em></p>
 <hr>
 <h1 id="RPC通信模型"><a href="#RPC通信模型" class="headerlink" title="RPC通信模型"></a>RPC通信模型</h1><p>RPC是一种提供网络从远程计算机上请求服务,但不需要了解底层网络技术的协议</p>
@@ -297,7 +297,7 @@
 <p>Hadoop RPC总体架构自下而上可分为两层，第一层是一个基于Java NIO实现的客户机 - 服务器通信模型。其中，客户端将用户的调用方法及其参数封装成请求包后发送到服务器端。服务器端收到请求包后，经解包、调用参数、打包结果等一系列操作后，将结果返回给客户端。为了增强Server端的扩展性和并发处理能力，Hadoop RPC采用了基于事件驱动的Reactor设计模式，在具体实现时，用到了JDK提供的各种功能包，主要包括java.nio、java.lang.reflect(反射机制和动态代理)、java.net(网络编程)等。第二层是供更上层程序直接调用的RPC接口，这些接口底层即为C/S通信模型</p>
 <h1 id="Hadoop-RPC使用方法"><a href="#Hadoop-RPC使用方法" class="headerlink" title="Hadoop RPC使用方法"></a>Hadoop RPC使用方法</h1><p><strong>Hadoop RPC对外主要提供了两种接口(见类org.apache.hadoop.ipc.RPC)，分别是 ：</strong> </p>
 <ul>
-<li>public static <T>ProtocolProxy <T> getProxy/waitForProxy() : 构造一个客户端代理对象，用于向服务器发送RPC请求</li>
+<li>public static <t>ProtocolProxy <t> getProxy/waitForProxy() : 构造一个客户端代理对象，用于向服务器发送RPC请求</t></t></li>
 <li>public static Server RPC.Builder (Configuration).build() : 为某个协议实例构造一个服务器对象，用于处理客户端发送的请求</li>
 </ul>
 <p><strong>使用Hadoop RPC分为以下4个步骤 ：</strong></p>
