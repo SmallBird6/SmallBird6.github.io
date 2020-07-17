@@ -50,13 +50,13 @@
   };
 </script>
 
-  <meta name="description" content="YARN基础库是其他一切模块的基础,它的设计直接决定了YARN的稳定性和扩展性,YARN借用了MRV1的一些底层基础库,比如RPC库等,但因为引入了很多新的软件设计方式,所以它的基础库更多,包括直接使用了开源序列化框架Protocol Buffers和Apache Avro,自定义的服务库、事件库和状态机等">
+  <meta name="description" content="YARN基础库是其他一切模块的基础,它的设计直接决定了YARN的稳定性和扩展性,YARN借用了MRV1的一些底层基础库,比如RPC库等,但因为引入了很多新的软件设计方式,所以它的基础库更多,包括直接使用了开源序列化框架Protocol Buffers和Apache Avro,自定义的服务库、事件库和状态机等 概述Yarn基础库是其他一切模块的基础,它的设计直接决定了Yarn的稳定性和扩展性 Yar">
 <meta name="keywords" content="大数据,Hadoop">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Yarn底层基础库">
 <meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;10&#x2F;28&#x2F;Yarn%E5%BA%95%E5%B1%82%E5%9F%BA%E7%A1%80%E5%BA%93&#x2F;index.html">
 <meta property="og:site_name" content="SmallBird&#96;s Blog">
-<meta property="og:description" content="YARN基础库是其他一切模块的基础,它的设计直接决定了YARN的稳定性和扩展性,YARN借用了MRV1的一些底层基础库,比如RPC库等,但因为引入了很多新的软件设计方式,所以它的基础库更多,包括直接使用了开源序列化框架Protocol Buffers和Apache Avro,自定义的服务库、事件库和状态机等">
+<meta property="og:description" content="YARN基础库是其他一切模块的基础,它的设计直接决定了YARN的稳定性和扩展性,YARN借用了MRV1的一些底层基础库,比如RPC库等,但因为引入了很多新的软件设计方式,所以它的基础库更多,包括直接使用了开源序列化框架Protocol Buffers和Apache Avro,自定义的服务库、事件库和状态机等 概述Yarn基础库是其他一切模块的基础,它的设计直接决定了Yarn的稳定性和扩展性 Yar">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;10&#x2F;28&#x2F;Yarn%E5%BA%95%E5%B1%82%E5%9F%BA%E7%A1%80%E5%BA%93&#x2F;image1.png">
 <meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;10&#x2F;28&#x2F;Yarn%E5%BA%95%E5%B1%82%E5%9F%BA%E7%A1%80%E5%BA%93&#x2F;image2.png">
@@ -255,7 +255,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <p><em>YARN基础库是其他一切模块的基础,它的设计直接决定了YARN的稳定性和扩展性,YARN借用了MRV1的一些底层基础库,比如RPC库等,但因为引入了很多新的软件设计方式,所以它的基础库更多,包括直接使用了开源序列化框架Protocol Buffers和Apache Avro,自定义的服务库、事件库和状态机等</em></p><a id="more"></a>
+        <p><em>YARN基础库是其他一切模块的基础,它的设计直接决定了YARN的稳定性和扩展性,YARN借用了MRV1的一些底层基础库,比如RPC库等,但因为引入了很多新的软件设计方式,所以它的基础库更多,包括直接使用了开源序列化框架Protocol Buffers和Apache Avro,自定义的服务库、事件库和状态机等</em></p>
 <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>Yarn基础库是其他一切模块的基础,它的设计直接决定了Yarn的稳定性和扩展性</p>
 <p><strong>Yarn的基础库主要有 :</strong></p>
 <ul>

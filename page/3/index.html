@@ -240,14 +240,87 @@
 
       
           <p><em>YARN基础库是其他一切模块的基础,它的设计直接决定了YARN的稳定性和扩展性,YARN借用了MRV1的一些底层基础库,比如RPC库等,但因为引入了很多新的软件设计方式,所以它的基础库更多,包括直接使用了开源序列化框架Protocol Buffers和Apache Avro,自定义的服务库、事件库和状态机等</em></p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/10/28/Yarn%E5%BA%95%E5%B1%82%E5%9F%BA%E7%A1%80%E5%BA%93/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
+<h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>Yarn基础库是其他一切模块的基础,它的设计直接决定了Yarn的稳定性和扩展性</p>
+<p><strong>Yarn的基础库主要有 :</strong></p>
+<ul>
+<li>Protocol Buffers : Protocol Buffers是Google开源的序列化库,具有平台无关,高性能,兼容好等优点.Yarn将ProtocolBuffers用到RPC通信中,默认情况下,Yarn RPC中所有参数采用Protocol Buffers进行序列化/反序列化</li>
+<li>Apache Avro : Avro是Hadoop生态系统中的RPC框架,具有平台无关,支持动态模式等优点,Avro的最初设计动机是解决Yarn RPC兼容性和扩展性差等问题</li>
+<li>RPC库 : Yarn采用MR1中的RPC库,但其中采用的默认序列化方法被替换成了Protocol Buffers</li>
+<li>服务库和事件库 : Yarn将所有的对象服务化,以便统一管理(创建,销毁等),而服务之间则采用事件机制进行通信</li>
+<li>状态机库 : 状态机是一种表示有限个状态以及在这些状态之间的转移和动作等行为的数学模型</li>
+</ul>
+<h1 id="Protocol-Buffers"><a href="#Protocol-Buffers" class="headerlink" title="Protocol Buffers"></a>Protocol Buffers</h1><p>Protocol Buffers是一种轻便高效的结构化数据存储格式,可以用于结构化数据序列化/反序列化</p>
+<p>他适合做数据存储或RPC的数据交换格式,常用作通信协议,数据存储等领域的与语言无关,平台无关,可扩展的序列化结构数据格式</p>
+<p><strong>相比XML格式,Protocol Buffers的优点 :</strong></p>
+<ul>
+<li>平台无关,语言无关</li>
+<li>高性能,解析速度是XML的20 ~ 100倍</li>
+<li>体积小,文件大小仅是XML的1/10 ~ 1/3</li>
+<li>使用简单</li>
+<li>兼容性好</li>
+</ul>
+<p>Yarn中,所有的RPC函数的参数均采用Protocol Buffers定义的,Yarn的RPC协议全是使用Protocol Buffers定义(RPC协议上一章有介绍)</p>
+<h1 id="Apache-Avro"><a href="#Apache-Avro" class="headerlink" title="Apache Avro"></a>Apache Avro</h1><p>Apache Avro是Hadoop下的一个子项目。它本身既是一个序列化框架，同时也实现了RPC的功能</p>
+<p><strong>Avro的特性和功能 ：</strong></p>
+<ul>
+<li>丰富的数据结构类型</li>
+<li>快速可压缩的二进制数据形式</li>
+<li>存储持久数据的文件容器</li>
+<li>提供远程过程调用RPC</li>
+<li>简单的动态语言结合功能</li>
+</ul>
+<p><strong>Avro具有以下特点 ：</strong> </p>
+<ul>
+<li>支持动态模式。Avro不需要生成代码，有利于搭建通用的数据处理系统，避免了代码入侵</li>
+<li>数据无需加标签</li>
+<li>无需手工分配的域标识</li>
+</ul>
+<p>Avro作为日志序列化库使用，在Yarn MapReduce中，所有事件的序列化/反序列化均采用Avro完成</p>
+<h1 id="底层通信库"><a href="#底层通信库" class="headerlink" title="底层通信库"></a>底层通信库</h1><p>HadoopRPC的解析参考我的文章<a href="https://mp.weixin.qq.com/s/jmqrU6bqFFiZu3hyOamZHA" target="_blank" rel="noopener">Hadoop RPC机制详解</a></p>
+<p>YARN提供的对外类是Yarn RPC，用户只需使用该类便可以构建一个基于HadoopRPC且采用Protocol Buffers序列化框架的通信协议</p>
+<h1 id="服务库与事件库"><a href="#服务库与事件库" class="headerlink" title="服务库与事件库"></a>服务库与事件库</h1><h2 id="服务库"><a href="#服务库" class="headerlink" title="服务库"></a>服务库</h2><p><strong>对于生命周期较长的对象,YARN采用了基于服务的对象管理模型对其进行管理,该模型主要有以下几个特点 :</strong> </p>
+<ul>
+<li>将每个被服务化的对象分为4个状态 : NOTINITED(被创建)，INITED(已初始化)，STARTED(已启动)，STOPPED(已停止)</li>
+<li>任何服务状态变化都可以触发另外一些动作</li>
+<li>可通过组合的方式对任意服务进行组合，以便进行统一管理</li>
+</ul>
+<p>YARN中所有的服务对象最终都实现了接口Service，它定义了最基本的服务初始化、启动、停止等操作，而AbstractService类提供了一个最基本的Service实现。</p>
+<p>YARN中所有对象，如果是非组合服务，直接继承AbstractService类即可，否则需CompositeService。比如，对于RM而言，它是一个组合服务，它组合了各种服务对象，包括ClientRMService、ApplicationMasterLauncher、ApplicationMasterService等</p>
+<p><img src="image1.png" alt="image1"></p>
+<p>YARN中，RM和NM属于组合服务，它们内部包含多个单一服务和组合服务，以实现对内部多种服务的统一管理</p>
+<h2 id="事件库"><a href="#事件库" class="headerlink" title="事件库"></a>事件库</h2><p>YARN采用了基于事件驱动的并发模型，该模型能够大大增强并发性，从而提高系统整体性能。为了构建该模型，YARN将各种处理逻辑抽象成事件和对应事件调度器，并将每类事件的处理过程分割成多个步骤，用有限状态机表示</p>
+<p><img src="image2.png" alt="image2"></p>
+<p><strong>整个处理过程大致为 ：</strong>处理请求会作为事件进入系统，由中央异步调度器(AsyncDispatcher)负责传递给相应事件调度器(Event Handler)。该事件调度器可能将该事件转发给另外一个事件调度器，也可能交给一个带有有限状态机的事件处理器，其处理结果也以事件的形式输出给中央异步调度器。而新的事件会再次被中央异步调度器转发给下一个事件调度器，直至处理完成(达到终止条件)</p>
+<p>YARN中，所有核心服务实际上都是一个中央异步调度器，包括RM、NM和AppMaster等，它们维护了事先注册的事件与事件处理器，并根据接收的事件类型驱动服务的运行</p>
+<p>使用YARN事件库时，通常先定义一个中央异步调度器，负责事件的转发与处理，然后根据实际业务需求定义一系列的事件与事件处理器，并注册到中央异步调度器实现事件统一管理和调度。以MRAppMaster为例，它内部包含一个中央异步调度器，并注册了TaskAttemptEvent/TaskAttemptImpl、TaskEvent/TaskImpl、JobEvent/JobImpl等一系列事件/事件处理器，由中央异步调度器统一管理和调度</p>
+<p>服务化和事件驱动软件设计思想的引入，使得YARN具有低耦合、高内聚的特点，各个模块只需完成各自功能，而模块之间则采用事件联系起来，系统设计简单且维护方便</p>
+<h2 id="YARN服务库和事件库的使用"><a href="#YARN服务库和事件库的使用" class="headerlink" title="YARN服务库和事件库的使用"></a>YARN服务库和事件库的使用</h2><p>YARN服务库和事件库的使用方法，介绍一个简单的实例，该例子涉及任务和作业两种对象的事件以及一个中央异步调度器</p>
+<p><strong>(1) 定义Task事件</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">public class TaskEvent extends AbstractEvent&lt;TaskEventType&gt; &#123;</span><br><span class="line">    private String taskID;</span><br><span class="line">    public TaskEvent (String taskID, TaskEventType type) &#123;</span><br><span class="line">        super(type);</span><br><span class="line">        this.taskID = taskID;</span><br><span class="line">    &#125;</span><br><span class="line">    public String getTaskID() &#123;</span><br><span class="line">        return taskID;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">// Task事件类型定义</span><br><span class="line">public enum TaskEventType &#123;</span><br><span class="line">    T_KILL,</span><br><span class="line">    T_SCHEDULE</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>(2) 定义Job事件</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">public class JobEvent extends AbstractEvent&lt;JobEventType&gt; &#123;</span><br><span class="line">    private String jobID;</span><br><span class="line">    public JobEvent (String jobID, JobEventType type) &#123;</span><br><span class="line">        super(type);</span><br><span class="line">        this.jobID = jobID;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">//Job事件类型定义</span><br><span class="line">public enum JobEventType &#123;</span><br><span class="line">    JOB_KILL,</span><br><span class="line">    JOB_INIT,</span><br><span class="line">    JOB_START</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>(3) 事件调度器</strong></p>
+<p>定义一个中央异步调度器，它接收Job和Task两种类型事件，并交给对应的事件处理器处理</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line">@SuppressWarnings(&quot;unchecked&quot;)</span><br><span class="line">public class SimpleMRAppMaster extends CompositeService &#123;</span><br><span class="line">    private Dispatcher dispatcher; //中央异步调度器</span><br><span class="line">    private String jobID;</span><br><span class="line">    private int taskNumber; //该作业包含的任务数目</span><br><span class="line">    private String[] taskIDs; //该作业内部包含的所有任务</span><br><span class="line"></span><br><span class="line">    public SimpleMRAppMaster (String name, String jobID, int taskNumber) &#123;</span><br><span class="line">        super(name);</span><br><span class="line">        this.jobID = jobID;</span><br><span class="line">        this.taskNumber = taskNumber;</span><br><span class="line">        taskIDs = new String[taskNumber];</span><br><span class="line">        for (int i = 0; i &lt; taskNumber; i++) &#123;</span><br><span class="line">            taskIDs[i] = new String (jobID + &quot;_task_&quot; + i);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public void serviceInit (final Configuration conf) throws Exception &#123;</span><br><span class="line">        dispatcher = new AsyncDispatcher(); //定义一个中央异步调度器</span><br><span class="line">        //分别注册Job和Task事件调度器</span><br><span class="line">        dispatcher.register(JobEventType.class, new JobEventDispatcher());</span><br><span class="line">        dispatcher.register(TaskEventType.class, new TaskEventDispatcher());</span><br><span class="line">        addService((Service)dispatcher);</span><br><span class="line">        super.serviceInit(conf);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    public Dispatcher getDispatcher() &#123;</span><br><span class="line">        return dispatcher;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private class JobEventDispatcher implements EventHandler&lt;JobEvent&gt; &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public void handle (JobEvent event) &#123;</span><br><span class="line">            if (event.getType() == JobEventType.JOB_KILL) &#123;</span><br><span class="line">                System.out.println(&quot;Receive JOB_KILL event, killing all the tasks&quot;);</span><br><span class="line">                for (int i = 0; i &lt; taskNumber; i++) &#123;</span><br><span class="line">                    dispatcher.getEventHandler().handle(new TaskEvent(taskIDs[i], TaskEventType.T_KILL));</span><br><span class="line">                &#125;</span><br><span class="line">            &#125; else if (event.getType() == JobEventType.JOB_INIT) &#123;</span><br><span class="line">                System.out.println(&quot;Receive JOB_INIT event, scheduling tasks&quot;);</span><br><span class="line">                for (int i = 0; i &lt; taskNumber; i++) &#123;</span><br><span class="line">                    dispatcher.getEventHandler().handle(new TaskEvent(taskIDs[i], TaskEventType.T_SCHEDULE));</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private class TaskEventDispatcher implements EventHandler&lt;TaskEvent&gt; &#123;</span><br><span class="line">        @Override</span><br><span class="line">        public void handler (TaskEvent event) &#123;</span><br><span class="line">            if (event.getType() == TaskEventType.T_KILL) &#123;</span><br><span class="line">                System.out.println(&quot;Receive T_KILL event of task&quot; + event.getTaskID());</span><br><span class="line">            &#125; else if (event.getType() == TaskEventType.T_SCHEDULE) &#123;</span><br><span class="line">                System.out.println(&quot;Receive T_SCHEDULE of task&quot; + event.getTaskID()); </span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>(4). 测试程序</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">@SuppressWarnings(&quot;unchecked&quot;)</span><br><span class="line">public class SimpleMRAppMasterTest &#123;</span><br><span class="line">    public static void main (String[] args) throws Exception &#123;</span><br><span class="line">        String jobID = &quot;job_20131215_12&quot;;</span><br><span class="line">        SimpleMRAppMaster appMaster = new SimpleMRAppMaster(&quot;Simple MRAppMaster&quot;, jobID, 5);</span><br><span class="line">        YarnConfiguration conf = new YarnConfiguration(new Configuration());</span><br><span class="line">        appMaster.serviceInit(conf);</span><br><span class="line">        appMaster.serviceStart();</span><br><span class="line">        appMaster.getDispatcher().getEventHandler().handle(new JobEvent(jobID, JobEventType.JOB_KILL));</span><br><span class="line">        appMaster.getDispatcher().getEventHandler().handle(new JobEvent(jobID, JobEventType.JOB_INIT));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="事件驱动带来的变化"><a href="#事件驱动带来的变化" class="headerlink" title="事件驱动带来的变化"></a>事件驱动带来的变化</h2><p>MRV1中，对象之间的作用关系是基于函数调用实现的，当一个对象向另外一个对象传递消息时，会直接采用函数调用的方式，且整个过程是串行的</p>
+<p>基于函数调用的编程模型时低效的，它隐含着整个过程是串行、同步进行的。MRV2引入了事件驱动编程模型是一种更加高效的方式。</p>
+<p>在基于事件驱动的编程模型中，所有对象被抽象成了事件处理器，而事件处理器之间通过事件相互关联。 每种事件处理器处理一种类型的事件，同时根据需要触发另外一种事件</p>
+<p>相比于基于函数调用的编程模型，这种编程模型具有异步、并发等特点，更加高效，因此更适合大型分布式系统</p>
+<h1 id="状态机库"><a href="#状态机库" class="headerlink" title="状态机库"></a>状态机库</h1><p>状态机由一组状态组成，这些状态分为三类：初始状态、中间状态和最终状态。状态机从初始状态开始运行，经过一系列中间状态后，到达最终状态并退出。在一个状态机中，每个状态都可以接收一组特定事件，并根据具体的事件类型转换到另一个状态。当状态机转换到最终状态时，则退出</p>
+<h2 id="YARN状态转换方式"><a href="#YARN状态转换方式" class="headerlink" title="YARN状态转换方式"></a>YARN状态转换方式</h2><p>YARN中，每种状态转换由一个四元组表示，分别是转换前状态(preState)、转换后状态(postState)、事件(event)和回调函数(hook)。</p>
+<p><strong>YARN定义了三种状态转换方式 ：</strong></p>
+<p>(1) 一个初始状态、一个最终状态、一种事件。该方式表示状态机在preState状态下，接收到Event事件后，执行函数状态转移函数Hook，并在执行完成后将当前状态转换为postState</p>
+<p><img src="image3.png" alt="image3"></p>
+<p>(2) 一个初始状态、多个最终状态、一种事件。该方式表示状态机在preState状态下，接收到Event事件后，执行函数状态转移函数Hook，并将当前状态转移为Hook的返回值所表示的状态</p>
+<p><img src="image5.png" alt="image5"></p>
+<p>(3) 一个初始状态、一个最终状态、多个事件。该方式表示状态机在preState状态下，接收到Event1、Event2和Event3中的任何一个事件，将执行函数状态转移函数Hook，并在执行完成后将当前状态转换成postState。</p>
+<p><img src="image4.png" alt="image4"></p>
+<h2 id="状态机类"><a href="#状态机类" class="headerlink" title="状态机类"></a>状态机类</h2><p>YARN自己实现了一个非常简单的状态机库(位于包org.apache.hadcop.yarn.state中)。YARN对外提供了一个状态机工厂StatemachineFactory，它提供多种addTransition方法供用户添加各种状态转移，一旦状态机添加完毕后，可通过调用installTopology完成一个状态机的构建</p>
+
       
     </div>
 
@@ -323,14 +396,119 @@
 
       
           <p><em>网络通信模块是分布式系统中最底层的模块,他直接支撑了上层分布式环境下复杂的进程间通信逻辑,是所有分布式系统的基础。远程过程调用(RPC)是一种常用的分布式网络通信协议，他允许运行于一台计算机的程序调用另一台计算机的子程序，同时将网络的通信细节隐藏起来，使得用户无需额外地为这个交互作用编程，大大的简化了分布式程序开发</em></p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/10/28/Hadoop-RPC%E6%9C%BA%E5%88%B6%E8%AF%A6%E8%A7%A3/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
+<p><em>作为一个分布式文件系统，Hadoop实现了自己的RPC通信协议，他是上层多个分布式子系统(MapReduce,Yarn,HDFS等)公用的网络通信模块</em></p>
+<hr>
+<h1 id="RPC通信模型"><a href="#RPC通信模型" class="headerlink" title="RPC通信模型"></a>RPC通信模型</h1><p>RPC是一种提供网络从远程计算机上请求服务,但不需要了解底层网络技术的协议</p>
+<p><strong>RPC通常采用客户机/服务器模型。请求程序是一个客户机，而服务提供程序则是一个服务器。一个典型的RPC框架，主要包括以下几个部分 :</strong> </p>
+<ul>
+<li>通信模块。两个相互协作的通信模块实现请求 - 应答协议，它们在客户和服务器之间传递请求和应答消息，一般不会对数据包进行任何处理。请求 - 应答协议的实现一般有同步方式和异步方式两种<ul>
+<li>同步模式下客户端程序一直阻塞到服务器断发送的应答请求到达本地</li>
+<li>异步模式下将请求发送到服务端后，不必等待应答返回，可以做其他事情</li>
+</ul>
+</li>
+<li>Stub程序。客户端和服务器端均包含Stub程序，可以将之看作代理程序。它使得远程函数调用表现的跟本地调用一样，对用户程序完全透明。在客户端，Stub程序像一个本地程序，但不直接执行本地调用，而是将请求信息提供网络模块发送给服务器端，服务器端给客户端发送应答后，客户端Stub程序会解码对应结果。在服务器端，Stub程序依次进行解码请求消息中的参数、调用相应的服务过程和编码应答结果的返回值等处理</li>
+<li>调度程序。调度程序接收来自通信模块的请求信息，并根据其中的标识选择一个Stub程序进行处理。通常客户端并发请求量比较大时，会采用线程池提高处理效率</li>
+<li>客户程序/服务过程。请求的发出者和请求的处理者<br><img src="tongbuyibu.png" alt="同步模式和异步模式对比"></li>
+</ul>
+<p><strong>一个RPC请求从发送到获取处理结果，所经历的步骤 :</strong></p>
+<ol>
+<li>客户程序以本地方式调用系统产生的Stub程序</li>
+<li>该Stub程序将函数调用信息按照网络通信模块的要求封装成消息包，并交给通信模块发送给远程服务器端</li>
+<li>远程服务器端接收此消息后，将此消息发送给相应的Stub程序</li>
+<li>Stub程序拆封消息，形成被调过程要求的形式，并调用对应函数</li>
+<li>被调用函数按照所获参数执行，并将结果返回给Stub程序</li>
+<li>Stub程序将此结果封装成消息，通过网络通信模块逐级地传送给客户程序</li>
+</ol>
+<h1 id="Hadoop-RPC的特点概述"><a href="#Hadoop-RPC的特点概述" class="headerlink" title="Hadoop RPC的特点概述"></a>Hadoop RPC的特点概述</h1><p>RPC实际上时分布式计算中C/S(Client/Server)模型的一个应用案例</p>
+<p><strong>对于Hadoop而言,RPC具有以下几个特点 :</strong> </p>
+<ul>
+<li>透明性。这是所有RPC框架最根本的特点，即当用户在一台计算机的程序调用另外一台计算机上的子程序时，用户自身不应感觉到其间设计机器间的通信，而是感觉像是在执行一个本地调用</li>
+<li>高性能。Hadoop各个系统(HDFS,YARN,MapReduce等)均采用了Master/Slave架构，其中，Master实际上是一个RPC Server，它负责处理集群中所有Slave发送的服务请求，为了保证Master的并发处理能力，RPC Server应是一个高性能服务器，能够高效地处理来自多个Client的并发RPC请求</li>
+<li>可控性。RPC是Hadoop最底层最核心的模块之一，保证其轻量级，高性能和可控性显得尤为重要</li>
+</ul>
+<h1 id="RPC总体架构"><a href="#RPC总体架构" class="headerlink" title="RPC总体架构"></a>RPC总体架构</h1><p>Hadoop RPC主要分为四个部分，分别是序列化层、函数调用层、网络传输层和服务器端处理框架</p>
+<p><strong>具体实现机制 ：</strong> </p>
+<ul>
+<li>序列化层。序列化主要作用是将结构化对象转为字节流以便于通过网络进行传输或写入持久存储，在RPC框架中，它主要是用于将用户请求中的参数或者应答转换成字节流以便跨机器传输</li>
+<li>函数调用层。函数调用层主要功能是定位要调用的而函数并执行该函数，Hadoop RPC采用了Java反射机制与动态代理实现了函数调用</li>
+<li>网络传输层。网络传输层描述了Client与Server之间消息传输的方式，Hadoop RPC采用了基础TCP/IP的Socket机制</li>
+<li>服务器端处理框架。服务器端处理框架可被抽象为网络I/O模型，它描述了客户端与服务器间信息的交互方式，它的设计直接决定这服务器端的并发处理能力，而Hadoop RPC采用了基于Reactor设计模式的事件驱动I/O模型</li>
+</ul>
+<p><img src="RPCzongtijiagou.png" alt="Hadoop RPC总体架构"></p>
+<p>Hadoop RPC总体架构自下而上可分为两层，第一层是一个基于Java NIO实现的客户机 - 服务器通信模型。其中，客户端将用户的调用方法及其参数封装成请求包后发送到服务器端。服务器端收到请求包后，经解包、调用参数、打包结果等一系列操作后，将结果返回给客户端。为了增强Server端的扩展性和并发处理能力，Hadoop RPC采用了基于事件驱动的Reactor设计模式，在具体实现时，用到了JDK提供的各种功能包，主要包括java.nio、java.lang.reflect(反射机制和动态代理)、java.net(网络编程)等。第二层是供更上层程序直接调用的RPC接口，这些接口底层即为C/S通信模型</p>
+<h1 id="Hadoop-RPC使用方法"><a href="#Hadoop-RPC使用方法" class="headerlink" title="Hadoop RPC使用方法"></a>Hadoop RPC使用方法</h1><p><strong>Hadoop RPC对外主要提供了两种接口(见类org.apache.hadoop.ipc.RPC)，分别是 ：</strong> </p>
+<ul>
+<li>public static <T>ProtocolProxy <T> getProxy/waitForProxy() : 构造一个客户端代理对象，用于向服务器发送RPC请求</li>
+<li>public static Server RPC.Builder (Configuration).build() : 为某个协议实例构造一个服务器对象，用于处理客户端发送的请求</li>
+</ul>
+<p><strong>使用Hadoop RPC分为以下4个步骤 ：</strong></p>
+<h2 id="定义RPC协议"><a href="#定义RPC协议" class="headerlink" title="定义RPC协议"></a>定义RPC协议</h2><p>RPC协议是客户端和服务器端之间的通信接口，它定义了服务器端对外提供的服务接口。如下所示，我们定义一个ClientProtocol通信接口，声明了echo和add两个方法。Hadoop中所有自定义RPC接口都需要继承VersionedProtocol接口，它描述了协议的版本信息</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">interface ClientProtocol extends org.apache.hadoop.ipc.VersionedProtocol &#123;</span><br><span class="line">    public static final long versionID = 1L;</span><br><span class="line">    String echo(String value) throws IOException;</span><br><span class="line">    int add(int v1 , int v2) throws IOException;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="实现RPC协议"><a href="#实现RPC协议" class="headerlink" title="实现RPC协议"></a>实现RPC协议</h2><p>Hadoop RPC协议通常是一个Java接口，用户需要实现该接口</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">public static class ClientProtocolImpl implements ClientProtocol &#123;</span><br><span class="line">    //重载的方法，用于获取自定义的协议版本号</span><br><span class="line">    public long getProtocolVersion(String protocol, long clientVersion) &#123;</span><br><span class="line">        return ClientProtocol.versionID;</span><br><span class="line">    &#125;</span><br><span class="line">    //重载的方法，用于获取协议签名</span><br><span class="line">    public ProtocolSignature getProtocolSignature(String protocol, long clientVersion, inthashcode) &#123;</span><br><span class="line">        return new ProtocolSignature(ClientProtocol.versionID, null);</span><br><span class="line">    &#125;</span><br><span class="line">    public String echo(String value) throws IOException &#123;</span><br><span class="line">        return value;</span><br><span class="line">    &#125;</span><br><span class="line">    public int add(int v1, int v2) throws IOException &#123;</span><br><span class="line">        return v1 + v2;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="构造并启动RPC-Server"><a href="#构造并启动RPC-Server" class="headerlink" title="构造并启动RPC Server"></a>构造并启动RPC Server</h2><p>直接使用静态类Builder构造一个RPC Server，并调用函数start()启动该Server</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Server server = new RPC.Builder(conf).setProtocol(ClientProtocol.class)</span><br><span class="line">    .setInstance(new ClientProtocolImpl()).setBindAddress(ADDRESS).setPort(0)</span><br><span class="line">    .setNumHandlers(5).build();</span><br><span class="line">server.start();</span><br><span class="line">// BindAddress : 服务器的HOST</span><br><span class="line">// Port ： 监听端口号，0代表系统随机选择一个端口号</span><br><span class="line">// NumHandlers : 服务端处理请求的线程数目</span><br></pre></td></tr></table></figure>
+
+<h2 id="构造RPC-Client并发送RPC请求"><a href="#构造RPC-Client并发送RPC请求" class="headerlink" title="构造RPC Client并发送RPC请求"></a>构造RPC Client并发送RPC请求</h2><p>使用静态方法getProxy构造客户端代理对象</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">proxy = (ClientProtocol)RPC.getProxy(</span><br><span class="line">    ClientProtocol.class, ClientProtocol.versionID, addr, conf);</span><br><span class="line">int result = proxy.add(5, 6);</span><br><span class="line">String echoResult = proxy.echo(&quot;result&quot;);</span><br></pre></td></tr></table></figure>
+
+<h1 id="Hadoop-RPC类详解"><a href="#Hadoop-RPC类详解" class="headerlink" title="Hadoop RPC类详解"></a>Hadoop RPC类详解</h1><p>Hadoop RPC主要有三个大类组成，即RPC、Client、Server，分别对应对外编程接口、客户端实现、服务器实现</p>
+<h2 id="ipc-RPC实现"><a href="#ipc-RPC实现" class="headerlink" title="ipc.RPC实现"></a>ipc.RPC实现</h2><p>RPC类实际上是对底层客户机 - 服务器网络模型的封装，以便为程序员提供一套更方便简洁的编程接口</p>
+<p>RPC类定义了一系列构建和销毁RPC客户端的方法，构建方法分为getProxy和waitForProxy两类，销毁方只有一个，即为stopProxy。RPC服务器的构建则由静态内部类RPC.Builder，该类提供了一些方法共用户设置一些基本的参数，设置完成参数，可调用build()完成一个服务器对象的构建，调用start()方法启动该服务器</p>
+<h2 id="ipc-Client"><a href="#ipc-Client" class="headerlink" title="ipc.Client"></a>ipc.Client</h2><p>Client主要完成的功能是发送远程过程调用信息并接收执行结果。</p>
+<p><strong>Client内部有两个重要的内部类，分别是 ：</strong> </p>
+<ul>
+<li>Call类 ： 封装了一个RPC请求，它包含5个成员变量，分别是唯一标识ID、函数调用信息param、函数执行返回值value、出错或者异常信息error和执行完成标识符done。由于Hadoop RPC Server采用异步方式处理客户端请求，这使远程过程调用的发生顺序与结果返回顺序无直接关系，而Client端正式提供ID识别不同的函数调用的。当客户端向服务器端发送请求时，只需填充id和param两个变量，而剩下的三个变量则由服务器根据函数执行情况填充</li>
+<li>Connection类 ： Client与每个Server之间维护一个通信连接，与该连接相关的基本信息及操作被封装到Connection类中，基本信息主要包括通信连接唯一标识、与Server端通信的Socket、网络输入数据流(in)、网络输出数据流(out)、保存RPC请求的哈希表(calls)等。<strong>操作则包括</strong> ： <ul>
+<li>addCall – 将一个Call对象添加到哈希表中</li>
+<li>sendParam – 向服务器端发送RPC请求</li>
+<li>receiveResponse – 从服务器端接收已经处理完成的RPC请求</li>
+<li>run – Connection是一个线程类，它的run方法调用了receiveResponse方法，会一直等待接收RPC返回结果</li>
+</ul>
+</li>
+</ul>
+<p><strong>当调用Call函数执行某个远程方法时，Client端需要及进行以下四个步骤 ：</strong> </p>
+<ol>
+<li>创建一个Connection对象，并将远程方法调用信息封装成Call对象，放到Connection对象中的哈希表中</li>
+<li>调用Connection类中的sendRpcRequest()方法将当前Call对象发送给Server端</li>
+<li>Server端处理完RPC请求后，将结果通过网络返回给Client端，Client端通过receiveRpcResponse()函数获取结果</li>
+<li>Client检查结果处理状态，并将对应Call对象从哈希表中删除</li>
+</ol>
+<p><img src="rpcclient.png" alt="Hadoop RPC Client处理过程"></p>
+<h2 id="ipc-Server"><a href="#ipc-Server" class="headerlink" title="ipc.Server"></a>ipc.Server</h2><p>Hadoop采用了Master/Slave结构，其中Master是整个系统的单点，这是制约系统性能和可扩展性的最关键因素之一</p>
+<p>ipc.Server采用了很多提高并发处理能力的技术，主要包括线程池、事件驱动和Reactor设计模式等</p>
+<p><strong>Reactor是并发编程中一种基于事件驱动的设计模式，它具有以下两个特点 ：</strong> </p>
+<ul>
+<li>通过派发/分离IO操作事件提高系统的并发性能</li>
+<li>提供了粗粒度的并发控制，使用单线程实现，避免了复杂的同步处理</li>
+</ul>
+<p><strong>ipc.Server实际上实现了一个典型的Reactor设计模式，典型的Reactor设计模式中主要包括以下几个角色 ：</strong> </p>
+<ul>
+<li>Reactor ： I/O事件的派发者</li>
+<li>Acceptor ： 接受来自Client的连接，建立与Client对应的Handler，并向Reactor注册此Handler</li>
+<li>Handler ： 与一个Client通信的实体，并按一定的过程实现业务的处理</li>
+<li>Reader/Sender ： 为了加速处理速度，Reactor模式往往构建一个存放数据处理线程的线程池，这样数据读出后，立即扔到线程吃中等待后续处理即可。为此，Reactor模式一般分离Handler中的读和写两个过程，分别注册成单独的读事件和写事件，并由对应的Reader和Sender线程处理</li>
+</ul>
+<p><img src="rpcserver.png" alt="Hadoop RPC Server处理过程"></p>
+<h3 id="ipc-Server处理过程被划分成3个阶段-：-接收请求、处理请求和返回结果"><a href="#ipc-Server处理过程被划分成3个阶段-：-接收请求、处理请求和返回结果" class="headerlink" title="ipc.Server处理过程被划分成3个阶段 ： 接收请求、处理请求和返回结果"></a>ipc.Server处理过程被划分成3个阶段 ： 接收请求、处理请求和返回结果</h3><p><strong>接收请求</strong></p>
+<p>该阶段主要任务是接收来自各个客户端的RPC请求，并将它们封装成固定的格式(Call类)放到一个共享队列(CallQueue)中,该阶段内部又分为建立连接和接收请求两个子阶段，分别由Listener和Reader两种线程完成</p>
+<p>整个Server只有一个Listener线程，统一负责监听来自客户端的连接请求，一旦由新的请求到达，它会采用轮询的方式从线程池中选择一个Reader线程进行处理，而Reader线程可同时存在多个，它们分别负责接收一部分客户端连接的RPC请求，至于每个Reader线程负责哪些客户端连接，完全由Listener决定，当前Listener只是采用了简单的轮询分配机制</p>
+<p>Listener和Reader线程内部各自包含一个Selector对象，分别用于监听SelectionKey.OP_ACCEPT和SelectionKey.OP_READ事件。对于Listener线程，主循环的实现体是监听是否有新的连接请求到达，并采用轮询策略选择一个Reader线程处理新连接；对于Reader线程，主循环的实现体是监听客户端连接中是否有新的RPC请求到达，并将新的RPC请求封装成Call对象，放到共享队列中</p>
+<p><strong>处理请求</strong></p>
+<p>该阶段主要任务是从共享队列中获取call对象，执行对应的函数调用，并将结果返回给客户端，这全部由Handler线程完成</p>
+<p>Server端可同时存在多个Handler线程，它们并行从共享队列中读取Call对象，经执行对应的函数调用后，将尝试着直接将结果返回给对应的客户端。但考虑到某些函数调用返回结果很大或者网络速度很慢，可能难以将结果一次性发送给客户端，此时Handler将尝试着将后续发送任务交给Responder线程</p>
+<p><strong>返回结果</strong></p>
+<p>Server仅存一个Responder线程，它的内部包含一个Selector对象，用于监听SelectionKey.OP_WRITE事件。当Handler没能将结果一次性发送到客户端时，会向该Selector对象注册SelectionKey.OP_WRITE事件，进而由Responder线程采用异步方式继续发送未发送完成的结果</p>
+<h1 id="Hadoop-RPC参数调优"><a href="#Hadoop-RPC参数调优" class="headerlink" title="Hadoop RPC参数调优"></a>Hadoop RPC参数调优</h1><p><strong>HadoopRPC对外提供一些可配置参数，以便于用户根据业务需求和硬件环境对其进行调优 ：</strong></p>
+<ul>
+<li>Reader线程数目。参数ipc.server.read.threadpool.size设置</li>
+<li>每个Handler线程对应的最大Call数目。参数ipc.server.handler.queue.size设置</li>
+<li>Handler线程数目。参数yarn.resourcemanager.resource-tracker.client.thread-count和dfs.namenode.service.handler.count设置</li>
+<li>客户端最大重试次数。参数ipc.client.connect.max.size设置</li>
+</ul>
+
       
     </div>
 
@@ -405,15 +583,111 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="博客准备和搭建"><a href="#博客准备和搭建" class="headerlink" title="博客准备和搭建"></a>博客准备和搭建</h1><h2 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h2><h3 id="安装Git"><a href="#安装Git" class="headerlink" title="安装Git"></a>安装Git</h3><h3 id="安装Node-js"><a href="#安装Node-js" class="headerlink" title="安装Node.js"></a>安装Node.js</h3>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/10/28/hello-world/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
+          <h1 id="博客准备和搭建"><a href="#博客准备和搭建" class="headerlink" title="博客准备和搭建"></a>博客准备和搭建</h1><h2 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h2><h3 id="安装Git"><a href="#安装Git" class="headerlink" title="安装Git"></a>安装Git</h3><h3 id="安装Node-js"><a href="#安装Node-js" class="headerlink" title="安装Node.js"></a>安装Node.js</h3><p><a href="https://nodejs.org/en/" target="_blank" rel="noopener">下载Node.Js</a></p>
+<p>Window用户使用安装程序进行安装.安装时,勾选<strong>Add to PATH</strong>选项</p>
+<h3 id="安装Hexo"><a href="#安装Hexo" class="headerlink" title="安装Hexo"></a>安装Hexo</h3><p>打开CMD,执行命令 : <code>npm install -g hexo-cli</code></p>
+<h3 id="Github"><a href="#Github" class="headerlink" title="Github"></a>Github</h3><p><a href="https://github.com/" target="_blank" rel="noopener">注册登陆Github</a></p>
+<p>点击右上角你的头像，打开“Your repositories”，点击绿色的按钮“New”。</p>
+<p>在”Repository name”一栏填入 yourname.github.io （“yourname”指你的 GitHub ID，比如我就填 Smallbird6.github.io），”Description”可以随便填也可以不填，然后点绿色的按钮“Create repository”。</p>
+<h2 id="本地设置"><a href="#本地设置" class="headerlink" title="本地设置"></a>本地设置</h2><p>输入命令<code>hexo init</code>来初始化<code>hexo</code></p>
+<p>输入命令<code>npm install</code>来安装一些需要的包</p>
+<p>输入命令<code>hexo s</code>并在浏览器打开<code>localhost:4000</code>在本地预览博客；如果上文步骤进行正确，应该看到一个类似于这样的页面：</p>
+<p><img src="blog1.jpg" alt="blog1"></p>
+<h3 id="下载NexT主题"><a href="#下载NexT主题" class="headerlink" title="下载NexT主题"></a>下载NexT主题</h3><p><code>git clone https://github.com/theme-next/hexo-theme-next themes/next</code></p>
+<p>打开根目录下的<code>_config.yml</code>将<code>theme: landscape</code>修改为<code>theme: next</code></p>
+<h2 id="将博客上传至GitHub"><a href="#将博客上传至GitHub" class="headerlink" title="将博客上传至GitHub"></a>将博客上传至GitHub</h2><p>输入命令<code>ssh-keygen</code>来生成SSH，让你输入东西你就空着，按回车（应该要按三次回车)</p>
+<p>然后用任意的文本编辑器打开<code>C:\Users\电脑用户名\.ssh\id_rsa.pub</code>,复制里面的内容</p>
+<p>打开GitHub,点击右上角的头像，打开“Settings”，选择左边的“SSH and GPG keys”，点绿色的按钮“New SSH key”，Title随便填,下面的Key把刚才复制的东西粘贴进去，然后点绿色的按钮“Add SSH key”。过程中可能需要输入密码</p>
+<p>输入命令<code>ssh -T git@github.com</code>，若出现<code>Hi yourname! You&#39;ve successfully authenticated, but GitHub does not provide shell access</code>表示 SSH 配置成功</p>
+<p>输入命令<code>npm install hexo-deployer-git --save</code>安装 deployer</p>
+<p><strong>打开根目录下的_config.yml ，将最后几行改为 :</strong></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">deploy:</span><br><span class="line">  type: git</span><br><span class="line">  repository: https://github.com/yourname/SmallBird6.github.io.git</span><br><span class="line">  branch: master</span><br></pre></td></tr></table></figure>
+
+<p>当然”yourname”要改成你的GitHub ID</p>
+<p>依次输入命令：</p>
+<p>hexo clean<br>hexo g<br>hexo d</p>
+<p>等几分钟，再用浏览器打开<code>yourname.github.io</code>，应该就可以看到你的博客了</p>
+<h1 id="博客的配置"><a href="#博客的配置" class="headerlink" title="博客的配置"></a>博客的配置</h1><h2 id="根目录下的-config-yml"><a href="#根目录下的-config-yml" class="headerlink" title="根目录下的_config.yml"></a>根目录下的_config.yml</h2><p>可以在<code>highlight.tab_replace</code>设置将缩进替换为什么，默认是长度为八空格的制表符。例如：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">highlight:</span><br><span class="line">  enable: true</span><br><span class="line">  line_number: true</span><br><span class="line">  auto_detect: false</span><br><span class="line">  tab_replace: &apos;    &apos;</span><br></pre></td></tr></table></figure>
+
+<h2 id="主题目录下的-config-yml"><a href="#主题目录下的-config-yml" class="headerlink" title="主题目录下的 _config.yml"></a>主题目录下的 _config.yml</h2><h3 id="选择NexT主题的四种之一"><a href="#选择NexT主题的四种之一" class="headerlink" title="选择NexT主题的四种之一"></a>选择NexT主题的四种之一</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"># Schemes</span><br><span class="line">scheme: Muse</span><br><span class="line">#scheme: Mist</span><br><span class="line">#scheme: Pisces</span><br><span class="line">#scheme: Gemini</span><br></pre></td></tr></table></figure>
+<p>四种主题预览 :<br><img src="blog2.png" alt="blog2"></p>
+<h3 id="改变网站图标"><a href="#改变网站图标" class="headerlink" title="改变网站图标"></a>改变网站图标</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">favicon:</span><br><span class="line">  small: /images/favicon-16x16-next.png</span><br><span class="line">  medium: /images/favicon-32x32-next.png</span><br><span class="line">  apple_touch_icon: /images/apple-touch-icon-next.png</span><br><span class="line">  safari_pinned_tab: /images/logo.svg</span><br></pre></td></tr></table></figure>
+
+<p>将你想用的图标放在<code>\themes\next\source\images</code>里，然后修改上面的文件名即可</p>
+<h3 id="页脚设置"><a href="#页脚设置" class="headerlink" title="页脚设置"></a>页脚设置</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">footer:</span><br><span class="line">  # Specify the date when the site was setup.</span><br><span class="line">  # If not defined, current year will be used.</span><br><span class="line">  #since: 2015</span><br><span class="line"></span><br><span class="line">  # Icon between year and copyright info.</span><br><span class="line">  icon:</span><br><span class="line">    # Icon name in fontawesome, see: https://fontawesome.com/v4.7.0/icons</span><br><span class="line">    # `heart` is recommended with animation in red (#ff0000).</span><br><span class="line">    name: battery-full</span><br><span class="line">    # If you want to animate the icon, set it to true.</span><br><span class="line">    animated: false</span><br><span class="line">    # Change the color of icon, using Hex Code.</span><br><span class="line">    color: &quot;#808080&quot;</span><br><span class="line"></span><br><span class="line">  # If not defined, will be used `author` from Hexo main config.</span><br><span class="line">  copyright: </span><br><span class="line">  # -------------------------------------------------------------</span><br><span class="line">  powered:</span><br><span class="line">    # Hexo link (Powered by Hexo).</span><br><span class="line">    enable: false</span><br><span class="line">    # Version info of Hexo after Hexo link (vX.X.X).</span><br><span class="line">    version: true</span><br><span class="line"></span><br><span class="line">  theme:</span><br><span class="line">    # Theme &amp; scheme info link (Theme - NexT.scheme).</span><br><span class="line">    enable: true</span><br><span class="line">    # Version info of NexT after scheme info (vX.X.X).</span><br><span class="line">    version: true</span><br></pre></td></tr></table></figure>
+
+<p><code>icon</code>： <code>© 2019</code>与用户名之间的图标（图中 1）</p>
+<p>图标名称为<a href="https://fontawesome.com/icons" target="_blank" rel="noopener">Font Awesome</a>上的图标名称</p>
+<p><code>powered.enable</code>：为<code>true</code>则会显示“由 Hexo 强力驱动”（图中 2）</p>
+<p><code>powered.version</code>：为<code>true</code>则会显示 Hexo 的版本（图中 3）</p>
+<p><code>theme.enable</code>：为<code>true</code>则会显示“主题 – NexT.XX”（图中 4）</p>
+<p><code>theme.version</code>：为<code>true</code>则会显示主题的版本（图中 5）</p>
+<p><img src="blog3.jpg" alt="blog3"></p>
+<p>注：根据 NexT 主题的 LICENSE，footer 中必须开启 theme.enable 选项</p>
+<h3 id="“关于”-amp-”标签”"><a href="#“关于”-amp-”标签”" class="headerlink" title="“关于”&amp;”标签”"></a>“关于”&amp;”标签”</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">menu:</span><br><span class="line">  home: / || home</span><br><span class="line">  about: /about/ || user</span><br><span class="line">  tags: /tags/ || tags</span><br><span class="line">  categories: /categories/ || th</span><br><span class="line">  archives: /archives/ || archive</span><br><span class="line">  #schedule: /schedule/ || calendar</span><br><span class="line">  #sitemap: /sitemap.xml || sitemap</span><br><span class="line">  #commonweal: /404/ || heartbeat</span><br></pre></td></tr></table></figure>
+
+<p>如果需要使用“关于”页面，输入命令<code>hexo new page &quot;about&quot;</code></p>
+<p>然后在<code>\source\about\index.md</code>中就可以编辑“关于”页面了</p>
+<p>可以修改<code>\source\about\index.md</code>中的<code>title</code>项来显示“关于”而非“about”</p>
+<p>如果需要使用“标签”页面，输入命令<code>hexo new page &quot;tags&quot;</code></p>
+<p>然后向<code>source\tags\index.md</code>中添加一行：<code>type: &quot;tags&quot;</code></p>
+<p>如果需要使用“分类”页面，输入命令<code>hexo new page &quot;categories&quot;</code></p>
+<p>然后向<code>source\categories\index.md</code>中添加一行：<code>type: &quot;categories&quot;</code></p>
+<h3 id="社交网站"><a href="#社交网站" class="headerlink" title="社交网站"></a>社交网站</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">social:</span><br><span class="line">  GitHub: https://github.com/ouuan || github</span><br><span class="line">  洛谷: https://www.luogu.org/space/show?uid=49742 || code</span><br><span class="line">  Codeforces: https://www.codeforces.com/profile/ouuan || code</span><br><span class="line">  b站: https://space.bilibili.com/11067182 || tv</span><br><span class="line"></span><br><span class="line">social_icons:</span><br><span class="line">  enable: true</span><br><span class="line">  icons_only: false</span><br><span class="line">  transition: false</span><br></pre></td></tr></table></figure>
+
+<p>在<code>social</code>下每行一个，格式为：<code>名称: 地址 || 图标</code></p>
+<h3 id="友情链接"><a href="#友情链接" class="headerlink" title="友情链接"></a>友情链接</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"># Blog rolls</span><br><span class="line">links_icon: globe</span><br><span class="line">links_title: 友情链接</span><br><span class="line"># links_layout: block</span><br><span class="line">links_layout: inline</span><br><span class="line">links:</span><br><span class="line">  Dew: https://www.cnblogs.com/ppprseter/</span><br><span class="line">  wjyyy: https://www.wjyyy.top/</span><br><span class="line">  Sooke: https://www.luogu.org/blog/Sooke/</span><br><span class="line">  huyufeifei: https://www.cnblogs.com/huyufeifei/</span><br><span class="line">  Rye_Catcher: https://rye-catcher.github.io/</span><br><span class="line">  额冻豆腐: http://www.mayflyyh.com/</span><br></pre></td></tr></table></figure>
+
+<p><code>links_icon</code>：显示在标题前的图标</p>
+<p><code>links_title</code>：标题</p>
+<p><code>links_layout</code>：block 一行一个，inline 一行多个</p>
+<p><code>links</code>：要显示的链接以及名称</p>
+<h3 id="头像"><a href="#头像" class="headerlink" title="头像"></a>头像</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"># Sidebar Avatar</span><br><span class="line">avatar:</span><br><span class="line">  # in theme directory(source/images): /images/avatar.gif</span><br><span class="line">  # in site  directory(source/uploads): /uploads/avatar.gif</span><br><span class="line">  # You can also use other linking images.</span><br><span class="line">  url: /images/avatar.jpg</span><br><span class="line">  # If true, the avatar would be dispalyed in circle.</span><br><span class="line">  rounded: true</span><br><span class="line">  # The value of opacity should be choose from 0 to 1 to set the opacity of the avatar.</span><br><span class="line">  opacity: 1</span><br><span class="line">  # If true, the avatar would be rotated with the cursor.</span><br><span class="line">  rotated: false</span><br></pre></td></tr></table></figure>
+<p><code>url</code>：头像地址，留空则不显示头像</p>
+<p><code>rounded</code>：圆/方头像</p>
+<p><code>opacity</code>：不透明度</p>
+<p><code>rotated</code>：随光标旋转</p>
+<h3 id="回到顶部按钮-阅读百分比"><a href="#回到顶部按钮-阅读百分比" class="headerlink" title="回到顶部按钮/阅读百分比"></a>回到顶部按钮/阅读百分比</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">back2top:</span><br><span class="line">  enable: true</span><br><span class="line">  # Back to top in sidebar.</span><br><span class="line">  sidebar: true</span><br><span class="line">  # Scroll percent label in b2t button.</span><br><span class="line">  scrollpercent: true</span><br></pre></td></tr></table></figure>
+
+<h3 id="首页不显示全文"><a href="#首页不显示全文" class="headerlink" title="首页不显示全文"></a>首页不显示全文</h3><p>可以在<code>\themes\next\_config.yml</code>里设置到一定字数自动不显示全文：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"># Automatically Excerpt. Not recommend.</span><br><span class="line"># Please use &lt;!-- more --&gt; in the post to control excerpt accurately.</span><br><span class="line">auto_excerpt:</span><br><span class="line">  enable: true</span><br><span class="line">  length: 150</span><br><span class="line"></span><br><span class="line"># Read more button</span><br><span class="line"># If true, the read more button would be displayed in excerpt section</span><br><span class="line">read_more_btn: true</span><br></pre></td></tr></table></figure>
+<p><code>length</code>：不显示全文的字数上限</p>
+<h3 id="控制按钮"><a href="#控制按钮" class="headerlink" title="控制按钮"></a>控制按钮</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">codeblock:</span><br><span class="line">  # Manual define the border radius in codeblock</span><br><span class="line">  # Leave it empty for the default 1</span><br><span class="line">  border_radius:</span><br><span class="line">  # Add copy button on codeblock</span><br><span class="line">  copy_button:</span><br><span class="line">    enable: true</span><br><span class="line">    # Show text copy result</span><br><span class="line">    show_result: true</span><br></pre></td></tr></table></figure>
+
+<p><code>enable</code>：启用复制按钮</p>
+<h3 id="访客统计"><a href="#访客统计" class="headerlink" title="访客统计"></a>访客统计</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">busuanzi_count:</span><br><span class="line">  enable: true</span><br></pre></td></tr></table></figure>
+
+<h3 id="书签"><a href="#书签" class="headerlink" title="书签"></a>书签</h3><p>书签的功能是关闭页面/手动点击书签按钮时，保存这篇博客看到的位置，下次点进这篇博客时继续从这个位置开始</p>
+<p>安装插件：<code>git clone https://github.com/theme-next/theme-next-bookmark.git source/lib/bookmark</code></p>
+<p>更改<code>\themes\next\_config.yml</code>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"># Bookmark Support</span><br><span class="line"># Dependencies: https://github.com/theme-next/theme-next-bookmark</span><br><span class="line">bookmark:</span><br><span class="line">  enable: true</span><br><span class="line">  # if auto</span><br><span class="line">  #   - save the reading position when closing the page</span><br><span class="line">  #   - or clicking the bookmark-icon</span><br><span class="line">  # if manual, only save it by clicking the bookmark-icon</span><br><span class="line">  save: manual</span><br></pre></td></tr></table></figure>
+
+<h3 id="博客背景"><a href="#博客背景" class="headerlink" title="博客背景"></a>博客背景</h3><p>打开<code>\themes\next\source\css\_custom\custom.styl</code>，输入：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">body &#123;</span><br><span class="line">    background-image:url(/images/background.jpg);</span><br><span class="line">    background-size: cover;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>把背景图片重命名为<code>background.jpg</code>，放入<code>\themes\source\images</code>（当然也可以更改background-image:url()）</p>
+<p><code>background-size: cover</code>;表示宽度缩放至页面大小</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">body &#123;</span><br><span class="line">    background-image:url(/images/background.jpg);</span><br><span class="line">    background-repeat: no-repeat;</span><br><span class="line">    background-attachment:fixed;</span><br><span class="line">    background-size: cover;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>如果修改成这样的话背景图片就不会滚动</p>
+<p>如果不想让博客内容挡住背景，可以设置博客内容的透明度，在<code>\themes\next\source\css\_custom\custom.styl</code>中加入下面的代码即可：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">.main-inner &#123;</span><br><span class="line">    opacity: 0.9;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="README-md-amp-CNAME"><a href="#README-md-amp-CNAME" class="headerlink" title="README.md&amp;CNAME"></a>README.md&amp;CNAME</h3><p>如果想在<code>https://github.com/yourname/yourname.github.io</code>让别人看到你的博客的简介，就需要写一个<code>README.md</code>放在根目录下的<code>source</code>文件夹内</p>
+<p>然而，只是这样的话,<code>README.md</code>会被渲染成 html，所以需要更改根目录下<code>_config.yml</code>的设置： <code>skip_render: README.md</code></p>
+<p>CNAME同理</p>
+<h1 id="写作博客"><a href="#写作博客" class="headerlink" title="写作博客"></a>写作博客</h1><h2 id="撰写博客前的准备"><a href="#撰写博客前的准备" class="headerlink" title="撰写博客前的准备"></a>撰写博客前的准备</h2><p>打开根目录下的<code>_config.yml</code>，将<code>post_asset_folder</code>设为<code>true</code></p>
+<p>这样就可以把图片放到博客里而不用其它图床了</p>
+<h2 id="博文的撰写"><a href="#博文的撰写" class="headerlink" title="博文的撰写"></a>博文的撰写</h2><p>新建一篇博客：<code>hexo new &quot;博文标题&quot;</code></p>
+<p>然后等几秒钟，在<code>\source\_posts</code>文件夹下，就会生成<code>博客名</code>这个文件夹（如果你把<code>post_asset_folder</code>设为<code>true</code>了）以及<code>博客名.md</code></p>
+<p>撰写博客就是<code>编辑博客名.md</code></p>
+<p>这个文件的开头是博客的一些设置，可以在<code>\scaffolds\posts.md</code>中修改默认设置，我的默认设置是：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">---</span><br><span class="line">title: &#123;&#123; title &#125;&#125;</span><br><span class="line">date: &#123;&#123; date &#125;&#125;</span><br><span class="line">tags: </span><br><span class="line">categories: </span><br><span class="line">---</span><br></pre></td></tr></table></figure>
+
+<h2 id="引用本地图片"><a href="#引用本地图片" class="headerlink" title="引用本地图片"></a>引用本地图片</h2><p>引用链接/网络上的图片格式与普通 Markdown 相同（<code>[链接名称](链接地址)</code>和<code>![图片描述](图片地址)</code>），引用本地图片需要把<code>post_asset_folder</code>设为<code>true</code>,然后把图片放在与博客同名的文件夹中，然后只用<code>![图片描述](图片文件名)</code>就可以引用了</p>
+<p><strong>接下来就直接进行博客的发布就OK了,集群的搭建也完成了!</strong></p>
+
       
     </div>
 

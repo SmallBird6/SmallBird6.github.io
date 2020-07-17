@@ -50,13 +50,13 @@
   };
 </script>
 
-  <meta name="description" content="ApplicationMaster管理">
+  <meta name="description" content="ApplicationMaster管理ApplicationMaster管理部分主要由三个服务构成，分别是ApplicationMasterLauncher、AMLivelinessMonitor和ApplicationMasterService，它们共同管理应用程序的ApplicationMaster的生命周期 ApplicationMasterLauncher、AMLivelinessMoni">
 <meta name="keywords" content="大数据,Hadoop">
 <meta property="og:type" content="article">
 <meta property="og:title" content="ResourceManager管理">
 <meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;10&#x2F;29&#x2F;ResourceManager%E7%AE%A1%E7%90%86&#x2F;index.html">
 <meta property="og:site_name" content="SmallBird&#96;s Blog">
-<meta property="og:description" content="ApplicationMaster管理">
+<meta property="og:description" content="ApplicationMaster管理ApplicationMaster管理部分主要由三个服务构成，分别是ApplicationMasterLauncher、AMLivelinessMonitor和ApplicationMasterService，它们共同管理应用程序的ApplicationMaster的生命周期 ApplicationMasterLauncher、AMLivelinessMoni">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2019&#x2F;10&#x2F;29&#x2F;ResourceManager%E7%AE%A1%E7%90%86&#x2F;blog2.png">
 <meta property="og:updated_time" content="2020-03-11T09:53:00.047Z">
@@ -251,7 +251,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="ApplicationMaster管理"><a href="#ApplicationMaster管理" class="headerlink" title="ApplicationMaster管理"></a>ApplicationMaster管理</h1><a id="more"></a><p><em>ApplicationMaster管理部分主要由三个服务构成，分别是ApplicationMasterLauncher、AMLivelinessMonitor和ApplicationMasterService，它们共同管理应用程序的ApplicationMaster的生命周期</em></p>
+        <h1 id="ApplicationMaster管理"><a href="#ApplicationMaster管理" class="headerlink" title="ApplicationMaster管理"></a>ApplicationMaster管理</h1><p><em>ApplicationMaster管理部分主要由三个服务构成，分别是ApplicationMasterLauncher、AMLivelinessMonitor和ApplicationMasterService，它们共同管理应用程序的ApplicationMaster的生命周期</em></p>
 <p><strong>ApplicationMasterLauncher、AMLivelinessMonitor和ApplicationMasterService这三个组件是如何协同管理ApplicationMaster生命周期，介绍从ResourceManager获得资源启动ApplicationMaster ：</strong> </p>
 <ol>
 <li>用户向YARN ResourceManager提交应用程序，ResourceManager收到提交请求后，先向资源调度器申请用以启动ApplicationMaster的资源，待申请到资源后，再由ApplicationMasterLauncher与对应的NodeManager通信，从而启动应用程序的ApplicationMaster</li>

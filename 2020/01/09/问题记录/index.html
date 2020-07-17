@@ -50,13 +50,13 @@
   };
 </script>
 
-  <meta name="description" content="问题记录HBase Name or service not known">
+  <meta name="description" content="问题记录HBase Name or service not known   问题描述  Hbase启动start-hbase.sh脚本发生Name or service not known异常   解决方案  查看regionservers文件是否被污染,如被污染删除手动创建    Java 对List进行操作时报错java.lang.UnsupportedOperationException">
 <meta name="keywords" content="Question">
 <meta property="og:type" content="article">
 <meta property="og:title" content="问题记录">
 <meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;01&#x2F;09&#x2F;%E9%97%AE%E9%A2%98%E8%AE%B0%E5%BD%95&#x2F;index.html">
 <meta property="og:site_name" content="SmallBird&#96;s Blog">
-<meta property="og:description" content="问题记录HBase Name or service not known">
+<meta property="og:description" content="问题记录HBase Name or service not known   问题描述  Hbase启动start-hbase.sh脚本发生Name or service not known异常   解决方案  查看regionservers文件是否被污染,如被污染删除手动创建    Java 对List进行操作时报错java.lang.UnsupportedOperationException">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:updated_time" content="2020-05-11T12:32:40.669Z">
 <meta name="twitter:card" content="summary">
@@ -240,7 +240,7 @@
       
         <h1 id="问题记录"><a href="#问题记录" class="headerlink" title="问题记录"></a>问题记录</h1><h2 id="HBase"><a href="#HBase" class="headerlink" title="HBase"></a>HBase</h2><ol>
 <li>Name or service not known</li>
-</ol><a id="more"></a>
+</ol>
 <ul>
 <li><p>问题描述</p>
 <ul>
@@ -263,7 +263,7 @@
 </li>
 <li>解决方案<ul>
 <li>调用Arrays.asList()生产的List的add、remove方法时报异常，这是由Arrays.asList() 返回的是Arrays的内部类ArrayList， 而不是java.util.ArrayList。Arrays的内部类ArrayList和java.util.ArrayList都是继承AbstractList，remove、add等方法AbstractList中是默认throw UnsupportedOperationException而且不作任何操作。java.util.ArrayList重新了这些方法而Arrays的内部类ArrayList没有重新，所以会抛出异常</li>
-<li>List<string> list = Arrays.asList(array);</string></li>
+<li>List<String> list = Arrays.asList(array);</li>
 <li>List arrList = new ArrayList(list);</li>
 </ul>
 </li>

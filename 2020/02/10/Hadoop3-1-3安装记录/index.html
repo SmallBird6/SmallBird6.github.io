@@ -50,13 +50,13 @@
   };
 </script>
 
-  <meta name="description" content="环境准备集群节点信息三台机器 :  henghe-032  henghe-033  henghe-034 角色分配    NameNode DataNode ResourceManager NodeManager Journalnode ZKFC ZK    henghe-032 * * * * * * *   henghe-033 * * * * *  *   henghe-034  *  *">
+  <meta name="description" content="环境准备集群节点信息三台机器 :   henghe-032  henghe-033  henghe-034 角色分配    NameNode DataNode ResourceManager NodeManager Journalnode ZKFC ZK    henghe-032 * * * * * * *   henghe-033 * * * * *  *   henghe-034  *  *">
 <meta name="keywords" content="大数据,Hadoop">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Hadoop3.1.3安装记录(HA)">
 <meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;02&#x2F;10&#x2F;Hadoop3-1-3%E5%AE%89%E8%A3%85%E8%AE%B0%E5%BD%95&#x2F;index.html">
 <meta property="og:site_name" content="SmallBird&#96;s Blog">
-<meta property="og:description" content="环境准备集群节点信息三台机器 :  henghe-032  henghe-033  henghe-034 角色分配    NameNode DataNode ResourceManager NodeManager Journalnode ZKFC ZK    henghe-032 * * * * * * *   henghe-033 * * * * *  *   henghe-034  *  *">
+<meta property="og:description" content="环境准备集群节点信息三台机器 :   henghe-032  henghe-033  henghe-034 角色分配    NameNode DataNode ResourceManager NodeManager Journalnode ZKFC ZK    henghe-032 * * * * * * *   henghe-033 * * * * *  *   henghe-034  *  *">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:updated_time" content="2020-03-11T09:53:00.043Z">
 <meta name="twitter:card" content="summary">
@@ -249,7 +249,8 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h1><h2 id="集群节点信息"><a href="#集群节点信息" class="headerlink" title="集群节点信息"></a>集群节点信息</h2><p>三台机器 : </p><ul>
+        <h1 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h1><h2 id="集群节点信息"><a href="#集群节点信息" class="headerlink" title="集群节点信息"></a>集群节点信息</h2><p>三台机器 : </p>
+<ul>
 <li><p>henghe-032</p>
 </li>
 <li><p>henghe-033</p>
@@ -322,8 +323,7 @@
 </li>
 </ol>
 </li>
-</ul><a id="more"></a>
-
+</ul>
 <h2 id="Zoo-cfg配置文件"><a href="#Zoo-cfg配置文件" class="headerlink" title="Zoo.cfg配置文件"></a>Zoo.cfg配置文件</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">修改 : </span><br><span class="line">dataDir=/opt/zookeeper/zkdata</span><br><span class="line"></span><br><span class="line">添加 : </span><br><span class="line">server.1=henghe-032:2888:3888</span><br><span class="line">server.2=henghe-033:2888:3888</span><br><span class="line">server.3=henghe-034:2888:3888</span><br></pre></td></tr></table></figure>
 
 <h2 id="启动Zookeeper"><a href="#启动Zookeeper" class="headerlink" title="启动Zookeeper"></a>启动Zookeeper</h2><p><strong>分发Zookeeper :</strong> <code>scp -r /opt/zookeeper henghe-033:/opt</code>  (henghe-034同理)</p>

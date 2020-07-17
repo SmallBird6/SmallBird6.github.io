@@ -50,15 +50,15 @@
   };
 </script>
 
-  <meta name="description" content="Kerberos概述Kerberos技术概况">
+  <meta name="description" content="Kerberos概述Kerberos技术概况Kerberos技术是一种计算机网络授权协议，用于在非安全的网络环境下对个人通信进行加密认证。Kerberos协议认证过程的实现不依赖于主机操作系统的认证，无需基于主机地址的信任，不要求网络上所有主机的物理安全，并且是以假定网络上传送的数据包可以被任意的读取，修改和插入数据为前提设计的 Kerberos设计的目标如下：  用户的密码不能在网络上传输 用户">
 <meta name="keywords" content="大数据,Kerberos">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Kerberos认证">
 <meta property="og:url" content="http:&#x2F;&#x2F;yoursite.com&#x2F;2020&#x2F;03&#x2F;18&#x2F;Kerberos%E8%AE%A4%E8%AF%81&#x2F;index.html">
 <meta property="og:site_name" content="SmallBird&#96;s Blog">
-<meta property="og:description" content="Kerberos概述Kerberos技术概况">
+<meta property="og:description" content="Kerberos概述Kerberos技术概况Kerberos技术是一种计算机网络授权协议，用于在非安全的网络环境下对个人通信进行加密认证。Kerberos协议认证过程的实现不依赖于主机操作系统的认证，无需基于主机地址的信任，不要求网络上所有主机的物理安全，并且是以假定网络上传送的数据包可以被任意的读取，修改和插入数据为前提设计的 Kerberos设计的目标如下：  用户的密码不能在网络上传输 用户">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2020-05-17T11:47:24.290Z">
+<meta property="og:updated_time" content="2020-06-22T08:05:44.809Z">
 <meta name="twitter:card" content="summary">
 
 <link rel="canonical" href="http://yoursite.com/2020/03/18/Kerberos%E8%AE%A4%E8%AF%81/">
@@ -217,7 +217,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-05-17 19:47:24" itemprop="dateModified" datetime="2020-05-17T19:47:24+08:00">2020-05-17</time>
+                <time title="修改时间：2020-06-22 16:05:44" itemprop="dateModified" datetime="2020-06-22T16:05:44+08:00">2020-06-22</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -249,7 +249,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="Kerberos概述"><a href="#Kerberos概述" class="headerlink" title="Kerberos概述"></a>Kerberos概述</h1><h2 id="Kerberos技术概况"><a href="#Kerberos技术概况" class="headerlink" title="Kerberos技术概况"></a>Kerberos技术概况</h2><a id="more"></a><p>Kerberos技术是一种计算机网络授权协议，用于在非安全的网络环境下对个人通信进行加密认证。Kerberos协议认证过程的实现不依赖于主机操作系统的认证，无需基于主机地址的信任，不要求网络上所有主机的物理安全，并且是以假定网络上传送的数据包可以被任意的读取，修改和插入数据为前提设计的</p>
+        <h1 id="Kerberos概述"><a href="#Kerberos概述" class="headerlink" title="Kerberos概述"></a>Kerberos概述</h1><h2 id="Kerberos技术概况"><a href="#Kerberos技术概况" class="headerlink" title="Kerberos技术概况"></a>Kerberos技术概况</h2><p>Kerberos技术是一种计算机网络授权协议，用于在非安全的网络环境下对个人通信进行加密认证。Kerberos协议认证过程的实现不依赖于主机操作系统的认证，无需基于主机地址的信任，不要求网络上所有主机的物理安全，并且是以假定网络上传送的数据包可以被任意的读取，修改和插入数据为前提设计的</p>
 <p><strong>Kerberos设计的目标如下：</strong></p>
 <ul>
 <li>用户的密码不能在网络上传输</li>
@@ -306,26 +306,26 @@
 </ol>
 <h2 id="KDC常用操作"><a href="#KDC常用操作" class="headerlink" title="KDC常用操作"></a>KDC常用操作</h2><ol>
 <li>kadmin.local ：打开KDC控制台，需要root权限</li>
-<li>[addprinc <principal>] ：添加Principal，在KDC控制台使用，执行后需要两次输入该Principal的密码</principal></li>
-<li>[delprinc <principal>] ：删除Principal，在KDC控制台使用，执行后需要确认是否删除</principal></li>
-<li>[xst -k <keytab file path> <principal>] ：导出指定Principal到指定Keytab文件，在KDC控制台使用。如果指定的Keytab文件已存在，则会将指定Principal信息合并到Keytab文件中</principal></keytab></li>
-<li>[modprinc -<parameter> <parameter value> <principal>] ：针对指定的Principal进行某项参数的修改，在KDC控制台使用。需要注意的是，使用modprinc命令修改的参数，优先级会比kdc.conf中的高</principal></parameter></parameter></li>
-<li>[getprinc <principal>] ：查看指定Principal的信息，包括每种密钥的加密类型、KVNO标签等，在KDC控制台使用</principal></li>
+<li>[addprinc <principal>] ：添加Principal，在KDC控制台使用，执行后需要两次输入该Principal的密码</li>
+<li>[delprinc <principal>] ：删除Principal，在KDC控制台使用，执行后需要确认是否删除</li>
+<li>[xst -k <keytab file path> <principal>] ：导出指定Principal到指定Keytab文件，在KDC控制台使用。如果指定的Keytab文件已存在，则会将指定Principal信息合并到Keytab文件中</li>
+<li>[modprinc -<parameter> <parameter value> <principal>] ：针对指定的Principal进行某项参数的修改，在KDC控制台使用。需要注意的是，使用modprinc命令修改的参数，优先级会比kdc.conf中的高</li>
+<li>[getprinc <principal>] ：查看指定Principal的信息，包括每种密钥的加密类型、KVNO标签等，在KDC控制台使用</li>
 <li>[listprincs] ：列出所有Principal，在KDC控制台使用</li>
 </ol>
 <h2 id="Client常用操作"><a href="#Client常用操作" class="headerlink" title="Client常用操作"></a>Client常用操作</h2><ol>
 <li>klist ：列出当前系统用户的Kerberos认证情况</li>
-<li>klist -kt <keytab file path> ：列出指定Keytab文件中包含的Principal信息，需要该文件的读权限</keytab></li>
-<li>kinit <principal> ：使用输入密码的方式认证指定的Principal</principal></li>
-<li>kinit -kt <keytab file path> <principal> ：使用指定Keytab中的指定Principal进行认证，需要该文件的读权限</principal></keytab></li>
+<li>klist -kt <keytab file path> ：列出指定Keytab文件中包含的Principal信息，需要该文件的读权限</li>
+<li>kinit <principal> ：使用输入密码的方式认证指定的Principal</li>
+<li>kinit -kt <keytab file path> <principal> ：使用指定Keytab中的指定Principal进行认证，需要该文件的读权限</li>
 <li>kdestroy ：注销当前已经认证的Principal</li>
 <li>ktutil ：进入Keytab工具控制台</li>
 <li>[list][l] ：列出当前ktutil中的密钥表</li>
 <li>[clear] [clear_list] ：清除当前密钥表</li>
-<li>[rkt <keytab file path>] ：读取一个Keytab中的所用Principal信息到密钥表，需要有该文件的读权限，在ktutil中使用</keytab></li>
-<li>[wkt <keytab file path>] ：将密钥表中的所有Principal信息写入指定文件中。如果文件已存在，则需要该文件的写权限，信息会附加至文件末，在ktutil中使用</keytab></li>
-<li>[addent -password -p <principal> -k <kvno> -e <enctype>] ：手动添加一条Principal信息到密钥表，执行后需要输入指定Principal的密码。由于手动添加的信息ktutil不会进行验证，因此不推荐使用</enctype></kvno></principal></li>
-<li>[delent <entity number>] ：从密钥表中删除指定行号的Principal信息，行号可使用list或者l命令查看，在ktutil中使用</entity></li>
+<li>[rkt <keytab file path>] ：读取一个Keytab中的所用Principal信息到密钥表，需要有该文件的读权限，在ktutil中使用</li>
+<li>[wkt <keytab file path>] ：将密钥表中的所有Principal信息写入指定文件中。如果文件已存在，则需要该文件的写权限，信息会附加至文件末，在ktutil中使用</li>
+<li>[addent -password -p <principal> -k <KVNO> -e <enctype>] ：手动添加一条Principal信息到密钥表，执行后需要输入指定Principal的密码。由于手动添加的信息ktutil不会进行验证，因此不推荐使用</li>
+<li>[delent <entity number>] ：从密钥表中删除指定行号的Principal信息，行号可使用list或者l命令查看，在ktutil中使用</li>
 <li>[lr][list_request] ：列出所有ktutil中可用的命令，在ktutil中使用</li>
 <li>[quit][q][exit] ：退出ktutil控制台</li>
 </ol>

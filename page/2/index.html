@@ -239,15 +239,53 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p><strong>[转载文章]</strong></p><p>GET和POST是HTTP请求的两种基本方法</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/11/05/HTTP%E4%B8%ADGET%E4%B8%8EPOST%E7%9A%84%E5%8C%BA%E5%88%AB/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
+          <p><strong>[转载文章]</strong></p>
+<p>GET和POST是HTTP请求的两种基本方法</p>
+<p>最直观的区别就是GET把参数包含在URL中，POST通过request body传递参数</p>
+<p><strong>当你在面试中被问到这个问题,你轻轻松松的给出了一个“标准答案” :</strong></p>
+<ul>
+<li>GET在浏览器回退时是无害的，而POST会再次提交请求</li>
+<li>GET产生的URL地址可以被Bookmark，而POST不可以</li>
+<li>GET请求会被浏览器主动cache，而POST不会，除非手动设置</li>
+<li>GET请求只能进行url编码，而POST支持多种编码方式</li>
+<li>GET请求参数会被完整保留在浏览器历史记录里，而POST中的参数不会被保留</li>
+<li>GET请求在URL中传送的参数是有长度限制的，而POST么有</li>
+<li>对参数的数据类型，GET只接受ASCII字符，而POST没有限制</li>
+<li>GET比POST更不安全，因为参数直接暴露在URL上，所以不能用来传递敏感信息</li>
+<li>GET参数通过URL传递，POST放在Request body中</li>
+<li>（本标准答案参考自w3schools）</li>
+</ul>
+<p>“很遗憾，这不是我们要的回答！”，请告诉我真相。。。</p>
+<p>如果我告诉你GET和POST本质上没有区别你信吗？</p>
+<p>让我们扒下GET和POST的外衣，坦诚相见吧！</p>
+<p>GET和POST是什么？<code>HTTP协议中的两种发送请求的方法</code></p>
+<p>HTTP是什么？<code>HTTP是基于TCP/IP的关于数据如何在万维网中如何通信的协议</code></p>
+<p>HTTP的底层是TCP/IP。所以GET和POST的底层也是TCP/IP，也就是说，GET/POST都是TCP链接。GET和POST能做的事情是一样一样的。你要给GET加上request body，给POST带上url参数，技术上是完全行的通的</p>
+<p><strong>那么，“标准答案”里的那些区别是怎么回事？</strong></p>
+<p>在我大万维网世界中，TCP就像汽车，我们用TCP来运输数据，它很可靠，从来不会发生丢件少件的现象。但是如果路上跑的全是看起来一模一样的汽车，那这个世界看起来是一团混乱，送急件的汽车可能被前面满载货物的汽车拦堵在路上，整个交通系统一定会瘫痪。为了避免这种情况发生，交通规则HTTP诞生了。HTTP给汽车运输设定了好几个服务类别，有GET, POST, PUT, DELETE等等，HTTP规定，当执行GET请求的时候，要给汽车贴上GET的标签（设置method为GET），而且要求把传送的数据放在车顶上（url中）以方便记录。如果是POST请求，就要在车上贴上POST的标签，并把货物放在车厢里。当然，你也可以在GET的时候往车厢内偷偷藏点货物，但是这是很不光彩；也可以在POST的时候在车顶上也放一些数据，让人觉得傻乎乎的。HTTP只是个行为准则，而TCP才是GET和POST怎么实现的基本。</p>
+<p><strong>但是，我们只看到HTTP对GET和POST参数的传送渠道（url还是requrest body）提出了要求。“标准答案”里关于参数大小的限制又是从哪来的呢?</strong></p>
+<p>在我大万维网世界中，还有另一个重要的角色：运输公司。不同的浏览器（发起http请求）和服务器（接受http请求）就是不同的运输公司。 虽然理论上，你可以在车顶上无限的堆货物（url中无限加参数）。但是运输公司可不傻，装货和卸货也是有很大成本的，他们会限制单次运输量来控制风险，数据量太大对浏览器和服务器都是很大负担。业界不成文的规定是，（大多数）浏览器通常都会限制url长度在2K个字节，而（大多数）服务器最多处理64K大小的url。超过的部分，恕不处理。如果你用GET服务，在request body偷偷藏了数据，不同服务器的处理方式也是不同的，有些服务器会帮你卸货，读出数据，有些服务器直接忽略，所以，虽然GET可以带request body，也不能保证一定能被接收到哦。</p>
+<p>好了，现在你知道，GET和POST本质上就是TCP链接，并无差别。但是由于HTTP的规定和浏览器/服务器的限制，导致他们在应用过程中体现出一些不同。</p>
+<p>你以为本文就这么结束了？</p>
+<p>我们的大BOSS还等着出场呢。。。</p>
+<p>这位BOSS有多神秘？当你试图在网上找“GET和POST的区别”的时候，那些你会看到的搜索结果里，从没有提到他。他究竟是什么呢。。。</p>
+<p><strong>GET和POST还有一个重大区别，简单的说：</strong></p>
+<p>GET产生一个TCP数据包；POST产生两个TCP数据包</p>
+<p><strong>长的说：</strong></p>
+<p>对于GET方式的请求，浏览器会把http header和data一并发送出去，服务器响应200（返回数据）；</p>
+<p>而对于POST，浏览器先发送header，服务器响应100 continue，浏览器再发送data，服务器响应200 ok（返回数据）。</p>
+<p>也就是说，GET只需要汽车跑一趟就把货送到了，而POST得跑两趟，第一趟，先去和服务器打个招呼“嗨，我等下要送一批货来，你们打开门迎接我”，然后再回头把货送过去。</p>
+<p><em>因为POST需要两步，时间上消耗的要多一点，看起来GET比POST更有效。因此Yahoo团队有推荐用GET替换POST来优化网站性能。但这是一个坑！跳入需谨慎。为什么？</em></p>
+<ol>
+<li><p>GET与POST都有自己的语义，不能随便混用。</p>
+</li>
+<li><p>据研究，在网络环境好的情况下，发一次包的时间和发两次包的时间差别基本可以无视。而在网络环境差的情况下，两次包的TCP在验证数据包完整性上，有非常大的优点。</p>
+</li>
+<li><p>并不是所有浏览器都会在POST中发送两次包，Firefox就只发送一次。</p>
+</li>
+</ol>
+<p>作者：Larry<br>链接：<a href="https://zhuanlan.zhihu.com/p/22536382" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/22536382</a><br>来源：知乎<br>著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处</p>
+
       
     </div>
 
@@ -322,15 +360,35 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="下载安装包"><a href="#下载安装包" class="headerlink" title="下载安装包"></a>下载安装包</h1><p><a href="https://dev.mysql.com/downloads/mysql/" target="_blank" rel="noopener">Mysql安装包下载地址</a></p><h1 id="解压安装包-配置环境变量"><a href="#解压安装包-配置环境变量" class="headerlink" title="解压安装包,配置环境变量"></a>解压安装包,配置环境变量</h1>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/10/31/Mysql8%E5%AE%89%E8%A3%85-Window%E7%B3%BB%E7%BB%9F/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
+          <h1 id="下载安装包"><a href="#下载安装包" class="headerlink" title="下载安装包"></a>下载安装包</h1><p><a href="https://dev.mysql.com/downloads/mysql/" target="_blank" rel="noopener">Mysql安装包下载地址</a></p>
+<h1 id="解压安装包-配置环境变量"><a href="#解压安装包-配置环境变量" class="headerlink" title="解压安装包,配置环境变量"></a>解压安装包,配置环境变量</h1><p>解压地址 : D:\Mysql\mysql-8.0.18-winx64</p>
+<h2 id="环境变量配置"><a href="#环境变量配置" class="headerlink" title="环境变量配置 :"></a>环境变量配置 :</h2><h3 id="MYSQL-HOME"><a href="#MYSQL-HOME" class="headerlink" title="MYSQL_HOME"></a>MYSQL_HOME</h3><p><img src="blog1.png" alt="blog1"></p>
+<h3 id="PATH"><a href="#PATH" class="headerlink" title="PATH"></a>PATH</h3><p><img src="blog2.png" alt="blog2"></p>
+<h1 id="my-ini配置文件"><a href="#my-ini配置文件" class="headerlink" title="my.ini配置文件"></a>my.ini配置文件</h1><p>MYSQL_HOME路径下新建文件<code>my.ini</code>,写入 : </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">[mysql]</span><br><span class="line">; 设置mysql客户端默认字符集</span><br><span class="line">default-character-set=utf8</span><br><span class="line">[mysqld]</span><br><span class="line">;设置3306端口</span><br><span class="line">port = 3306</span><br><span class="line">; 设置mysql的安装目录(注: 写自己的安装目录)</span><br><span class="line">basedir=$&#123;MYSQL_HOME&#125;</span><br><span class="line">; 设置mysql数据库的数据的存放目录(注: 写自己的安装目录)</span><br><span class="line">datadir=$&#123;MYSQL_HOME&#125;\data</span><br><span class="line">; 允许最大连接数</span><br><span class="line">max_connections=200</span><br><span class="line">; 服务端使用的字符集默认为8比特编码的latin1字符集</span><br><span class="line">character-set-server=utf8</span><br><span class="line">; 创建新表时将使用的默认存储引擎</span><br><span class="line">default-storage-engine=INNODB</span><br></pre></td></tr></table></figure>
+
+<h1 id="管理员身份运行CMD"><a href="#管理员身份运行CMD" class="headerlink" title="管理员身份运行CMD"></a>管理员身份运行CMD</h1><p>打开“开始”菜单 –&gt; 进入“所有程序–附件”中 –&gt; 找到到命令提示符 –&gt; 右键点击命令提示符 –&gt; 选择“以管理员权限运行”</p>
+<p><img src="blog3.png" alt="blog3"></p>
+<h1 id="安装并启动Mysql"><a href="#安装并启动Mysql" class="headerlink" title="安装并启动Mysql"></a>安装并启动Mysql</h1><h2 id="进入Mysql安装目录bin目录下"><a href="#进入Mysql安装目录bin目录下" class="headerlink" title="进入Mysql安装目录bin目录下"></a>进入Mysql安装目录bin目录下</h2><h2 id="安装Mysql"><a href="#安装Mysql" class="headerlink" title="安装Mysql"></a>安装Mysql</h2><p><code>mysqld install</code></p>
+<h2 id="初始化data目录"><a href="#初始化data目录" class="headerlink" title="初始化data目录"></a>初始化data目录</h2><p><code>mysqld --initialize-insecure</code></p>
+<h2 id="启动mysql"><a href="#启动mysql" class="headerlink" title="启动mysql"></a>启动mysql</h2><p><code>net start mysql</code></p>
+<h2 id="登录mysql-第一次登陆无须输入密码"><a href="#登录mysql-第一次登陆无须输入密码" class="headerlink" title="登录mysql(第一次登陆无须输入密码)"></a>登录mysql(第一次登陆无须输入密码)</h2><p><code>mysql -u root -p</code></p>
+<h2 id="修改ROOT用户密码"><a href="#修改ROOT用户密码" class="headerlink" title="修改ROOT用户密码"></a>修改ROOT用户密码</h2><p><code>alter user ‘root’@‘localhost’ identified with mysql_native_password by ‘new-password’;</code></p>
+<h2 id="为root用户授予所有权限"><a href="#为root用户授予所有权限" class="headerlink" title="为root用户授予所有权限"></a>为root用户授予所有权限</h2><p>从MySQL 8开始,不可以(隐式)使用GRANT命令创建用户,改用CREATE USER,然后使用GRANT声明：</p>
+<p><code>CREATE USER &#39;root&#39;@&#39;%&#39; IDENTIFIED BY &#39;root&#39;;</code></p>
+<p><code>GRANT ALL PRIVILEGES ON *.* TO &#39;root&#39;@&#39;%&#39; WITH GRANT OPTION;</code></p>
+<h2 id="刷新权限"><a href="#刷新权限" class="headerlink" title="刷新权限"></a>刷新权限</h2><p><code>flush privileges;</code></p>
+<h1 id="错误处理"><a href="#错误处理" class="headerlink" title="错误处理"></a>错误处理</h1><h2 id="删除Mysql"><a href="#删除Mysql" class="headerlink" title="删除Mysql"></a>删除Mysql</h2><p><code>mysqld --remove mysql</code></p>
+<h2 id="驱动类"><a href="#驱动类" class="headerlink" title="驱动类"></a>驱动类</h2><p><code>com.mysql.cj.jdbc.Driver</code></p>
+<h2 id="时区问题报错"><a href="#时区问题报错" class="headerlink" title="时区问题报错"></a>时区问题报错</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">java.sql.SQLException: The server time zone value &apos;�й���׼ʱ��&apos; is unrecognized or represents more than one time zone. You must configure either the server or JDBC driver (via the serverTimezone configuration property) to use a more specifc time zone value if you want to utilize time zone support.</span><br></pre></td></tr></table></figure>
+
+<p>错误信息 : java.sql.SQLException: 服务器时区值’?? u±e×??±??未被识别或代表多个时区。如果希望利用时区支持，必须配置服务器或JDBC驱动程序(通过serverTimezone配置属性)，以使用更特殊的时区值</p>
+<p>解决办法 : JDBC连接的URL后面加上serverTimezone = GMT，如果需要使用GMT + 8时区，需要写成GMT％2B8</p>
+<p>更改后URL代码 : <code>jdbc:mysql://192.168.98.105:3306/henghe_iris?useUnicode=true&amp;characterEncoding=utf-8&amp;allowMultiQueries=true&amp;rewriteBatchedStatements=true&amp;serverTimezone=GMT</code></p>
+<h2 id="Navicat连接MySql8出现2059错误"><a href="#Navicat连接MySql8出现2059错误" class="headerlink" title="Navicat连接MySql8出现2059错误"></a>Navicat连接MySql8出现2059错误</h2><p>错误原因 : 首先出现2059这个错误的原因是因为在mysql8之前的版本中加密规则为mysql_native_password。但是在mysql8以后的加密规则为caching_sha2_password</p>
+<p>解决办法 : 将mysql用户登录的加密规则进行修改。修改为mysql_native_password</p>
+<p>执行命令 : <code>ALTER USER &#39;root&#39;@&#39;localhost&#39; IDENTIFIED BY &#39;root&#39; PASSWORD EXPIRE NEVER;</code></p>
+
       
     </div>
 
@@ -406,14 +464,25 @@
 
       
           <p><em>网上的资料较少,工作上需要在K8S上搭建Hadoop,自己研究了一下,记录搭建过程</em></p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/10/29/Kubernetes-Kubernetes%E6%90%AD%E5%BB%BAHadoop%E6%9C%8D%E5%8A%A1/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
+<h1 id="编写Hadoop镜像"><a href="#编写Hadoop镜像" class="headerlink" title="编写Hadoop镜像"></a>编写Hadoop镜像</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line">FROM centos:7.5.1804</span><br><span class="line"></span><br><span class="line"># 下载wget,which</span><br><span class="line"># RUN yum install -y wget</span><br><span class="line">RUN yum install -y which</span><br><span class="line"></span><br><span class="line"># JAVA_HOME</span><br><span class="line">COPY jdk-8u221-linux-x64.tar.gz /</span><br><span class="line">RUN tar -zxvf jdk-8u221-linux-x64.tar.gz -C /opt/</span><br><span class="line"></span><br><span class="line">ENV JAVA_HOME /opt/jdk1.8.0_221</span><br><span class="line"></span><br><span class="line"># HADOOP</span><br><span class="line">COPY hadoop-2.7.4.tar.gz /</span><br><span class="line">RUN tar -zxvf hadoop-2.7.4.tar.gz -C /opt/</span><br><span class="line"></span><br><span class="line"># 设置Hadoop环境变量</span><br><span class="line">ENV HADOOP_HOME /opt/hadoop-2.7.4</span><br><span class="line">ENV HADOOP_PREFIX /opt/hadoop-2.7.4</span><br><span class="line">ENV HADOOP_COMMON_HOME /opt/hadoop-2.7.4</span><br><span class="line">ENV HADOOP_HDFS_HOME /opt/hadoop-2.7.4</span><br><span class="line">ENV HADOOP_CONF_DIR /opt/hadoop-2.7.4/etc/hadoop</span><br><span class="line">ENV HADOOP_CLASSPATH $JAVA_HOME/lib/tools.jar</span><br><span class="line">ENV PATH=$PATH:$HADOOP_HOME/bin</span><br><span class="line">ENV PATH=$PATH:$HADOOP_HOME/sbin</span><br><span class="line"></span><br><span class="line"># hadoop-env.sh配置文件添加JAVA_HOME</span><br><span class="line">RUN sed -i &apos;/^export JAVA_HOME/ s:.*:export JAVA_HOME=/opt/jdk1.8.0_221\nexport HADOOP_PREFIX=/opt/hadoop-2.7.4\nexport HADOOP_HOME=/opt/hadoop-2.7.4\n:&apos; $HADOOP_PREFIX/etc/hadoop/hadoop-env.sh</span><br><span class="line"></span><br><span class="line"># 更换Hadoop配置文件</span><br><span class="line">ADD conf/core-site.xml $HADOOP_PREFIX/etc/hadoop/core-site.xml</span><br><span class="line">ADD conf/hdfs-site.xml $HADOOP_PREFIX/etc/hadoop/hdfs-site.xml</span><br><span class="line">ADD conf/yarn-site.xml $HADOOP_PREFIX/etc/hadoop/yarn-site.xml</span><br><span class="line">ADD conf/mapred-site.xml $HADOOP_PREFIX/etc/hadoop/mapred-site.xml</span><br><span class="line"></span><br><span class="line">RUN $HADOOP_PREFIX/bin/hdfs namenode -format</span><br><span class="line"></span><br><span class="line"># Hdfs ports</span><br><span class="line">EXPOSE 50010 50020 50070 50075 50090 8020 9000</span><br><span class="line"></span><br><span class="line"># Mapred ports</span><br><span class="line">EXPOSE 10020 19888</span><br><span class="line"></span><br><span class="line"># Yarn ports</span><br><span class="line">EXPOSE 8030 8031 8032 8033 8040 8042 8088</span><br><span class="line"></span><br><span class="line"># Other ports</span><br><span class="line">EXPOSE 49707 2122</span><br><span class="line"></span><br><span class="line"># 启动节点脚本</span><br><span class="line">ADD start.sh /</span><br><span class="line"># CMD /start.sh</span><br><span class="line">CMD [&quot;/start.sh&quot;, &quot;-d&quot;]</span><br></pre></td></tr></table></figure>
+
+<p>镜像我写了几个版本,还有自己挂载配置文件的版本</p>
+<h1 id="编写启动脚本"><a href="#编写启动脚本" class="headerlink" title="编写启动脚本"></a>编写启动脚本</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">#!/usr/bin/env bash</span><br><span class="line">sed -i &quot;s/@HDFS_MASTER_SERVICE@/$HDFS_MASTER_SERVICE/g&quot; $HADOOP_HOME/etc/hadoop/core-site.xml</span><br><span class="line">sed -i &quot;s/@HADOOP_YARN_MASTER@/$HADOOP_YARN_MASTER/g&quot; $HADOOP_HOME/etc/hadoop/yarn-site.xml</span><br><span class="line">sed -i &quot;s/@NODEMANAGER_MEMORY@/$NODEMANAGER_MEMORY/g&quot; $HADOOP_HOME/etc/hadoop/yarn-site.xml</span><br><span class="line">sed -i &quot;s/@NODEMANAGER_CPU@/$NODEMANAGER_CPU/g&quot; $HADOOP_HOME/etc/hadoop/yarn-site.xml</span><br><span class="line"></span><br><span class="line">HADOOP_NODE=&quot;$&#123;HADOOP_NODE_TYPE&#125;&quot;</span><br><span class="line">if [ $HADOOP_NODE = &quot;datanode&quot; ]; then</span><br><span class="line">        echo &quot;Start DataNode ...&quot;</span><br><span class="line">        hdfs datanode  -regular</span><br><span class="line">else</span><br><span class="line">    if [  $HADOOP_NODE = &quot;namenode&quot; ]; then</span><br><span class="line">        echo &quot;Start NameNode ...&quot;</span><br><span class="line">        hdfs namenode &amp; hdfs secondarynamenode</span><br><span class="line">    else</span><br><span class="line">        if [ $HADOOP_NODE = &quot;resourcemanager&quot; ]; then</span><br><span class="line">            echo &quot;Start Yarn Resource Manager ...&quot;</span><br><span class="line">            yarn resourcemanager &amp; mapred historyserver</span><br><span class="line">        else</span><br><span class="line">             if [ $HADOOP_NODE = &quot;nodemanager&quot; ]; then</span><br><span class="line">                 echo &quot;Start Yarn Resource Node  ...&quot;</span><br><span class="line">                 yarn nodemanager</span><br><span class="line">             else</span><br><span class="line">                echo &quot;not recoginized nodetype &quot;</span><br><span class="line">             fi</span><br><span class="line">        fi</span><br><span class="line">    fi</span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
+
+<p>在启动容器的时候,传入参数配置</p>
+<p><strong>参数介绍 :</strong></p>
+<ul>
+<li>HDFS_MASTER_SERVICE : HDFS的主机名</li>
+<li>HADOOP_YARN_MASTER : Yarn</li>
+<li>NODEMANAGER_MEMORY : 启动NodeManager分配的内存</li>
+<li>NODEMANAGER_CPU : 启动NodeManager分配的CPU</li>
+</ul>
+<h1 id="在Docker中启动容器测试"><a href="#在Docker中启动容器测试" class="headerlink" title="在Docker中启动容器测试"></a>在Docker中启动容器测试</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line">创建网络 : </span><br><span class="line">docker network create -d bridge my-net</span><br><span class="line"></span><br><span class="line">NameNode :</span><br><span class="line">docker run -d --name hdfs-master \</span><br><span class="line">    -h hdfs-master -p 50070:50070 -p 50090:50090 \</span><br><span class="line">    --env-file ./NameNodeENV --network my-net smallbird/hadoop:v1</span><br><span class="line"></span><br><span class="line">DataNode :     </span><br><span class="line">docker run -d --name hdfs-datanode \</span><br><span class="line">    -h hdfs-datanode -p 50075:50075 \</span><br><span class="line">    --env-file ./DataNodeENV --network my-net smallbird/hadoop:v1</span><br><span class="line">    </span><br><span class="line">ResourceManager :</span><br><span class="line">docker run -d --name yarn-master \</span><br><span class="line">    -h yarn-master -p 8088:8088 -p 19888:19888 \</span><br><span class="line">    --env-file ./ResourceManagerENV --network my-net smallbird/hadoop:v1</span><br><span class="line">    </span><br><span class="line">NodeManager :</span><br><span class="line">docker run -d --name yarn-nodemanager \</span><br><span class="line">    -h yarn-nodemanager \</span><br><span class="line">    --env-file ./NodeManagerENV --network my-net smallbird/hadoop:v1</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">参数配置 : </span><br><span class="line"></span><br><span class="line">NameNodeENV : </span><br><span class="line">HDFS_MASTER_SERVICE=hdfs-master</span><br><span class="line">HADOOP_YARN_MASTER=yarn-master</span><br><span class="line">HADOOP_NODE_TYPE=namenode</span><br><span class="line">NODEMANAGER_MEMORY=8000</span><br><span class="line">NODEMANAGER_CPU=8</span><br><span class="line"></span><br><span class="line">DataNodeENV :</span><br><span class="line">HDFS_MASTER_SERVICE=hdfs-master</span><br><span class="line">HADOOP_YARN_MASTER=yarn-master</span><br><span class="line">HADOOP_NODE_TYPE=datanode</span><br><span class="line">NODEMANAGER_MEMORY=8000</span><br><span class="line">NODEMANAGER_CPU=8</span><br><span class="line"></span><br><span class="line">ResourceManagerENV :</span><br><span class="line">HDFS_MASTER_SERVICE=hdfs-master</span><br><span class="line">HADOOP_YARN_MASTER=yarn-master</span><br><span class="line">HADOOP_NODE_TYPE=resourcemanager</span><br><span class="line">NODEMANAGER_MEMORY=8000</span><br><span class="line">NODEMANAGER_CPU=8</span><br><span class="line"></span><br><span class="line">NodeManagerENV :</span><br><span class="line">HDFS_MASTER_SERVICE=hdfs-master</span><br><span class="line">HADOOP_YARN_MASTER=yarn-master</span><br><span class="line">HADOOP_NODE_TYPE=nodemanager</span><br><span class="line">NODEMANAGER_MEMORY=8000</span><br><span class="line">NODEMANAGER_CPU=8</span><br></pre></td></tr></table></figure>
+
+<h1 id="K8S中搭建Hadoop"><a href="#K8S中搭建Hadoop" class="headerlink" title="K8S中搭建Hadoop"></a>K8S中搭建Hadoop</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br></pre></td><td class="code"><pre><span class="line">apiVersion: v1</span><br><span class="line">kind: ConfigMap</span><br><span class="line">metadata:</span><br><span class="line">  name: kube-hadoop-conf</span><br><span class="line">  namespace: default</span><br><span class="line">data:</span><br><span class="line">  HDFS_MASTER_SERVICE: hadoop-hdfs-master</span><br><span class="line">  HADOOP_YARN_MASTER: hadoop-yarn-master</span><br><span class="line">  NODEMANAGER_MEMORY: &quot;8000&quot;</span><br><span class="line">  NODEMANAGER_CPU: &quot;8&quot;</span><br><span class="line">---</span><br><span class="line">apiVersion: v1</span><br><span class="line">kind: Service</span><br><span class="line">metadata:</span><br><span class="line">  name: hadoop-hdfs-master</span><br><span class="line">spec:</span><br><span class="line">  type: NodePort</span><br><span class="line">  selector:</span><br><span class="line">    app: hdfs-master</span><br><span class="line">  ports:</span><br><span class="line">    - name: rpc</span><br><span class="line">      port: 9000</span><br><span class="line">      targetPort: 9000</span><br><span class="line">    - name: http</span><br><span class="line">      port: 50070</span><br><span class="line">      targetPort: 50070</span><br><span class="line">      nodePort: 32007</span><br><span class="line">---</span><br><span class="line">apiVersion: v1</span><br><span class="line">kind: Pod</span><br><span class="line">metadata:</span><br><span class="line">  name: hdfs-master</span><br><span class="line">  labels:</span><br><span class="line">    app: hdfs-master</span><br><span class="line">spec:</span><br><span class="line">  containers:</span><br><span class="line">    - name: hdfs-master</span><br><span class="line">      image: smallbird/hadoop:v1</span><br><span class="line">      imagePullPolicy: IfNotPresent</span><br><span class="line">      ports:</span><br><span class="line">        - containerPort: 9000</span><br><span class="line">        - containerPort: 50070</span><br><span class="line">      env:</span><br><span class="line">        - name: HADOOP_NODE_TYPE</span><br><span class="line">          value: namenode</span><br><span class="line">        - name: HDFS_MASTER_SERVICE</span><br><span class="line">          valueFrom:</span><br><span class="line">            configMapKeyRef:</span><br><span class="line">              name: kube-hadoop-conf</span><br><span class="line">              key: HDFS_MASTER_SERVICE</span><br><span class="line">        - name: HADOOP_YARN_MASTER</span><br><span class="line">          valueFrom:</span><br><span class="line">            configMapKeyRef:</span><br><span class="line">              name: kube-hadoop-conf</span><br><span class="line">              key: HADOOP_YARN_MASTER</span><br><span class="line">        - name: NODEMANAGER_MEMORY</span><br><span class="line">          valueFrom:</span><br><span class="line">            configMapKeyRef:</span><br><span class="line">              name: kube-hadoop-conf</span><br><span class="line">              key: NODEMANAGER_MEMORY</span><br><span class="line">        - name: NODEMANAGER_CPU</span><br><span class="line">          valueFrom:</span><br><span class="line">            configMapKeyRef:</span><br><span class="line">              name: kube-hadoop-conf</span><br><span class="line">              key: NODEMANAGER_CPU</span><br><span class="line">  restartPolicy: Always</span><br><span class="line">---</span><br><span class="line">apiVersion: v1</span><br><span class="line">kind: Pod</span><br><span class="line">metadata:</span><br><span class="line">  name: hadoop-datanode</span><br><span class="line">  labels:</span><br><span class="line">    app: hadoop-datanode</span><br><span class="line">spec:</span><br><span class="line">  containers:</span><br><span class="line">    - name: hadoop-datanode</span><br><span class="line">      image: smallbird/hadoop:v1</span><br><span class="line">      imagePullPolicy: IfNotPresent</span><br><span class="line">      ports:</span><br><span class="line">        - containerPort: 9000</span><br><span class="line">        - containerPort: 50070</span><br><span class="line">      env:</span><br><span class="line">        - name: HADOOP_NODE_TYPE</span><br><span class="line">          value: datanode</span><br><span class="line">        - name: HDFS_MASTER_SERVICE</span><br><span class="line">          valueFrom:</span><br><span class="line">            configMapKeyRef:</span><br><span class="line">              name: kube-hadoop-conf</span><br><span class="line">              key: HDFS_MASTER_SERVICE</span><br><span class="line">        - name: HADOOP_YARN_MASTER</span><br><span class="line">          valueFrom:</span><br><span class="line">            configMapKeyRef:</span><br><span class="line">              name: kube-hadoop-conf</span><br><span class="line">              key: HADOOP_YARN_MASTER</span><br><span class="line">        - name: NODEMANAGER_MEMORY</span><br><span class="line">          valueFrom:</span><br><span class="line">            configMapKeyRef:</span><br><span class="line">              name: kube-hadoop-conf</span><br><span class="line">              key: NODEMANAGER_MEMORY</span><br><span class="line">        - name: NODEMANAGER_CPU</span><br><span class="line">          valueFrom:</span><br><span class="line">            configMapKeyRef:</span><br><span class="line">              name: kube-hadoop-conf</span><br><span class="line">              key: NODEMANAGER_CPU</span><br><span class="line">  restartPolicy: Always</span><br><span class="line">---</span><br><span class="line">apiVersion: v1</span><br><span class="line">kind: Service</span><br><span class="line">metadata:</span><br><span class="line">  name: hadoop-yarn-master</span><br><span class="line">spec:</span><br><span class="line">  type: NodePort</span><br><span class="line">  selector:</span><br><span class="line">    app: yarn-master</span><br><span class="line">  ports:</span><br><span class="line">    - name: &quot;8030&quot;</span><br><span class="line">      port: 8030</span><br><span class="line">    - name: &quot;8031&quot;</span><br><span class="line">      port: 8031</span><br><span class="line">    - name: &quot;8032&quot;</span><br><span class="line">      port: 8032</span><br><span class="line">    - name: http</span><br><span class="line">      port: 8088</span><br><span class="line">      targetPort: 8088</span><br><span class="line">      nodePort: 32088</span><br><span class="line">---</span><br><span class="line">apiVersion: v1</span><br><span class="line">kind: Pod</span><br><span class="line">metadata:</span><br><span class="line">  name: yarn-master</span><br><span class="line">  labels:</span><br><span class="line">    app: yarn-master</span><br><span class="line">spec:</span><br><span class="line">  containers:</span><br><span class="line">    - name: yarn-master</span><br><span class="line">      image: smallbird/hadoop:v1</span><br><span class="line">      imagePullPolicy: IfNotPresent</span><br><span class="line">      ports:</span><br><span class="line">        - containerPort: 9000</span><br><span class="line">        - containerPort: 50070</span><br><span class="line">      env:</span><br><span class="line">        - name: HADOOP_NODE_TYPE</span><br><span class="line">          value: resourcemanager</span><br><span class="line">        - name: HDFS_MASTER_SERVICE</span><br><span class="line">          valueFrom:</span><br><span class="line">            configMapKeyRef:</span><br><span class="line">              name: kube-hadoop-conf</span><br><span class="line">              key: HDFS_MASTER_SERVICE</span><br><span class="line">        - name: HADOOP_YARN_MASTER</span><br><span class="line">          valueFrom:</span><br><span class="line">            configMapKeyRef:</span><br><span class="line">              name: kube-hadoop-conf</span><br><span class="line">              key: HADOOP_YARN_MASTER</span><br><span class="line">        - name: NODEMANAGER_MEMORY</span><br><span class="line">          valueFrom:</span><br><span class="line">            configMapKeyRef:</span><br><span class="line">              name: kube-hadoop-conf</span><br><span class="line">              key: NODEMANAGER_MEMORY</span><br><span class="line">        - name: NODEMANAGER_CPU</span><br><span class="line">          valueFrom:</span><br><span class="line">            configMapKeyRef:</span><br><span class="line">              name: kube-hadoop-conf</span><br><span class="line">              key: NODEMANAGER_CPU</span><br><span class="line">  restartPolicy: Always</span><br><span class="line">---</span><br><span class="line">apiVersion: v1</span><br><span class="line">kind: Service</span><br><span class="line">metadata:</span><br><span class="line">  name: yarn-node</span><br><span class="line">spec:</span><br><span class="line">  clusterIP: None</span><br><span class="line">  selector:</span><br><span class="line">    app: yarn-node</span><br><span class="line">  ports:</span><br><span class="line">    - port: 8040</span><br><span class="line">---</span><br><span class="line">apiVersion: v1</span><br><span class="line">kind: Pod</span><br><span class="line">metadata:</span><br><span class="line">  name: yarn-node</span><br><span class="line">  labels:</span><br><span class="line">    app: yarn-node</span><br><span class="line">spec:</span><br><span class="line">  containers:</span><br><span class="line">    - name: yarn-node</span><br><span class="line">      image: smallbird/hadoop:v1</span><br><span class="line">      imagePullPolicy: IfNotPresent</span><br><span class="line">      ports:</span><br><span class="line">        - containerPort: 8040</span><br><span class="line">        - containerPort: 8041</span><br><span class="line">        - containerPort: 8042</span><br><span class="line">      env:</span><br><span class="line">        - name: HADOOP_NODE_TYPE</span><br><span class="line">          value: nodemanager</span><br><span class="line">        - name: HDFS_MASTER_SERVICE</span><br><span class="line">          valueFrom:</span><br><span class="line">            configMapKeyRef:</span><br><span class="line">              name: kube-hadoop-conf</span><br><span class="line">              key: HDFS_MASTER_SERVICE</span><br><span class="line">        - name: HADOOP_YARN_MASTER</span><br><span class="line">          valueFrom:</span><br><span class="line">            configMapKeyRef:</span><br><span class="line">              name: kube-hadoop-conf</span><br><span class="line">              key: HADOOP_YARN_MASTER</span><br><span class="line">        - name: NODEMANAGER_MEMORY</span><br><span class="line">          valueFrom:</span><br><span class="line">            configMapKeyRef:</span><br><span class="line">              name: kube-hadoop-conf</span><br><span class="line">              key: NODEMANAGER_MEMORY</span><br><span class="line">        - name: NODEMANAGER_CPU</span><br><span class="line">          valueFrom:</span><br><span class="line">            configMapKeyRef:</span><br><span class="line">              name: kube-hadoop-conf</span><br><span class="line">              key: NODEMANAGER_CPU</span><br><span class="line">  restartPolicy: Always</span><br></pre></td></tr></table></figure>
+
+<h1 id="镜像各版本说明"><a href="#镜像各版本说明" class="headerlink" title="镜像各版本说明"></a>镜像各版本说明</h1><p>镜像有几个版本,搭建方式也会有所不同</p>
+
       
     </div>
 
@@ -488,15 +557,21 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="校验数字的表达式"><a href="#校验数字的表达式" class="headerlink" title="校验数字的表达式"></a>校验数字的表达式</h1><h2 id="数字：-0-9"><a href="#数字：-0-9" class="headerlink" title="数字：^[0-9]*$"></a>数字：<code>^[0-9]*$</code></h2>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/10/29/%E6%9C%80%E5%85%A8%E9%9D%A2%E7%9A%84%E5%B8%B8%E7%94%A8%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F%E5%A4%A7%E5%85%A8/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
+          <h1 id="校验数字的表达式"><a href="#校验数字的表达式" class="headerlink" title="校验数字的表达式"></a>校验数字的表达式</h1><h2 id="数字：-0-9"><a href="#数字：-0-9" class="headerlink" title="数字：^[0-9]*$"></a>数字：<code>^[0-9]*$</code></h2><h2 id="n位的数字：-d-n"><a href="#n位的数字：-d-n" class="headerlink" title="n位的数字：^\d{n}$"></a>n位的数字：<code>^\d{n}$</code></h2><h2 id="至少n位的数字：-d-n"><a href="#至少n位的数字：-d-n" class="headerlink" title="至少n位的数字：^\d{n,}$"></a>至少n位的数字：<code>^\d{n,}$</code></h2><h2 id="m-n位的数字：-d-m-n"><a href="#m-n位的数字：-d-m-n" class="headerlink" title="m-n位的数字：^\d{m,n}$"></a>m-n位的数字：<code>^\d{m,n}$</code></h2><h2 id="零和非零开头的数字：-0-1-9-0-9"><a href="#零和非零开头的数字：-0-1-9-0-9" class="headerlink" title="零和非零开头的数字：^(0|[1-9][0-9]*)$"></a>零和非零开头的数字：<code>^(0|[1-9][0-9]*)$</code></h2><h2 id="非零开头的最多带两位小数的数字：-1-9-0-9-0-9-1-2"><a href="#非零开头的最多带两位小数的数字：-1-9-0-9-0-9-1-2" class="headerlink" title="非零开头的最多带两位小数的数字：^([1-9][0-9]*)+(.[0-9]{1,2})?$"></a>非零开头的最多带两位小数的数字：<code>^([1-9][0-9]*)+(.[0-9]{1,2})?$</code></h2><h2 id="带1-2位小数的正数或负数：-d-d-1-2"><a href="#带1-2位小数的正数或负数：-d-d-1-2" class="headerlink" title="带1-2位小数的正数或负数：^(\-)?\d+(\.\d{1,2})?$"></a>带1-2位小数的正数或负数：<code>^(\-)?\d+(\.\d{1,2})?$</code></h2><h2 id="正数、负数、和小数：-d-d"><a href="#正数、负数、和小数：-d-d" class="headerlink" title="正数、负数、和小数：^(\-|\+)?\d+(\.\d+)?$"></a>正数、负数、和小数：<code>^(\-|\+)?\d+(\.\d+)?$</code></h2><h2 id="有两位小数的正实数：-0-9-0-9-2"><a href="#有两位小数的正实数：-0-9-0-9-2" class="headerlink" title="有两位小数的正实数：^[0-9]+(.[0-9]{2})?$"></a>有两位小数的正实数：<code>^[0-9]+(.[0-9]{2})?$</code></h2><h2 id="有1-3位小数的正实数：-0-9-0-9-1-3"><a href="#有1-3位小数的正实数：-0-9-0-9-1-3" class="headerlink" title="有1~3位小数的正实数：^[0-9]+(.[0-9]{1,3})?$"></a>有1~3位小数的正实数：<code>^[0-9]+(.[0-9]{1,3})?$</code></h2><h2 id="非零的正整数：-1-9-d-或-1-9-0-9-1-3-或-1-9-0-9"><a href="#非零的正整数：-1-9-d-或-1-9-0-9-1-3-或-1-9-0-9" class="headerlink" title="非零的正整数：^[1-9]\d*$ 或 ^([1-9][0-9]*){1,3}$ 或 ^\+?[1-9][0-9]*$"></a>非零的正整数：<code>^[1-9]\d*$ 或 ^([1-9][0-9]*){1,3}$ 或 ^\+?[1-9][0-9]*$</code></h2><h2 id="非零的负整数：-1-9-0-9-quot-或-1-9-d"><a href="#非零的负整数：-1-9-0-9-quot-或-1-9-d" class="headerlink" title="非零的负整数：^\-[1-9][]0-9&quot;*$ 或 ^-[1-9]\d*$"></a>非零的负整数：<code>^\-[1-9][]0-9&quot;*$ 或 ^-[1-9]\d*$</code></h2><h2 id="非负整数：-d-或-1-9-d-0"><a href="#非负整数：-d-或-1-9-d-0" class="headerlink" title="非负整数：^\d+$ 或 ^[1-9]\d*|0$"></a>非负整数：<code>^\d+$ 或 ^[1-9]\d*|0$</code></h2><h2 id="非正整数：-1-9-d-0-或-d-0"><a href="#非正整数：-1-9-d-0-或-d-0" class="headerlink" title="非正整数：^-[1-9]\d*|0$ 或 ^((-\d+)|(0+))$"></a>非正整数：<code>^-[1-9]\d*|0$ 或 ^((-\d+)|(0+))$</code></h2><h2 id="非负浮点数：-d-d-或-1-9-d-d-0-d-1-9-d-0-0-0"><a href="#非负浮点数：-d-d-或-1-9-d-d-0-d-1-9-d-0-0-0" class="headerlink" title="非负浮点数：^\d+(\.\d+)?$ 或 ^[1-9]\d*\.\d*|0\.\d*[1-9]\d*|0?\.0+|0$"></a>非负浮点数：<code>^\d+(\.\d+)?$ 或 ^[1-9]\d*\.\d*|0\.\d*[1-9]\d*|0?\.0+|0$</code></h2><h2 id="非正浮点数：-d-d-0-0-或-1-9-d-d-0-d-1-9-d-0-0-0"><a href="#非正浮点数：-d-d-0-0-或-1-9-d-d-0-d-1-9-d-0-0-0" class="headerlink" title="非正浮点数：^((-\d+(\.\d+)?)|(0+(\.0+)?))$ 或 ^(-([1-9]\d*\.\d*|0\.\d*[1-9]\d*))|0?\.0+|0$"></a>非正浮点数：<code>^((-\d+(\.\d+)?)|(0+(\.0+)?))$ 或 ^(-([1-9]\d*\.\d*|0\.\d*[1-9]\d*))|0?\.0+|0$</code></h2><h2 id="正浮点数：-1-9-d-d-0-d-1-9-d-或-0-9-0-9-1-9-0-9-0-9-1-9-0-9-0-9-0-9-1-9-0-9"><a href="#正浮点数：-1-9-d-d-0-d-1-9-d-或-0-9-0-9-1-9-0-9-0-9-1-9-0-9-0-9-0-9-1-9-0-9" class="headerlink" title="正浮点数：^[1-9]\d*\.\d*|0\.\d*[1-9]\d*$ 或 ^(([0-9]+\.[0-9]*[1-9][0-9]*)|([0-9]*[1-9][0-9]*\.[0-9]+)|([0-9]*[1-9][0-9]*))$"></a>正浮点数：<code>^[1-9]\d*\.\d*|0\.\d*[1-9]\d*$ 或 ^(([0-9]+\.[0-9]*[1-9][0-9]*)|([0-9]*[1-9][0-9]*\.[0-9]+)|([0-9]*[1-9][0-9]*))$</code></h2><h2 id="负浮点数：-1-9-d-d-0-d-1-9-d-或-0-9-0-9-1-9-0-9-0-9-1-9-0-9-0-9-0-9-1-9-0-9"><a href="#负浮点数：-1-9-d-d-0-d-1-9-d-或-0-9-0-9-1-9-0-9-0-9-1-9-0-9-0-9-0-9-1-9-0-9" class="headerlink" title="负浮点数：^-([1-9]\d*\.\d*|0\.\d*[1-9]\d*)$ 或 ^(-(([0-9]+\.[0-9]*[1-9][0-9]*)|([0-9]*[1-9][0-9]*\.[0-9]+)|([0-9]*[1-9][0-9]*)))$"></a>负浮点数：<code>^-([1-9]\d*\.\d*|0\.\d*[1-9]\d*)$ 或 ^(-(([0-9]+\.[0-9]*[1-9][0-9]*)|([0-9]*[1-9][0-9]*\.[0-9]+)|([0-9]*[1-9][0-9]*)))$</code></h2><h2 id="浮点数：-d-d-或-1-9-d-d-0-d-1-9-d-0-0-0"><a href="#浮点数：-d-d-或-1-9-d-d-0-d-1-9-d-0-0-0" class="headerlink" title="浮点数：^(-?\d+)(\.\d+)?$ 或 ^-?([1-9]\d*\.\d*|0\.\d*[1-9]\d*|0?\.0+|0)$"></a>浮点数：<code>^(-?\d+)(\.\d+)?$ 或 ^-?([1-9]\d*\.\d*|0\.\d*[1-9]\d*|0?\.0+|0)$</code></h2><h1 id="校验字符的表达式"><a href="#校验字符的表达式" class="headerlink" title="校验字符的表达式"></a>校验字符的表达式</h1><h2 id="汉字：-u4e00-u9fa5-0"><a href="#汉字：-u4e00-u9fa5-0" class="headerlink" title="汉字：^[\u4e00-\u9fa5]{0,}$"></a>汉字：<code>^[\u4e00-\u9fa5]{0,}$</code></h2><h2 id="英文和数字：-A-Za-z0-9-或-A-Za-z0-9-4-40"><a href="#英文和数字：-A-Za-z0-9-或-A-Za-z0-9-4-40" class="headerlink" title="英文和数字：^[A-Za-z0-9]+$ 或 ^[A-Za-z0-9]{4,40}$"></a>英文和数字：<code>^[A-Za-z0-9]+$ 或 ^[A-Za-z0-9]{4,40}$</code></h2><h2 id="长度为3-20的所有字符：-3-20"><a href="#长度为3-20的所有字符：-3-20" class="headerlink" title="长度为3-20的所有字符：^.{3,20}$"></a>长度为3-20的所有字符：<code>^.{3,20}$</code></h2><h2 id="由26个英文字母组成的字符串：-A-Za-z"><a href="#由26个英文字母组成的字符串：-A-Za-z" class="headerlink" title="由26个英文字母组成的字符串：^[A-Za-z]+$"></a>由26个英文字母组成的字符串：<code>^[A-Za-z]+$</code></h2><h2 id="由26个大写英文字母组成的字符串：-A-Z"><a href="#由26个大写英文字母组成的字符串：-A-Z" class="headerlink" title="由26个大写英文字母组成的字符串：^[A-Z]+$"></a>由26个大写英文字母组成的字符串：<code>^[A-Z]+$</code></h2><h2 id="由26个小写英文字母组成的字符串：-a-z"><a href="#由26个小写英文字母组成的字符串：-a-z" class="headerlink" title="由26个小写英文字母组成的字符串：^[a-z]+$"></a>由26个小写英文字母组成的字符串：<code>^[a-z]+$</code></h2><h2 id="由数字和26个英文字母组成的字符串：-A-Za-z0-9"><a href="#由数字和26个英文字母组成的字符串：-A-Za-z0-9" class="headerlink" title="由数字和26个英文字母组成的字符串：^[A-Za-z0-9]+$"></a>由数字和26个英文字母组成的字符串：<code>^[A-Za-z0-9]+$</code></h2><h2 id="由数字、26个英文字母或者下划线组成的字符串：-w-或-w-3-20"><a href="#由数字、26个英文字母或者下划线组成的字符串：-w-或-w-3-20" class="headerlink" title="由数字、26个英文字母或者下划线组成的字符串：^\w+$ 或 ^\w{3,20}$"></a>由数字、26个英文字母或者下划线组成的字符串：<code>^\w+$ 或 ^\w{3,20}$</code></h2><h2 id="中文、英文、数字包括下划线：-u4E00-u9FA5A-Za-z0-9"><a href="#中文、英文、数字包括下划线：-u4E00-u9FA5A-Za-z0-9" class="headerlink" title="中文、英文、数字包括下划线：^[\u4E00-\u9FA5A-Za-z0-9_]+$"></a>中文、英文、数字包括下划线：<code>^[\u4E00-\u9FA5A-Za-z0-9_]+$</code></h2><h2 id="中文、英文、数字但不包括下划线等符号：-u4E00-u9FA5A-Za-z0-9-或-u4E00-u9FA5A-Za-z0-9-2-20"><a href="#中文、英文、数字但不包括下划线等符号：-u4E00-u9FA5A-Za-z0-9-或-u4E00-u9FA5A-Za-z0-9-2-20" class="headerlink" title="中文、英文、数字但不包括下划线等符号：^[\u4E00-\u9FA5A-Za-z0-9]+$ 或 ^[\u4E00-\u9FA5A-Za-z0-9]{2,20}$"></a>中文、英文、数字但不包括下划线等符号：<code>^[\u4E00-\u9FA5A-Za-z0-9]+$ 或 ^[\u4E00-\u9FA5A-Za-z0-9]{2,20}$</code></h2><h2 id="可以输入含有-amp-’-quot-等字符：-amp-39-x22"><a href="#可以输入含有-amp-’-quot-等字符：-amp-39-x22" class="headerlink" title="可以输入含有^%&amp;’,;=?$&quot;等字符：[^%&amp;&#39;,;=?$\x22]+"></a>可以输入含有^%&amp;’,;=?$&quot;等字符：<code>[^%&amp;&#39;,;=?$\x22]+</code></h2><h2 id="禁止输入含有”“的字符：-x22"><a href="#禁止输入含有”“的字符：-x22" class="headerlink" title="禁止输入含有”“的字符：`[^\x22]+`"></a>禁止输入含有”<del>“的字符：`[^</del>\x22]+`</h2><h1 id="特殊需求表达式"><a href="#特殊需求表达式" class="headerlink" title="特殊需求表达式"></a>特殊需求表达式</h1><h2 id="Email地址：-w-w-w-w-w-w"><a href="#Email地址：-w-w-w-w-w-w" class="headerlink" title="Email地址：^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$"></a>Email地址：<code>^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$</code></h2><h2 id="域名：-a-zA-Z0-9-a-zA-Z0-9-0-62-a-zA-Z0-9-a-zA-Z0-9-0-62"><a href="#域名：-a-zA-Z0-9-a-zA-Z0-9-0-62-a-zA-Z0-9-a-zA-Z0-9-0-62" class="headerlink" title="域名：[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(/.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+/.?"></a>域名：<code>[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(/.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+/.?</code></h2><h2 id="InternetURL：-a-zA-z-s-或-http-w-w-w-amp"><a href="#InternetURL：-a-zA-z-s-或-http-w-w-w-amp" class="headerlink" title="InternetURL：[a-zA-z]+://[^\s]* 或 ^http://([\w-]+\.)+[\w-]+(/[\w-./?%&amp;=]*)?$"></a>InternetURL：<code>[a-zA-z]+://[^\s]* 或 ^http://([\w-]+\.)+[\w-]+(/[\w-./?%&amp;=]*)?$</code></h2><h2 id="手机号码：-13-0-9-14-0-9-15-0-9-16-0-9-17-0-9-18-0-9-19-0-9-d-8-由于工信部放号段不定时，所以建议使用泛解析-1-3-4-5-6-7-8-9-d-9"><a href="#手机号码：-13-0-9-14-0-9-15-0-9-16-0-9-17-0-9-18-0-9-19-0-9-d-8-由于工信部放号段不定时，所以建议使用泛解析-1-3-4-5-6-7-8-9-d-9" class="headerlink" title="手机号码：^(13[0-9]|14[0-9]|15[0-9]|16[0-9]|17[0-9]|18[0-9]|19[0-9])\d{8}$ (由于工信部放号段不定时，所以建议使用泛解析 ^([1][3,4,5,6,7,8,9])\d{9}$)"></a>手机号码：<code>^(13[0-9]|14[0-9]|15[0-9]|16[0-9]|17[0-9]|18[0-9]|19[0-9])\d{8}$ (由于工信部放号段不定时，所以建议使用泛解析 ^([1][3,4,5,6,7,8,9])\d{9}$)</code></h2><h2 id="电话号码-“XXX-XXXXXXX”、”XXXX-XXXXXXXX”、”XXX-XXXXXXX”、”XXX-XXXXXXXX”、”XXXXXXX”和”XXXXXXXX-：-d-3-4-d-3-4-d-7-8"><a href="#电话号码-“XXX-XXXXXXX”、”XXXX-XXXXXXXX”、”XXX-XXXXXXX”、”XXX-XXXXXXXX”、”XXXXXXX”和”XXXXXXXX-：-d-3-4-d-3-4-d-7-8" class="headerlink" title="电话号码(“XXX-XXXXXXX”、”XXXX-XXXXXXXX”、”XXX-XXXXXXX”、”XXX-XXXXXXXX”、”XXXXXXX”和”XXXXXXXX)：^(\(\d{3,4}-)|\d{3.4}-)?\d{7,8}$"></a>电话号码(“XXX-XXXXXXX”、”XXXX-XXXXXXXX”、”XXX-XXXXXXX”、”XXX-XXXXXXXX”、”XXXXXXX”和”XXXXXXXX)：<code>^(\(\d{3,4}-)|\d{3.4}-)?\d{7,8}$</code></h2><h2 id="国内电话号码-0511-4405222、021-87888822-：-d-3-d-8-d-4-d-7"><a href="#国内电话号码-0511-4405222、021-87888822-：-d-3-d-8-d-4-d-7" class="headerlink" title="国内电话号码(0511-4405222、021-87888822)：\d{3}-\d{8}|\d{4}-\d{7}"></a>国内电话号码(0511-4405222、021-87888822)：<code>\d{3}-\d{8}|\d{4}-\d{7}</code></h2><h2 id="18位身份证号码-数字、字母x结尾-：-d-18-0-9x-18-0-9X-18"><a href="#18位身份证号码-数字、字母x结尾-：-d-18-0-9x-18-0-9X-18" class="headerlink" title="18位身份证号码(数字、字母x结尾)：^((\d{18})|([0-9x]{18})|([0-9X]{18}))$"></a>18位身份证号码(数字、字母x结尾)：<code>^((\d{18})|([0-9x]{18})|([0-9X]{18}))$</code></h2><h2 id="帐号是否合法-字母开头，允许5-16字节，允许字母数字下划线-：-a-zA-Z-a-zA-Z0-9-4-15"><a href="#帐号是否合法-字母开头，允许5-16字节，允许字母数字下划线-：-a-zA-Z-a-zA-Z0-9-4-15" class="headerlink" title="帐号是否合法(字母开头，允许5-16字节，允许字母数字下划线)：^[a-zA-Z][a-zA-Z0-9_]{4,15}$"></a>帐号是否合法(字母开头，允许5-16字节，允许字母数字下划线)：<code>^[a-zA-Z][a-zA-Z0-9_]{4,15}$</code></h2><h2 id="密码-以字母开头，长度在6-18之间，只能包含字母、数字和下划线-：-a-zA-Z-w-5-17"><a href="#密码-以字母开头，长度在6-18之间，只能包含字母、数字和下划线-：-a-zA-Z-w-5-17" class="headerlink" title="密码(以字母开头，长度在6~18之间，只能包含字母、数字和下划线)：^[a-zA-Z]\w{5,17}$"></a>密码(以字母开头，长度在6~18之间，只能包含字母、数字和下划线)：<code>^[a-zA-Z]\w{5,17}$</code></h2><h2 id="强密码-必须包含大小写字母和数字的组合，不能使用特殊字符，长度在8-10之间-：-d-a-z-A-Z-8-10"><a href="#强密码-必须包含大小写字母和数字的组合，不能使用特殊字符，长度在8-10之间-：-d-a-z-A-Z-8-10" class="headerlink" title="强密码(必须包含大小写字母和数字的组合，不能使用特殊字符，长度在8-10之间)：^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,10}$"></a>强密码(必须包含大小写字母和数字的组合，不能使用特殊字符，长度在8-10之间)：<code>^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,10}$</code></h2><h2 id="日期格式：-d-4-d-1-2-d-1-2"><a href="#日期格式：-d-4-d-1-2-d-1-2" class="headerlink" title="日期格式：^\d{4}-\d{1,2}-\d{1,2}"></a>日期格式：<code>^\d{4}-\d{1,2}-\d{1,2}</code></h2><h2 id="一年的12个月-01～09和1～12-：-0-1-9-1-0-2"><a href="#一年的12个月-01～09和1～12-：-0-1-9-1-0-2" class="headerlink" title="一年的12个月(01～09和1～12)：^(0?[1-9]|1[0-2])$"></a>一年的12个月(01～09和1～12)：<code>^(0?[1-9]|1[0-2])$</code></h2><h2 id="一个月的31天-01～09和1～31-：-0-1-9-1-2-0-9-30-31"><a href="#一个月的31天-01～09和1～31-：-0-1-9-1-2-0-9-30-31" class="headerlink" title="一个月的31天(01～09和1～31)：^((0?[1-9])|((1|2)[0-9])|30|31)$"></a>一个月的31天(01～09和1～31)：<code>^((0?[1-9])|((1|2)[0-9])|30|31)$</code></h2><h2 id="钱的输入格式："><a href="#钱的输入格式：" class="headerlink" title="钱的输入格式："></a>钱的输入格式：</h2><ol>
+<li>有四种钱的表示形式我们可以接受:”10000.00” 和 “10,000.00”, 和没有 “分” 的 “10000” 和 “10,000”：<code>^[1-9][0-9]*$</code></li>
+<li>这表示任意一个不以0开头的数字,但是,这也意味着一个字符”0”不通过,所以我们采用下面的形式：<code>^(0|[1-9][0-9]*)$</code></li>
+<li>一个0或者一个不以0开头的数字.我们还可以允许开头有一个负号：<code>^(0|-?[1-9][0-9]*)$</code></li>
+<li>这表示一个0或者一个可能为负的开头不为0的数字.让用户以0开头好了.把负号的也去掉,因为钱总不能是负的吧.下面我们要加的是说明可能的小数部分：<code>^[0-9]+(.[0-9]+)?$</code></li>
+<li>必须说明的是,小数点后面至少应该有1位数,所以”10.”是不通过的,但是 “10” 和 “10.2” 是通过的：<code>^[0-9]+(.[0-9]{2})?$</code></li>
+<li>这样我们规定小数点后面必须有两位,如果你认为太苛刻了,可以这样：<code>^[0-9]+(.[0-9]{1,2})?$</code></li>
+<li>这样就允许用户只写一位小数.下面我们该考虑数字中的逗号了,我们可以这样：<code>^[0-9]{1,3}(,[0-9]{3})*(.[0-9]{1,2})?$</code></li>
+<li>1到3个数字,后面跟着任意个 逗号+3个数字,逗号成为可选,而不是必须：<code>^([0-9]+|[0-9]{1,3}(,[0-9]{3})*)(.[0-9]{1,2})?$</code></li>
+</ol>
+<h2 id="xml文件：-a-zA-Z-a-zA-Z0-9-x-X-m-M-l-L"><a href="#xml文件：-a-zA-Z-a-zA-Z0-9-x-X-m-M-l-L" class="headerlink" title="xml文件：^([a-zA-Z]+-?)+[a-zA-Z0-9]+\\.[x|X][m|M][l|L]$"></a>xml文件：<code>^([a-zA-Z]+-?)+[a-zA-Z0-9]+\\.[x|X][m|M][l|L]$</code></h2><h2 id="中文字符的正则表达式：-u4e00-u9fa5"><a href="#中文字符的正则表达式：-u4e00-u9fa5" class="headerlink" title="中文字符的正则表达式：[\u4e00-\u9fa5]"></a>中文字符的正则表达式：<code>[\u4e00-\u9fa5]</code></h2><h2 id="双字节字符：-x00-xff-包括汉字在内，可以用来计算字符串的长度-一个双字节字符长度计2，ASCII字符计1"><a href="#双字节字符：-x00-xff-包括汉字在内，可以用来计算字符串的长度-一个双字节字符长度计2，ASCII字符计1" class="headerlink" title="双字节字符：[^\x00-\xff]    (包括汉字在内，可以用来计算字符串的长度(一个双字节字符长度计2，ASCII字符计1))"></a>双字节字符：<code>[^\x00-\xff]    (包括汉字在内，可以用来计算字符串的长度(一个双字节字符长度计2，ASCII字符计1))</code></h2><h2 id="空白行的正则表达式：-n-s-r-可以用来删除空白行"><a href="#空白行的正则表达式：-n-s-r-可以用来删除空白行" class="headerlink" title="空白行的正则表达式：\n\s*\r    (可以用来删除空白行)"></a>空白行的正则表达式：<code>\n\s*\r    (可以用来删除空白行)</code></h2><h2 id="HTML标记的正则表达式：-lt-S-gt-gt-lt-1-gt-lt-gt-网上流传的版本太糟糕，上面这个也仅仅能部分，对于复杂的嵌套标记依旧无能为力"><a href="#HTML标记的正则表达式：-lt-S-gt-gt-lt-1-gt-lt-gt-网上流传的版本太糟糕，上面这个也仅仅能部分，对于复杂的嵌套标记依旧无能为力" class="headerlink" title="HTML标记的正则表达式：&lt;(\S*?)[^&gt;]*&gt;.*?&lt;/\1&gt;|&lt;.*? /&gt;    (网上流传的版本太糟糕，上面这个也仅仅能部分，对于复杂的嵌套标记依旧无能为力)"></a>HTML标记的正则表达式：<code>&lt;(\S*?)[^&gt;]*&gt;.*?&lt;/\1&gt;|&lt;.*? /&gt;    (网上流传的版本太糟糕，上面这个也仅仅能部分，对于复杂的嵌套标记依旧无能为力)</code></h2><h2 id="首尾空白字符的正则表达式：-s-s-或-s-s-可以用来删除行首行尾的空白字符-包括空格、制表符、换页符等等-，非常有用的表达式"><a href="#首尾空白字符的正则表达式：-s-s-或-s-s-可以用来删除行首行尾的空白字符-包括空格、制表符、换页符等等-，非常有用的表达式" class="headerlink" title="首尾空白字符的正则表达式：^\s*|\s*$或(^\s*)|(\s*$)    (可以用来删除行首行尾的空白字符(包括空格、制表符、换页符等等)，非常有用的表达式)"></a>首尾空白字符的正则表达式：<code>^\s*|\s*$或(^\s*)|(\s*$)    (可以用来删除行首行尾的空白字符(包括空格、制表符、换页符等等)，非常有用的表达式)</code></h2><h2 id="腾讯QQ号：-1-9-0-9-4-腾讯QQ号从10000开始"><a href="#腾讯QQ号：-1-9-0-9-4-腾讯QQ号从10000开始" class="headerlink" title="腾讯QQ号：[1-9][0-9]{4,}    (腾讯QQ号从10000开始)"></a>腾讯QQ号：<code>[1-9][0-9]{4,}    (腾讯QQ号从10000开始)</code></h2><h2 id="中国邮政编码：-1-9-d-5-d-中国邮政编码为6位数字"><a href="#中国邮政编码：-1-9-d-5-d-中国邮政编码为6位数字" class="headerlink" title="中国邮政编码：[1-9]\d{5}(?!\d)    (中国邮政编码为6位数字)"></a>中国邮政编码：<code>[1-9]\d{5}(?!\d)    (中国邮政编码为6位数字)</code></h2><h2 id="IP地址：-d-d-d-d-提取IP地址时有用"><a href="#IP地址：-d-d-d-d-提取IP地址时有用" class="headerlink" title="IP地址：\d+\.\d+\.\d+\.\d+    (提取IP地址时有用)"></a>IP地址：<code>\d+\.\d+\.\d+\.\d+    (提取IP地址时有用)</code></h2><h2 id="IP地址：-25-0-5-2-0-4-d-01-d-d-3-25-0-5-2-0-4-d-01-d-d"><a href="#IP地址：-25-0-5-2-0-4-d-01-d-d-3-25-0-5-2-0-4-d-01-d-d" class="headerlink" title="IP地址：((?:(?:25[0-5]|2[0-4]\\d|[01]?\\d?\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|[01]?\\d?\\d))"></a>IP地址：<code>((?:(?:25[0-5]|2[0-4]\\d|[01]?\\d?\\d)\\.){3}(?:25[0-5]|2[0-4]\\d|[01]?\\d?\\d))</code></h2><hr>
+<p><strong>作者：zxin</strong></p>
+<p><strong>出处：<a href="http://zxin.cnblogs.com/" target="_blank" rel="noopener">http://zxin.cnblogs.com/</a></strong></p>
+<hr>
+
       
     </div>
 
@@ -572,14 +647,43 @@
 
       
           <h1 id="Kubeadm安装"><a href="#Kubeadm安装" class="headerlink" title="Kubeadm安装"></a>Kubeadm安装</h1><p>kubeadm是Kubernetes官方提供的用于快速安装Kubernetes集群的工具，伴随Kubernetes每个版本的发布都会同步更新，kubeadm会对集群配置方面的一些实践做调整，通过实验kubeadm可以学习到Kubernetes官方在集群配置上一些新的最佳实践。</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/10/29/%E4%BD%BF%E7%94%A8kubeadm%E6%96%B9%E5%BC%8F%E5%AE%89%E8%A3%85K8S/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
+<h1 id="安装Docker-ce"><a href="#安装Docker-ce" class="headerlink" title="安装Docker ce"></a>安装Docker ce</h1><p><a href="">Docker安装</a><br>每个机器都需要装</p>
+<h1 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h1><h2 id="编辑hosts对应关系"><a href="#编辑hosts对应关系" class="headerlink" title="编辑hosts对应关系"></a>编辑hosts对应关系</h2><pre><code>cat &lt;&lt;EOF &gt;&gt;/etc/hosts
+192.168.37.61 Smile1
+192.168.37.62 Smile2
+192.168.37.63 Smile3
+EOF</code></pre><h2 id="关闭防火墙"><a href="#关闭防火墙" class="headerlink" title="关闭防火墙"></a>关闭防火墙</h2><pre><code>systemctl stop firewalld.service  
+systemctl disable firewalld.service</code></pre><h2 id="禁用SELINUX"><a href="#禁用SELINUX" class="headerlink" title="禁用SELINUX"></a>禁用SELINUX</h2><pre><code>sudo setenforce 0
+sed -i &quot;s/^SELINUX=enforcing/SELINUX=disabled/g&quot; /etc/selinux/config</code></pre><h2 id="关闭swap"><a href="#关闭swap" class="headerlink" title="关闭swap"></a>关闭swap</h2><pre><code>swapoff -a
+sed -i &apos;s/.*swap.*/#&amp;/&apos; /etc/fstab </code></pre><h2 id="配置内核参数添加如下内容"><a href="#配置内核参数添加如下内容" class="headerlink" title="配置内核参数添加如下内容"></a>配置内核参数添加如下内容</h2><p>cat &gt; /etc/sysctl.d/k8s.conf &lt;&lt;EOF<br>net.bridge.bridge-nf-call-ip6tables = 1<br>net.bridge.bridge-nf-call-iptables = 1<br>EOF</p>
+<h1 id="配置K8S的yum源"><a href="#配置K8S的yum源" class="headerlink" title="配置K8S的yum源"></a>配置K8S的yum源</h1><p>cat &lt;<EOF > /etc/yum.repos.d/kubernetes.repo<br>[kubernetes]<br>name=Kubernetes<br>baseurl=<a href="http://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64" target="_blank" rel="noopener">http://mirrors.aliyun.com/kubernetes/yum/repos/kubernetes-el7-x86_64</a><br>enabled=1<br>gpgcheck=0<br>repo_gpgcheck=0<br>gpgkey=<a href="http://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg" target="_blank" rel="noopener">http://mirrors.aliyun.com/kubernetes/yum/doc/yum-key.gpg</a><br>      <a href="http://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg" target="_blank" rel="noopener">http://mirrors.aliyun.com/kubernetes/yum/doc/rpm-package-key.gpg</a><br>EOF</p>
+<h1 id="安装kubelet、kubeadm、kubectl"><a href="#安装kubelet、kubeadm、kubectl" class="headerlink" title="安装kubelet、kubeadm、kubectl"></a>安装kubelet、kubeadm、kubectl</h1><pre><code>yum makecache fast
+yum install -y kubelet kubeadm kubectl</code></pre><h1 id="调整启动方式"><a href="#调整启动方式" class="headerlink" title="调整启动方式"></a>调整启动方式</h1><p>kubelet的启动环境变量要与docker的cgroup-driver驱动一样</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker info | grep -i cgroup</span><br><span class="line">Cgroup Driver: cgroupfs  --&gt; 运行命令显示</span><br></pre></td></tr></table></figure>
+<p>docker的cgroup-driver是cgroupfs，而k8s默认是systemd<br>修改docker的cgroup-driver</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">vim /etc/docker/daemon.json</span><br><span class="line">加入内容 : &#123; &quot;exec-opts&quot;: [&quot;native.cgroupdriver=systemd&quot;] &#125;</span><br></pre></td></tr></table></figure>
+<h2 id="最终文件内容"><a href="#最终文件内容" class="headerlink" title="最终文件内容"></a>最终文件内容</h2><p>{<br>    “registry-mirrors”: [<br>        “<a href="https://dockerhub.azk8s.cn&quot;" target="_blank" rel="noopener">https://dockerhub.azk8s.cn&quot;</a>,<br>        “<a href="https://reg-mirror.qiniu.com&quot;" target="_blank" rel="noopener">https://reg-mirror.qiniu.com&quot;</a><br>      ],<br>        “exec-opts”: [“native.cgroupdriver=systemd”]<br>}</p>
+<h2 id="重启Docker"><a href="#重启Docker" class="headerlink" title="重启Docker"></a>重启Docker</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl restart docker</span><br><span class="line">systemctl status docker</span><br></pre></td></tr></table></figure>
+<h1 id="启动kubelet服务"><a href="#启动kubelet服务" class="headerlink" title="启动kubelet服务"></a>启动kubelet服务</h1><pre><code>systemctl enable kubelet.service
+systemctl start kubelet.service</code></pre><h1 id="配置Master节点"><a href="#配置Master节点" class="headerlink" title="配置Master节点"></a>配置Master节点</h1><h2 id="进行kubernetes集群初始化"><a href="#进行kubernetes集群初始化" class="headerlink" title="进行kubernetes集群初始化"></a>进行kubernetes集群初始化</h2><p>Master节点执行命令 :<br>kubeadm init –kubernetes-version=1.15.0 \<br>–apiserver-advertise-address=192.168.37.61 \<br>–image-repository=gcr.azk8s.cn/google_containers \<br>–pod-network-cidr=10.244.0.0/16 <br>–token-ttl 0 </p>
+<p><strong>–kubernetes-version : 指定版本号</strong><br><strong>–apiserver-advertise-address : 指定主机地址</strong><br>其中设置image-repository这一步很重要，kubeadm默认从官网k8s.grc.io下载所需镜像，国内无法访问，因此需要指定阿里云或者是其他国内镜像仓库地址。</p>
+<p>定义POD的网段为: 10.244.0.0/16，</p>
+<h2 id="初始化成功后会返回如下信息"><a href="#初始化成功后会返回如下信息" class="headerlink" title="初始化成功后会返回如下信息"></a>初始化成功后会返回如下信息</h2><pre><code>//这个返回信息三条命令是配置kubectl工具的命令
+mkdir -p $HOME/.kube
+sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+sudo chown $(id -u):$(id -g) $HOME/.kube/config
+
+// 这个返回信息是配置Node节点的命令
+kubeadm join 192.168.98.230:6443 --token dexs09.ftjp7y7obq6a3t6n \
+      --discovery-token-ca-cert-hash sha256:4aace846f8a6c381902592049591152fd7250b63e500e370a4b64902d202f7f2</code></pre><h2 id="配置kubectl工具"><a href="#配置kubectl工具" class="headerlink" title="配置kubectl工具"></a>配置kubectl工具</h2><p>运行初始化成功后返回的三条命令</p>
+<h2 id="部署pod的网络"><a href="#部署pod的网络" class="headerlink" title="部署pod的网络"></a>部署pod的网络</h2><p><a href="https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/create-cluster-kubeadm/#pod-network" target="_blank" rel="noopener">有很多种选择参考</a><br>我们选择的是<strong>flannel</strong>，其它的几种可能会有问题</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">wget https://raw.githubusercontent.com/coreos/flannel/a70459be0084506e4ec919aa1c114638878db11b/Documentation/kube-flannel.yml</span><br><span class="line"></span><br><span class="line">//在kube-flannel.yml里面默认的镜像下载地址是quay.io，国内无法访问，这里替换所有的quay.io为 quay-mirror.qiniu.com</span><br><span class="line">sed -i &quot;s/quay.io/quay-mirror.qiniu.com/g&quot; kube-flannel.yml</span><br></pre></td></tr></table></figure>
+<h3 id="执行安装命令"><a href="#执行安装命令" class="headerlink" title="执行安装命令"></a>执行安装命令</h3><pre><code>kubectl apply -f kube-flannel.yml</code></pre><h3 id="查看运行状态"><a href="#查看运行状态" class="headerlink" title="查看运行状态"></a>查看运行状态</h3><pre><code>kubectl get pod --all-namespaces -o wide</code></pre><p><em>确保所有的pod都处在运行状态</em></p>
+<h1 id="部署Node节点"><a href="#部署Node节点" class="headerlink" title="部署Node节点"></a>部署Node节点</h1><p>将所有的node节点加入到kubernets集群</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">//在Node节点上执行(这个命令就是集群初始化之后的返回信息)</span><br><span class="line">kubeadm join 192.168.98.230:6443 --token dexs09.ftjp7y7obq6a3t6n \</span><br><span class="line">          --discovery-token-ca-cert-hash sha256:4aace846f8a6c381902592049591152fd7250b63e500e370a4b64902d202f7f2</span><br></pre></td></tr></table></figure>
+<h1 id="最后检测集群各节点的运行状态"><a href="#最后检测集群各节点的运行状态" class="headerlink" title="最后检测集群各节点的运行状态"></a>最后检测集群各节点的运行状态</h1><pre><code>kubectl get nodes</code></pre><p><em>再次查看各个pod的状态，确保都是处于Runing状态</em></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kubectl get pod --all-namespaces -o wide</span><br></pre></td></tr></table></figure>
+<h1 id="如果有问题-重新配置Master"><a href="#如果有问题-重新配置Master" class="headerlink" title="如果有问题,重新配置Master"></a>如果有问题,重新配置Master</h1><pre><code>kubeadm reset</code></pre>
       
     </div>
 
@@ -655,14 +759,127 @@
 
       
           <p><em>Kubernetes是一个跨主机集群的开源的容器调度平台,它可以自动化应用容器的部署,扩展和操作,提供以容器为中心的基础架构</em></p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/10/29/Kubernetes-%E8%AF%A6%E7%BB%86%E4%BB%8B%E7%BB%8D%E5%92%8C%E6%9E%B6%E6%9E%84%E8%AF%A6%E8%A7%A3/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
+<h1 id="Kubernetes用途"><a href="#Kubernetes用途" class="headerlink" title="Kubernetes用途"></a>Kubernetes用途</h1><p>Kubernetes是容器集群管理系统,是一个开源的平台,可以实现容器集群的自动化部署,自动扩缩容,维护等功能</p>
+<ul>
+<li>快速部署应用</li>
+<li>快速扩展应用</li>
+<li>无缝对接新的应用功能</li>
+<li>节省资源,优化硬件资源的使用</li>
+</ul>
+<h1 id="Kubernetes特点"><a href="#Kubernetes特点" class="headerlink" title="Kubernetes特点"></a>Kubernetes特点</h1><ul>
+<li>可移植 : 支持公有云,私有云,混合云,多重云</li>
+<li>可扩展 : 模块化,插件化,可挂载,可组合,支持各种形式的扩展</li>
+<li>自动化 : 自动部署,自动重启,自动复制,自动伸缩/扩展,通过声明式语法提供了强大的自修复能力</li>
+</ul>
+<p>Kubernetes是Google2014年创建管理的,是Google10多年大规模容器管理技术Borg的开源版本</p>
+<h1 id="介绍容器技术"><a href="#介绍容器技术" class="headerlink" title="介绍容器技术"></a>介绍容器技术</h1><p>Kubernetes使用Linux容器技术来提供应用的隔离,如Docker或者rkt</p>
+<p>容器允许你在同一台机器上运行多个服务,不仅提供不同的环境给每个服务,而且将它们互相隔离,容器类似于虚拟机,但开销小很多</p>
+<p>一个容器仅仅是运行在宿主机上被隔离的单个进程,仅消耗应用容器消耗的资源,不会有其他进程的开销</p>
+<p>容器都是调用同一个内核,自然会有安全隐患</p>
+<h2 id="容器实现隔离机制介绍"><a href="#容器实现隔离机制介绍" class="headerlink" title="容器实现隔离机制介绍"></a>容器实现隔离机制介绍</h2><p>有两个机制可用 :<br>第一个是Linux命名空间,它使每个进程只能看到它自己的系统视图(文件,进程,网络接口,主机名等)<br>第二个是Linux控制组(cgroups),它限制了进程能使用的资源量(CPU,内存,网络带宽等)</p>
+<h2 id="Docker容器镜像层"><a href="#Docker容器镜像层" class="headerlink" title="Docker容器镜像层"></a>Docker容器镜像层</h2><p>容器镜像层是只读的,容器运行时,一个新的可写层在镜像层之上被创建容器中进程写入位于底层的一个文件时,此文件的一个拷贝在顶层被创建,进程写得此时拷贝</p>
+<h2 id="容器镜像可移植性的限制"><a href="#容器镜像可移植性的限制" class="headerlink" title="容器镜像可移植性的限制"></a>容器镜像可移植性的限制</h2><p>一个在特定硬件架构之上编译的容器化应用,只能在有相同硬件架构的机器上运行</p>
+<h2 id="容器优点"><a href="#容器优点" class="headerlink" title="容器优点"></a>容器优点</h2><ul>
+<li>敏捷的应用程序创建和部署 : 与虚拟机镜像相比,容器镜像更容器创建,提升了硬件的使用效率</li>
+<li>持续开发,集成和部署 : 提供可靠与频繁的容器镜像构建和部署,可以很方便及快速的回滚(由于镜像不可变性)</li>
+<li>关注开发与运维的分离 : 在构建/发布时创建应用程序容器镜像,从而将应用程序和基础架构分离</li>
+<li>开发,测试和生产环境的一致性 : 在笔记本电脑上运行与云中一样</li>
+<li>云和操作系统的可移植性 : 可运行在Ubuntu,RHEL,CoreOS,内部部署,Google 容器引擎和其他任何地方</li>
+<li>以应用为中心的管理 : 提升了操作系统的抽象级别,以便在使用逻辑资源的操作系统上运行应用程序</li>
+<li>松耦合,分布式,弹性伸缩,微服务 : 应用程序被分成更小,更独立的部分,可以动态部署和管理,而不是巨型单体应用运行在专用的大型机上</li>
+<li>资源隔离 : 通过对应用进行资源隔离,可以很容易的预测应用程序性能</li>
+<li>资源利用 : 高效率和高密度</li>
+</ul>
+<h1 id="Kubernetes能做什么"><a href="#Kubernetes能做什么" class="headerlink" title="Kubernetes能做什么?"></a>Kubernetes能做什么?</h1><p>最基础的,Kubernetes可以在物理或虚拟机集群上调度和运行应用程序容器.然而,Kubernetes还允许开发人员从物理和虚拟机’脱离’,从以主机为中心的基础架构转移到以容器为中心的基础架构,这样可以提供容器固有的全部优点和益处.Kubernetes提供了基础设施来构建一个真正以容器为中心的开发环境</p>
+<h2 id="Kubernetes满足了生产中运行应用程序的许多常见的需求"><a href="#Kubernetes满足了生产中运行应用程序的许多常见的需求" class="headerlink" title="Kubernetes满足了生产中运行应用程序的许多常见的需求"></a>Kubernetes满足了生产中运行应用程序的许多常见的需求</h2><ul>
+<li>Pod提供复合应用并保留一个应用一个容器的容器模型</li>
+<li>挂载外部存储</li>
+<li>Secret管理</li>
+<li>应用健康检查</li>
+<li>副本应用实例</li>
+<li>横向自动扩缩容</li>
+<li>服务发现</li>
+<li>负载均衡</li>
+<li>滚动更新</li>
+<li>资源监测</li>
+<li>日志采集和存储</li>
+<li>支持自检和调试</li>
+<li>认证和鉴权</li>
+</ul>
+<p>这提供了平台即服务(PAAS)的简单性以及基础架构即服务(IAAS)的灵活性,并促进跨基础设施供应商的可移植性</p>
+<h1 id="使用Kubernetes的好处"><a href="#使用Kubernetes的好处" class="headerlink" title="使用Kubernetes的好处"></a>使用Kubernetes的好处</h1><ul>
+<li>简化应用程序部署</li>
+<li>更好的利用硬件</li>
+<li>健康检查和自修复</li>
+<li>自动扩容</li>
+<li>简化应用部署</li>
+</ul>
+<h1 id="了解架构"><a href="#了解架构" class="headerlink" title="了解架构"></a>了解架构</h1><p><strong>Kubernetes集群分为两部分 :</strong></p>
+<ul>
+<li>Kubernetes控制平面</li>
+<li>(工作)节点</li>
+</ul>
+<p><strong>控制平面的组件 :</strong></p>
+<ul>
+<li>etcd分布式持久化存储</li>
+<li>API服务器</li>
+<li>调度器</li>
+<li>控制器管理器</li>
+</ul>
+<p>这些组件用来存储,管理集群状态,但它们不是运行应用的容器</p>
+<p><strong>工作节点上运行的组件 :</strong></p>
+<ul>
+<li>Kubelet</li>
+<li>Kubelet服务代理(kube-proxy)</li>
+<li>容器进行时(Docker,rkt或者其他)</li>
+</ul>
+<p><strong>附加组件 :</strong></p>
+<ul>
+<li>Kubernetes DNS服务器</li>
+<li>仪表板</li>
+<li>Ingress控制器</li>
+<li>Heapster(容器集群监控)</li>
+<li>容器网络接口插件</li>
+</ul>
+<h2 id="etcd"><a href="#etcd" class="headerlink" title="etcd"></a>etcd</h2><p>创建的所有对象 - pod,ReplicationController,服务和私密凭据等,需要以持久化方式存储到某个地方,这样它们的manifest在API服务器重启和失败的时候才不会丢失.为此,Kubernetes使用了etcd</p>
+<p>etcd是一个响应快,分布式,一致的Key-value存储.因为它是分布式的,故可以运行多个etcd实例来获取高可用性和更好的性能</p>
+<p>唯一能直接和etcd通信的是Kubernetes的API服务器.所有其他组件通过API服务器间接地读取,写入数据到etcd.这带来一些好处,其中之一就是增强乐观锁系统,验证系统的健壮性;并且,通过把实际存储机制从其他组件抽离,未来替换起来也更容易.值得强调的是,etcd是Kubernetes存储集群状态和元数据的唯一的地方</p>
+<h2 id="API服务器"><a href="#API服务器" class="headerlink" title="API服务器"></a>API服务器</h2><p>Kubernetes API服务器作为中心组件,其他组件或者客户端都会去调用它.以RESTful API的形式提供了可以查询,修改集群状态的CRUD(Create,Read,Update,Delete)接口.他将状态存储到etcd中</p>
+<p>API服务器除了提供一种一致的方式将对象存储到etcd,也对这些对象做校验,这样客户端就无法存入非法的对象(直接写入存储的话是有可能的).除了检验,还会处理乐观锁,这样对于并发更新的情况,对对象做更改就不会被其他客户端覆盖</p>
+<p>API服务器的客户端之一就是使用的命令行工具kubectl,也支持监听资源</p>
+<h2 id="调度器"><a href="#调度器" class="headerlink" title="调度器"></a>调度器</h2><p>通常不会去指定pod应该运行在哪个集群节点上,这项工作交给调度器.宏观来看,调度器的操作比较简单.就是利用API服务器的监听机制等待新创建的pod,然后给每个新的,没有节点集的pod分配节点</p>
+<p>调度器不会命令选中的节点去运行pod.调度器做的就是通过API服务器更新pod的定义.然后API服务器再去通知Kubelet该pod已经被调度过.当目标节点上的Kubelet发现该pod被调度到本节点,他就会创建并且运行pod的容器</p>
+<p>尽管宏观上调度的过程看起来比较简单,但实际上为pod选择最佳节点的任务并不简单.当然,最简单的调度方式是不关心节点上已经运行的pod,随机选择一个节点.另一方面,调度器可以利用高级技术,例如机器学习,来预测接下来几分钟或几小时哪种类型的pod将会被调度,然后以最大的硬件利用率,无须重新调度已运行pod的方式来调度.Kubernetes的默认调度器实现方式处于最简单和最复杂程度之间</p>
+<h2 id="控制器管理器"><a href="#控制器管理器" class="headerlink" title="控制器管理器"></a>控制器管理器</h2><p>API服务器只做了存储资源到etcd和通知客户端有变更的工作.调度器则只是给pod分配节点,所以需要有活跃的组件确保系统真实状态朝API服务器定义的期望的状态收敛.这个工作由控制器管理器里的控制器来实现</p>
+<p>单个控制器,管理器进程当前组合了多个执行不同非冲突任务的控制器.这些控制器最终会被分解到不同的进程,如果需要的话,我们能够用自定义实现替换它们每一个</p>
+<p><strong>控制器包括 :</strong></p>
+<ul>
+<li>Replication管理器(ReplicationController资源的管理器)</li>
+<li>ReplicaSet,DaemonSet以及Job控制器</li>
+<li>Deployment控制器</li>
+<li>StatefulSet控制器</li>
+<li>Node控制器</li>
+<li>Service控制器</li>
+<li>Endpoints控制器</li>
+<li>Namespace控制器</li>
+<li>PersistentVolume控制器</li>
+<li>其他</li>
+</ul>
+<h2 id="Kubelet"><a href="#Kubelet" class="headerlink" title="Kubelet"></a>Kubelet</h2><p>Kubelet就是负责所有运行在工作节点上内容的组件.它第一个任务就是在API服务器中创建一个Node资源来注册该节点.然后需要持续监控API服务器是否把该节点分配给pod,然后启动pod容器.具体实现方式是告知配置好的容器进行时来从特定容器镜像运行容器,Kubelet随后持续监控运行的容器,向API服务器报告他们的状态,事件和资源消耗</p>
+<p>Kubelet也是运行容器存活探针的组件,当探针报错时它会重启容器.最后一点,当pod从API服务器删除时,Kubelet终止容器,并通知服务器pod已经被终止了</p>
+<h2 id="kube-proxy"><a href="#kube-proxy" class="headerlink" title="kube-proxy"></a>kube-proxy</h2><p>每个工作节点都会运行kube-proxy,用于确保客户端可以通过Kubernetes API连接到你定义的服务</p>
+<p>kube-proxy确保对服务IP和端口的连接最终能到达支持服务的某个pod处.如果有多个pod支撑一个服务,那么代理会发挥对pod的负载均衡作用</p>
+<h2 id="docker"><a href="#docker" class="headerlink" title="docker"></a>docker</h2><p>Docker用于运行容器</p>
+<h2 id="supervisord"><a href="#supervisord" class="headerlink" title="supervisord"></a>supervisord</h2><p>supervisord是一个轻量级的进程监控系统,可以用来保证kubelet和docker运行</p>
+<h2 id="fluentd"><a href="#fluentd" class="headerlink" title="fluentd"></a>fluentd</h2><p>fluentd是一个守护进程,它有助于提供集群层面日志集群层面的日志</p>
+<h2 id="Kubernetes插件"><a href="#Kubernetes插件" class="headerlink" title="Kubernetes插件"></a>Kubernetes插件</h2><h3 id="DNS服务器"><a href="#DNS服务器" class="headerlink" title="DNS服务器"></a>DNS服务器</h3><p>集群中的所有pod默认配置使用集群内部DNS服务器.这使得pod能够轻松地通过名称查询到服务,甚至是无头服务pod的IP地址</p>
+<p>DNS服务pod通过kube-dns服务对外暴露,使得该pod能够像其他pod一样在集群中移动.服务的IP地址在集群每个容器的/etc/reslv.conf文件的nameserver中定义.kube-dns pod利用API服务器的监控机制来订阅Service和Endpoint的变动,以及DNS记录的变更,是的其客户端总是能够获取到最新的DNS信息.客观的说,在Service和Endpoint资源发生变化到DNS pod收到订阅通知时间点之间,DNS记录可能会无效</p>
+<h3 id="Ingress控制器"><a href="#Ingress控制器" class="headerlink" title="Ingress控制器"></a>Ingress控制器</h3><p>Ingress控制器运行一个反向代理服务器,根据集群中定义的Ingress,service以及Endpoint资源来配置该控制器.所以需要订阅这些资源,然后每次其中一个发生变化则更新代理服务器的配置</p>
+<p>尽管Ingress资源的定义指向一个Service,Ingress控制器会直接将流量转到服务的pod而不经过服务IP.当外部客户端通过Ingress控制器连接时,会对客户端IP进行保存,这使得在某些用例中,控制器比Service更受欢迎</p>
+<h3 id="用户界面"><a href="#用户界面" class="headerlink" title="用户界面"></a>用户界面</h3><p>dashboard提供了集群状态的只读概述</p>
+<h3 id="容器资源监控"><a href="#容器资源监控" class="headerlink" title="容器资源监控"></a>容器资源监控</h3><p>容器资源监控将关于容器的一些常见的时间序列度量值保存到一个集中的数据库,并提供用于浏览这些数据的界面</p>
+<h3 id="集群层面日志"><a href="#集群层面日志" class="headerlink" title="集群层面日志"></a>集群层面日志</h3><p>集群层面日志机制负责将容器的日志数据保存到一个集中的日志存储中,该存储能够提供搜索和浏览接口</p>
+
       
     </div>
 
@@ -737,15 +954,58 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="Pod概念"><a href="#Pod概念" class="headerlink" title="Pod概念"></a>Pod概念</h1><h2 id="ReplicationController-amp-ReplicaSet-amp-Deployment"><a href="#ReplicationController-amp-ReplicaSet-amp-Deployment" class="headerlink" title="ReplicationController &amp; ReplicaSet &amp; Deployment"></a>ReplicationController &amp; ReplicaSet &amp; Deployment</h2>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/10/29/Kubernetes-%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
+          <h1 id="Pod概念"><a href="#Pod概念" class="headerlink" title="Pod概念"></a>Pod概念</h1><h2 id="ReplicationController-amp-ReplicaSet-amp-Deployment"><a href="#ReplicationController-amp-ReplicaSet-amp-Deployment" class="headerlink" title="ReplicationController &amp; ReplicaSet &amp; Deployment"></a>ReplicationController &amp; ReplicaSet &amp; Deployment</h2><p>ReplicationController用来确保容器应用的副本数始终保持在用户定义的副本数,即如果有容器异常退出,会自动创建新的pod来替代;而如果异常多出来的容器也会自动回收.新版本的Kubernetes中建议使用ReplicaSet来取代ReplicationController</p>
+<p>ReplicaSet跟ReplicationController没有本质的不同,只是名字不一样,并且ReplicaSet支持集合式的selector</p>
+<p>虽然ReplicaSet可以独立使用,但一般还是建议使用Deployment来自动管理ReplicaSet,这样就无须担心跟其他机制的不兼容问题</p>
+<h2 id="Deployment"><a href="#Deployment" class="headerlink" title="Deployment"></a>Deployment</h2><p>Deployment为Pod和ReplicaSet提供了一个声明式定义方法,用来替代以前的ReplicationController来方便的管理应用.典型的应用场景包括 : </p>
+<ul>
+<li>定义Deployment来创建Pod和ReplicaSet</li>
+<li>滚动升级和回滚应用</li>
+<li>扩容和缩容</li>
+<li>暂停和继续Deplyment</li>
+</ul>
+<h3 id="HPA-HorizontalPodAutoScale"><a href="#HPA-HorizontalPodAutoScale" class="headerlink" title="HPA(HorizontalPodAutoScale)"></a>HPA(HorizontalPodAutoScale)</h3><p>HorizontalPodAutoScale Pod Autoscaling仅适用于Deployment和ReplicaSet,在V1版本中仅支持根据Pod的CPU利用率扩缩容,在v1alpha版本中,支持根据内存和用户自定义的metric扩缩容</p>
+<h2 id="StatefulSet"><a href="#StatefulSet" class="headerlink" title="StatefulSet"></a>StatefulSet</h2><p>StatefulSet是为了解决有状态服务的问题,其应用场景包括 : </p>
+<ul>
+<li>稳定的持久化存储,即pod重新调度后还是能访问到相同的持久化数据,基于PVC来实现</li>
+<li>稳定的网络标志,即pod重新调度后其podName和HostName不变,基于Headless Service来实现</li>
+<li>有序部署,有序扩展,即Pod是有顺序的,再部署或者扩展的时候要一句定义的顺序依次进行,基于init containers来实现</li>
+<li>有序收缩,有序删除</li>
+</ul>
+<h2 id="DaemonSet"><a href="#DaemonSet" class="headerlink" title="DaemonSet"></a>DaemonSet</h2><p>DaemonSet确保全部Node上运行一个pod的副本.当有Node加入集群时,也会为他们新增一个pod.当有Node从集群移除时,这些pod也会被回收.删除DaemonSet将会删除它创建的所有pod</p>
+<p>使用DaemonSet的一些典型用法 : </p>
+<ul>
+<li>运行集群存储daemon,例如在每个Node上运行glusterd,ceph</li>
+<li>在每个Node上运行日志收集daemon,例如fluentd,logstash</li>
+<li>在每个Node上运行监控daemon,例如Prometheus Node Exporter</li>
+</ul>
+<h2 id="Job-Cronjob"><a href="#Job-Cronjob" class="headerlink" title="Job,Cronjob"></a>Job,Cronjob</h2><p>Job负责批处理任务,即仅执行一次的任务,它保证批处理任务的一个或多个pod成功结束</p>
+<p>Cron Job管理基于时间的Job,即 : </p>
+<ul>
+<li>在给定时间点只运行一次</li>
+<li>周期性地在给定时间点运行</li>
+</ul>
+<h1 id="网络通讯方式"><a href="#网络通讯方式" class="headerlink" title="网络通讯方式"></a>网络通讯方式</h1><h2 id="网络通讯模式"><a href="#网络通讯模式" class="headerlink" title="网络通讯模式"></a>网络通讯模式</h2><p>Kubernetes的网络模型假定了所有pod都在一个可以直接连通的扁平的网络空间中,这在GCE里面是现成的网络模型,Kubernetes假定这个网络已经存在.而在私有云里搭建Kubernetes集群,就不能假定这个网络已经存在了.我们需要自己实现这个网络假设,将不同节点上的Docker容器之间的互相访问先打通,然后运行Kubernetes</p>
+<p>同一个pod内的多个容器之间 : lo</p>
+<p>各pod之间的通讯 : Overlay Network</p>
+<p>pod与service之间的通讯 : 各节点的Iptables规则</p>
+<h2 id="网络解决方案-Kubernetes-Flannel"><a href="#网络解决方案-Kubernetes-Flannel" class="headerlink" title="网络解决方案 Kubernetes+Flannel"></a>网络解决方案 Kubernetes+Flannel</h2><p>Flannel是CoreOS团队针对Kubernetes设计的一个网络规划服务,简单来说,它的功能是让集群中的不同节点主机创建的Docker容器都具有全集群唯一的虚拟IP地址.而且它还能在这些IP地址之间建立一个覆盖网络,通过这个覆盖网络,将数据包原封不动地传递到目标容器内</p>
+<p><img src="1.png" alt="1.png"></p>
+<p>ETCD之Flannel提供说明 : </p>
+<ul>
+<li>存储管理Flannel可分配的IP地址段资源</li>
+<li>监控ETCD中每个pod的实际地址,并在内存中建立维护pod节点路由表</li>
+</ul>
+<h2 id="不同情况下网络通信方式"><a href="#不同情况下网络通信方式" class="headerlink" title="不同情况下网络通信方式"></a>不同情况下网络通信方式</h2><p><strong>同一个pod内部通讯 : 同一个pod共享同一个网络命名空间,共享同一个Linux协议栈</strong></p>
+<p><strong>pod1至pod2</strong></p>
+<ul>
+<li>pod1与pod2不在同一台主机,pod的地址是与docker0在同一个网段的,但docker0网段与宿主机网卡是两个完全不同的IP网段,并且不同Node之间的通信只能通过宿主机的物理网卡进行.将Pod的IP和所在Node的IP关联起来,通过这个关联让Pod可以互相访问</li>
+<li>pod1与pod2在同一台机器,有Docker0网桥直接转发请求至pod2,不需要经过Flannel</li>
+</ul>
+<p>Pod至Service的网络 : 目前基于性能考虑,全部为iptables维护和转发</p>
+<p>Pod到外网 : Pod向外网发送请求,查找路由表,转发数据包到宿主机的网卡,宿主网卡完成路由选择后,iptables执行Masquerade,把源IP更改为宿主网卡的IP.然后向外网服务器发送请求</p>
+<p>外网访问pod : Service</p>
+
       
     </div>
 
@@ -821,14 +1081,58 @@
 
       
           <h1 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h1><p>NodeManager是运行在单个节点上的代理,它需要与应用程序的的ApplicationMaster和集群管理者ResourceManager交互: 从ApplicationMaster上接收有关Container的命令并执行之(比如启动,停止Container); 向ResourceManager汇报各个Container运行状态和节点健康状况,并领取有关Container的命令(比如清理Container)执行之</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/10/29/NodeManager%E6%A6%82%E8%BF%B0-%E5%9F%BA%E6%9C%AC%E8%81%8C%E8%83%BD%E5%92%8C%E5%86%85%E9%83%A8%E6%9E%B6%E6%9E%84/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
+<p>NodeManager是YARN中单个节点上的代理,它管理Hadoop集群中单个计算节点,功能包括与ResourceManager保持通信,管理Container的生命周期,监控每个Container的资源使用(内存,CPU等)情况,追踪节点健康状况,管理日志和不同应用程序用到的附属服务</p>
+<h1 id="NodeManager基本职能"><a href="#NodeManager基本职能" class="headerlink" title="NodeManager基本职能"></a>NodeManager基本职能</h1><p>NodeManager需通过两个RPC协议与ResourceManager服务和各个应用程序的ApplicationMaster交互<br><img src="NodeManager1.png" alt="NodeManager1.png"></p>
+<h2 id="ResourceTrackerProtocol协议"><a href="#ResourceTrackerProtocol协议" class="headerlink" title="ResourceTrackerProtocol协议"></a>ResourceTrackerProtocol协议</h2><p>NodeManager通过该RPC协议向ResourceManager注册,汇报节点健康状况和Container运行状态,并领取ResourceManager下达的命令,包括重新初始化,清理Container占用资源等.在该RPC协议中,ResourceManager扮演RPC Server的角色,而NodeManager扮演RPC Client的角色</p>
+<h3 id="ResourceTrackerProtocol协议主要提供了以下两个RPC函数"><a href="#ResourceTrackerProtocol协议主要提供了以下两个RPC函数" class="headerlink" title="ResourceTrackerProtocol协议主要提供了以下两个RPC函数"></a>ResourceTrackerProtocol协议主要提供了以下两个RPC函数</h3><p><strong>(1) registerNodeManager</strong></p>
+<p>NodeManager启动时通过该RPC函数向ResourceManager注册,注册信息由RegisterNodeManagerRequest封装的,包括如下三部分内容 :</p>
+<ul>
+<li>httpPort : 该NodeManager对外提供的HTTP端口号,ResourceManager会在界面上提供一个可直接访问NodeManager Web界面的超链接</li>
+<li>nodeId : 该NodeManager所在的host和对外的RPC端口号</li>
+<li>totalResource : 该NodeManager所在节点总的可分配资源,当前支持内存和虚拟CPU两种资源,管理员可通过参数yarn.nodemanager.resource.cpu-vcores和yarn.nodemanager.resource.memory-mb配置</li>
+</ul>
+<p>ResourceManager将通过registerNodeManager函数向NodeManager返回一个RegisterNodeManagerResponse类型的对象,主要包含以下信息 :</p>
+<ul>
+<li>MasterKey : 新生成的Container Token和Node Token的Master Key</li>
+<li>NodeAction : ResourceManager向该NodeManager返回的下一步操作,主要包括NORMAL,RESYNC,SHUTDOWN三种,分别表示正常,重新同步信息和停止运行</li>
+<li>rmIdentifier : ResourceManager的标示符,NodeManager通过该标识符判断ApplicationMaster发送的Container来自原始的还是新启动的ResourceManager</li>
+<li>diagnosticsMessage : NodeManager注册失败时,将收到一段诊断信息,告知具体的失败原因</li>
+</ul>
+<p><strong>(2) nodeHeartbeat</strong></p>
+<p>NodeManager启动后,定期通过该RPC函数向ResourceManager汇报Container运行信息和节点健康状况,并领取新的命令,比如杀死一个Container</p>
+<h2 id="ContainerManagementProtocol协议"><a href="#ContainerManagementProtocol协议" class="headerlink" title="ContainerManagementProtocol协议"></a>ContainerManagementProtocol协议</h2><p>应用程序的ApplicationMaster通过该RPC协议向NodeManager发起针对Container的相关操作,包括启动Container,杀死Container,获取Container</p>
+<p>ContainerManagementProtocol协议主要提供了以下三个RPC函数 : </p>
+<ul>
+<li>startContainer : ApplicationMaster通过该RPC要求NodeManager启动一个Contaienr.该函数有一个StartContainerRequest类型的参数,封装了Container启动所需的本地资源,环境变量,执行命令,Token等信息.如果Container启动成功,则该函数返回一个StartContainerResponse对象</li>
+<li>stopContainer : ApplicationMaster通过该RPC要求NodeManager停止(杀死)一个Container.该函数有一个StopContainerRequest类型的参数,用于指定待杀死的Container ID.如果Container被成功杀死,则该函数返回一个StopContainerResponse对象</li>
+<li>getContainerStatus : ApplicationMaster通过该RPC获取一个Container的运行状态.该函数参数类型为GetContainerStatusRequest,封装了目标Container的ID,返回值为封装了Container当前运行状态的类型为GetContainerStatusResponse的对象</li>
+</ul>
+<h1 id="NodeManager内部架构"><a href="#NodeManager内部架构" class="headerlink" title="NodeManager内部架构"></a>NodeManager内部架构</h1><p><strong>NodeManager内部组织结构和主要模块</strong></p>
+<ul>
+<li>NodeStatusUpdater : NodeStatusUpdater是NodeManager与ResourceManager通信的唯一通道</li>
+<li>ContainerManager : ContainerManager是NodeManager中最核心组件之一,它由多个子组件构成,每个子组件负责一部分功能,协作共同管理运行在该节点上的所有Container.<em>各个子组件如下</em><ul>
+<li>RPC Server : 该RPC Server实现了ContainerManagementProtocol协议,是ApplicationMaster与NodeManager通信的唯一通道</li>
+<li>ResourceLocalizationService : 负责Container所需资源的本地化.它能够按照描述从HDFS上下载Container所需的文件资源,并尽量将它们分摊到各个磁盘上以防止出现访问热点.此外,它会为下载的文件添加访问控制限制,并为之施加合适的磁盘空间使用份额</li>
+<li>ContainersLauncher : 维护了一个线程池以并行完成Container相关操作,比如启动或者杀死Container,其中启动Container请求是由ApplicationMaster发起的,而杀死Container请求则可能来自ApplicationMaster或者ResourceManager</li>
+<li>AuxServices : NodeManager允许用户通过配置附属服务的方式扩展自己的功能,这使得每个节点可以定制一些特定框架需要的服务</li>
+<li>ContainersMonitor : ContainersMonitor负责监控Container的资源使用量</li>
+<li>LogHandler : 一个可插拔组件,用户可通过它控制Container日志的保存方式,即是写到本地磁盘上还是将其打包后上传到一个文件系统中</li>
+<li>ContainerEventDispatcher : Container事件调度器,负责将ContainerEvent类型的事件调度给对应Application的状态机ApplicationImpl</li>
+<li>ApplicationEventDispatcher : Application事件调度器,负责将ApplicationEvent类型的事件调度给对应Application的状态机ApplicationImpl</li>
+</ul>
+</li>
+<li>ContainerExecutor : ContainerExecutor可与底层操作系统交互,安全存放Container需要的文件和目录,进而以一种安全的方式启动和清除Container对应的进程</li>
+<li>NodeHealthCheckerService : NodeHealthCheckerService通过周期性地运行一个自定义脚本和向磁盘写文件检查节点的健康状况,并将之通过NodeStatusUpdater传递给ResourceManager</li>
+<li>DeletionService : NodeManager将文件删除功能服务化,即提供一个专门的文件删除服务异步删除失效文件,这样可避免同步删除文件带来的性能开销</li>
+<li>Security : 安全模块是NodeManager中的一个重要模块,<em>包含两部分</em><ul>
+<li>ApplicationACLsManager : NodeManager需要为所有面向用户的API提供安全检查,如在Web UI上只能将Container日志显示给授权用户.该组件为每个应用程序维护了一个ACL列表,一旦收到类似请求后会利用该列表对其进行验证</li>
+<li>ContainerTokenSecretManager : 检查收到的各种访问请求的合法性,确保这些请求操作已被ResourceManager授权</li>
+</ul>
+</li>
+<li>WebServer : 通过Web界面向用户展示该节点上所有应用程序运行状态,Container列表,节点健康状态和Container产生的日志等信息</li>
+</ul>
+<p><img src="NodeManager2.png" alt="NodeManager2.png"></p>
+
       
     </div>
 
@@ -903,15 +1207,52 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="ApplicationMaster管理"><a href="#ApplicationMaster管理" class="headerlink" title="ApplicationMaster管理"></a>ApplicationMaster管理</h1>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/10/29/ResourceManager%E7%AE%A1%E7%90%86/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
+          <h1 id="ApplicationMaster管理"><a href="#ApplicationMaster管理" class="headerlink" title="ApplicationMaster管理"></a>ApplicationMaster管理</h1><p><em>ApplicationMaster管理部分主要由三个服务构成，分别是ApplicationMasterLauncher、AMLivelinessMonitor和ApplicationMasterService，它们共同管理应用程序的ApplicationMaster的生命周期</em></p>
+<p><strong>ApplicationMasterLauncher、AMLivelinessMonitor和ApplicationMasterService这三个组件是如何协同管理ApplicationMaster生命周期，介绍从ResourceManager获得资源启动ApplicationMaster ：</strong> </p>
+<ol>
+<li>用户向YARN ResourceManager提交应用程序，ResourceManager收到提交请求后，先向资源调度器申请用以启动ApplicationMaster的资源，待申请到资源后，再由ApplicationMasterLauncher与对应的NodeManager通信，从而启动应用程序的ApplicationMaster</li>
+<li>ApplicationMaster启动完成后，ApplicationMasterLauncher会通过事件的形式，将刚刚启动的ApplicationMaster注册到AMLivelinessMonitor，以启动心跳监控</li>
+<li>ApplicationMaster启动后，先向ApplicationMasterService注册，并将自己所在host、端口号等信息汇报给它</li>
+<li>ApplicationMaster运行过程中，周期性地向ApplicationMasterService汇报心跳信息</li>
+<li>ApplicationMasterService每次收到ApplicationMaster的心跳信息后，将通知AMLivelinessMonitor更新该应用程序的最近汇报心跳的时间</li>
+<li>当应用程序运行完成后，ApplicationMaster向ApplicationMasterService发送请求，注销自己</li>
+<li>ApplicationMasterService收到注销请求后，标注应用程序运行状态为完成，同时通知AMLivelinessMonitor移除对它的心跳监控</li>
+</ol>
+<h2 id="介绍三个服务"><a href="#介绍三个服务" class="headerlink" title="介绍三个服务"></a>介绍三个服务</h2><h3 id="ApplicationMasterLauncher"><a href="#ApplicationMasterLauncher" class="headerlink" title="ApplicationMasterLauncher"></a>ApplicationMasterLauncher</h3><p>ApplicationMasterLauncher即是一个服务，也是一个事件处理器，它处理AMLauncherEvent类型的事件，该类型事件有两种，分别是请求启动一个ApplicationMaster的”LAUNCH”事件和请求清理一个ApplicationMaster的”CLEANUP”事件。ApplicationMasterLauncher维护了一个线程池，从而能够尽快地处理这两种事件</p>
+<ul>
+<li>如果ApplicationMasterLauncher收到了”LAUNCH”类型的事件，它会与对应的NodeManager通信，要求它启动ApplicationMaster。整个过程比较简单，首先创建一个ContainerManagementProtocol协议的客户端，然后向对应的NodeManager发起连接请求，接着将启动AM所需的各种信息，包括启动命令、JAR包、环境变量等信息，封装成一个StartContainerRequest对象，然后通过RPC函数ContainerManagementProtocol#startContainer发送给对应的NM</li>
+<li>如果ApplicationMasterLauncher收到了”CLEANUP”类型的事件，它与对应的NodeManager通信，要求它杀死ApplicationMaster。整个过程与启动AM的过程类似</li>
+</ul>
+<h3 id="AMLivelinessMonitor"><a href="#AMLivelinessMonitor" class="headerlink" title="AMLivelinessMonitor"></a>AMLivelinessMonitor</h3><p>该服务周期性遍历所有应用程序的ApplicationMaster，如果一个ApplicationMaster在一定时间内未汇报心跳信息，则认为它死掉了，它上面所有正在运行的Container将被置为运行失败；如果AM运行失败，则由RM重新为它申请资源，以便能够重新分配到另外一个节点上执行</p>
+<h3 id="ApplicationMasterService"><a href="#ApplicationMasterService" class="headerlink" title="ApplicationMasterService"></a>ApplicationMasterService</h3><p>ApplicationMasterService实现了RPC协议ApplicationMasterProtocol，负责处理来自ApplicationMaster的请求，请求主要包括注册、心跳和清理三种，其中，注册是ApplicationMaster启动时发生的行为，请求包中包含AM所在节点、RPC端口号和tracking URL等信息；心跳是周期性行为，包含请求资源的类型描述、待释放的Container列表等，而AMS为之返回新分配的Container、失败的Container等信息；清理是应用程序运行结束时发生的行为，ApplicationMaster向RM发送清理应用程序的请求，以回收资源和清理各种内存空间</p>
+<p>ApplicationMasterLauncher启动AM后，AM做的第一件事是向RM注册，这是通过RPC函数ApplicationMasterProtocol#registerApplicationMaster实现的</p>
+<p><strong>AM运行过程中，需要周期性地通过RPC函数ApplicationMasterProtocol#allocate与RM通信，这主要有以下三个作用 ：</strong> </p>
+<ul>
+<li>请求资源</li>
+<li>获取新分配的资源</li>
+<li>形成周期性心跳，告诉RM自己还活着</li>
+</ul>
+<p>AM运行结束后，需要通过RPC函数ApplicationMasterProtocol#finishApplicationMaster告诉RM自己运行结束，可以回收资源和清理各种数据结果了</p>
+<h1 id="NodeManager管理"><a href="#NodeManager管理" class="headerlink" title="NodeManager管理"></a>NodeManager管理</h1><p>NodeManager管理部分主要由三个服务构成，分别是NMLivelinessMonitor，NodesListManager和ResourceTrackerService，它们共同管理NodeManager的生命周期</p>
+<h2 id="介绍三个服务-1"><a href="#介绍三个服务-1" class="headerlink" title="介绍三个服务"></a>介绍三个服务</h2><h3 id="NMLivelinessMonitor"><a href="#NMLivelinessMonitor" class="headerlink" title="NMLivelinessMonitor"></a>NMLivelinessMonitor</h3><p>该服务周期性的遍历集群中所有NodeManager，如果一个NodeManager在一定时间内未汇报心跳信息，则认为它死掉了，它上面所有正在运行的Container将被置为运行失败。需要注意的是，RM不会重新执行这些Container，它只会通过心跳机制告诉对应的AM，由AM决定是否重新执行。如果需要，则AM重新向RM申请资源，然后由AM与对应的NodeManager通信以重新运行失败的Container</p>
+<h3 id="NodesListManager"><a href="#NodesListManager" class="headerlink" title="NodesListManager"></a>NodesListManager</h3><p>NodesListManager管理exlude(类似于黑名单)和inlude(类似于白名单)节点列表，这两个列表所在的文件分别可通过yarn.resourcemanager.nodes.include-path和yarn.resourcemanager.nodes.exclude-path配置，其中，exlude节点列表可认为是黑名单，它们不允许直接与RM通信，而inlude节点列表可认为是白名单。默认情况下，这两个列表均为空，表示任何节点均被允许接入RM。需要注意的是，管理员可通过命令”bin/yarn rmadmin -refreshNodes”动态加载这两个文件</p>
+<h3 id="ResourceTrackerService"><a href="#ResourceTrackerService" class="headerlink" title="ResourceTrackerService"></a>ResourceTrackerService</h3><p>ResourceTrackerService实现了RPC协议ResourceTracker，负责处理来自各个NodeManager的请求，请求主要包括注册和心跳两种，其中，注册是NodeManager启动时发生的行为，请求包中包含节点ID，可用的资源上限等信息；而心跳时周期性行为，包含各个Container运行状态，运行的Application列表，节点健康状况，而ResourceTrackerService则为NM返回待释放的Container列表、Application列表等</p>
+<p>NM启动时，它所作的第一件事是向RM注册，这是通过RPC函数ResourceTracker#registerNodeManager实现的，注册信息包括节点可用资源总量，对外开放的HTTP端口号等</p>
+<p>NM启动后，他会周期性地通过RPC函数ResourceTracker#nodeHeartbeat汇报心跳，心跳信息包含各个Container运行状态，运行的Application列表，节点健康状况等信息，而RM则为之返回需要释放的Container列表，Application列表等</p>
+<h1 id="Application管理"><a href="#Application管理" class="headerlink" title="Application管理"></a>Application管理</h1><p>YARN中,Application是指应用程序,他可能启动多个运行实例,每个运行实例由一个ApplicationMaster与一组该ApplicationMaster启动的任务组成,他拥有名称、队列名、优先级等属性,是一个比较宽泛的概念,可以是一个MapReduce作业、一个DAG应用程序，设置可以是一个Storm集群实例</p>
+<h2 id="介绍三个服务-2"><a href="#介绍三个服务-2" class="headerlink" title="介绍三个服务"></a>介绍三个服务</h2><h3 id="ApplicationACLsManager"><a href="#ApplicationACLsManager" class="headerlink" title="ApplicationACLsManager"></a>ApplicationACLsManager</h3><p>ApplicationACLsManager负责管理应用程序的访问权限，包含两部分权限：查看权限和修改权限。其中，查看权限主要用于查看应用程序基本信息，比如运行时间、优先级等信息；而修改权限则主要用于修改应用程序优先级、杀死应用程序等。默认情况下，任意一个普通用户可以查看所有其他用户的应用程序。用户可以为自己的应用程序设置具有访问权限的用户列表，具体方法是在客户端使用ContainerLaunchContext#newInstance构造ContainerLaunchContext实例时将其作为参数传入。</p>
+<p>通常而言，为了便于用户设置该参数，运行在YARN之上的计算框架会预留一些参数供用户提交应用程序时动态设置，比如MapReduce计算框架允许用户通过参数mapreduce.job.acl-view-job和mapreduce.job.acl-modify-job为每个应用程序设置查看和修改权限</p>
+<h3 id="RMAppManager"><a href="#RMAppManager" class="headerlink" title="RMAppManager"></a>RMAppManager</h3><p>RMAppManager负责应用程序的启动和关闭。ClientRMService收到来自客户端的提交应用程序请求后，将调用函数RMAppManager#submitApplication创建一个RMApp对象，它将维护这个应用程序的整个生命周期，从开始运行到最终结束；当RMApp运行结束后，将向RMAppManager发送一个RMAppManagerEventType.APP_COMPLETED事件，他收到该事件后将调用RMARMAppManager#finishApplication进行收尾工作，包括 ： </p>
+<ul>
+<li>将该应用程序放入已完成应用程序列表中，以便用户查询历史应用程序运行信息。需要注意的是，该列表的大小是有限的，默认是10000(管理员可通过参数yarn.resourcemanager.max-completed-applications修改)，当已完成应用程序数目超过该值时，将从内存数据结构中移除(移除的应用程序可称为”过期的应用程序”)，这样用户只能通过History Server获取过期的应用程序信息，History Server是从磁盘文件中获取这些信息的</li>
+<li>将应用程序从RMStateStore中移除。RMStateStore记录了运行中的应用程序的运行日志，当集群故障重启后，ResourceManager可通过这些日志恢复应用程序运行状态，从而避免全部重新运行，一旦应用程序运行结束后，这些日志便失去了意义，故可以对其进行删除。这属于ResourceManager容错机制的范畴</li>
+</ul>
+<h3 id="ContainerAllocationExpirer"><a href="#ContainerAllocationExpirer" class="headerlink" title="ContainerAllocationExpirer"></a>ContainerAllocationExpirer</h3><p>当一个AM获得一个Container后，YARN不允许AM长时间不对其使用，因为这会降低整个集群的利用率。当AM收到RM新分配的一个Container后，必须在一定的时间内在对应的NM上启动该Container，否则RM将强制回收该Container</p>
+<h1 id="状态机管理"><a href="#状态机管理" class="headerlink" title="状态机管理"></a>状态机管理</h1><p>YARN中，如果一个对象由若干个状态以及触发这些状态发生转移的事件构成，它将被抽象成一个状态机，在YARN ResourceManager内部，共有四类状态机，分别是RMApp，RMAppAttempt，RMContainer和RMNode。其中，前2类状态机维护了一个应用程序相关的生命周期，包括Application生命周期，一次进行尝试的生命周期；RMContainer则维护了分配出去的各个资源的使用状态；RMNode维护了一个NodeManager的生命周期</p>
+<p>YARN中的Application生命周期由状态机RMAppImpl维护，每个Application可能会尝试运行多次，每次成为一次”运行尝试”，而每次运行尝试的生命周期则由状态机RMAppAttemptImpl维护，如果一次运行尝试运行失败，RMApp会创建另外一个运行尝试，知道某次运行尝试运行成功或者达到运行尝试上限。对于每次运行尝试，ResourceManager将为它分配一个Container，Container是运行环境的抽象，内部封装了任务的运行环境和资源等信息，而一个应用程序的ApplicationMaster就运行在这个Container中。ApplicationMaster启动之后，会不断向ResourceManager申请Container以运行各类任务。Container的生命周期由状态机RMContainerImpl维护</p>
+<p><img src="blog2.png" alt="应用程序状态机组织结构"></p>
+<p>Application Attempt的生命周期与ApplicationMaster的生命周期基本上是一致的 ： 一个Application内部所有任务均由ApplicationMaster维护和管理，ApplicationMaster本身需要占用一个Container，而这个Container由ResourceManager为其申请和启动。一旦ApplicationMaster成功启动，他就会与ResourceManager通信，为它内部的任务申请Container。如果ApplicationMaster重新启动，则意味着一个新的Application Attempt被启动，换句话说，一个Application Attempt的”生死存亡”与ApplicationMaster的”命运”紧紧绑定在一起</p>
+
       
     </div>
 
@@ -987,14 +1328,56 @@
 
       
           <p><em>YARN也采用了Master/Slave结构，其中，Master实现为ResourceManager，负责整个集群资源的管理与调度；Slave实现为NodeManager，负责单个节点的资源管理与任务启动ResourceManager是整个YARN集群中最重要的组件之一，它的设计直接决定了系统的可扩展性、可用性和容错性等特点，它的功能较多，包括ApplicationMaster管理（启动、停止等）、NodeManager管理、Application管理、状态机管理等</em></p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2019/10/29/ResourceManager%E5%9F%BA%E6%9C%AC%E8%81%8C%E8%83%BD%E5%92%8C%E5%86%85%E9%83%A8%E6%9E%B6%E6%9E%84/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
+<hr>
+<p>ResourceManager负责集群中所有资源的统一管理和分配，它接收来自各个节点的资源汇报信息，并把这些信息按照一定的策略分配给各个应用程序</p>
+<h1 id="ResourceManager基本职能"><a href="#ResourceManager基本职能" class="headerlink" title="ResourceManager基本职能"></a>ResourceManager基本职能</h1><h2 id="ResourceManager需通过两个RPC协议与NodeManager和AppMaster交互-具体如下"><a href="#ResourceManager需通过两个RPC协议与NodeManager和AppMaster交互-具体如下" class="headerlink" title="ResourceManager需通过两个RPC协议与NodeManager和AppMaster交互,具体如下 :"></a>ResourceManager需通过两个RPC协议与NodeManager和AppMaster交互,具体如下 :</h2><ul>
+<li><strong>ResourceTracker :</strong> NodeManager通过该RPC协议向ResourceManager注册、汇报节点健康状况和Container运行状态，并领取ResourceManager下达的命令，这些命令包括重新初始化、清理Container等，在该RPC协议中，ResourceManager扮演RPCServer的角色，而NodeManager扮演RPCClient的角色，换句话说，NodeManager与ResourceManager之间采用了“pull模型”,NodeManager总是周期性地主动向ResourceManager发起请求,并通过领取下达给自己的命令 </li>
+<li><strong>ApplicationMasterProtocol ：</strong>应用程序的ApplicationMaster通过该RPC协议向ResourceManager注册、申请资源和释放资源。在该协议中，ApplicationMaster扮演RPC Client的角色，而ResourceManager扮演RPC Server的角色，换句话说，ResourceManager与ApplicationMaster之间采用了“pull模型”</li>
+<li><strong>ApplicationClientProtocol ：</strong>应用程序的客户端通过该RPC协议向ResouceManager提交应用程序、查询应用程序状态和控制应用程序等。在该协议中，应用程序客户端扮演RPC Client的角色，而ResourceManager扮演RPC Server的角色</li>
+</ul>
+<h2 id="ResourceManager主要完成以下几个功能-："><a href="#ResourceManager主要完成以下几个功能-：" class="headerlink" title="ResourceManager主要完成以下几个功能 ："></a>ResourceManager主要完成以下几个功能 ：</h2><ul>
+<li>与客户端交互，处理来自客户端的请求</li>
+<li>启动和管理AppicationMaster，并在它运行失败时重新启动它</li>
+<li>管理NodeManager，接收来自NodeManager的资源汇报信息，并向NodeManager下达管理指令</li>
+<li>资源管理与调度，接收来自AppMaster的资源申请请求，并为之分配资源</li>
+</ul>
+<h1 id="ResouceManager内部架构"><a href="#ResouceManager内部架构" class="headerlink" title="ResouceManager内部架构"></a>ResouceManager内部架构</h1><h2 id="ResourceManager主要由以下几个部分组成-："><a href="#ResourceManager主要由以下几个部分组成-：" class="headerlink" title="ResourceManager主要由以下几个部分组成 ："></a>ResourceManager主要由以下几个部分组成 ：</h2><ul>
+<li><strong>用户交互模块。</strong>ResourceManager分别针对普通用户、管理员和Web提供了三种对外服务，<em>具体实现分别对应ClientRMService、AdminService和WebApp</em><ul>
+<li><strong>ClientRMService。</strong>ClientRMService是为普通用户提供的服务，它处理来自客户端各种RPC请求，比如提交应用程序、终止应用程序、获取应用程序运行状态等</li>
+<li><strong>AdminService。</strong>ResourceManager为管理员提供了一套独立的服务接口，以防止大量的普通用户请求使管理员发送的管理命令饿死，管理员可通过这些接口管理集群，比如动态更新节点列表、更新ACL列表、更新队列信息等</li>
+<li><strong>WebApp。</strong>为了更加友好地展示集群资源使用情况和应用程序运行状态等信息，YARN对外提供了一个WEB界面，这一部分是YARN仿照Haml开发的一个轻量级嵌入式Web框架</li>
+</ul>
+</li>
+<li><strong>NM管理模块。*</strong>该模块主要涉及以下组件 ：*<ul>
+<li><strong>NMLivelinessMonitor。</strong>监控NM是否活着，如果一个NodeManager在一定时间内未汇报心跳信息，则认为它死掉了，需将其从集群中移除</li>
+<li><strong>NodesListManager。</strong>维护正常节点和异常节点列表，管理exclude(类似于黑名单)和include(类似于白名单)节点列表，这两个列表均是在配置文件中设置的，可以动态加载</li>
+<li><strong>ResourceTrackerService。</strong>处理来自NodeManager的请求，主要包括注册和心跳两种请求，其中，注册时NodeManager启动时发生的行为，请求包中包含节点ID、可用的资源上限等信息；而心跳时周期性行为，包含各个Container运行状态，运行的Application列表、节点资源状况等信息，作为请求的应答，ResourceTrackerService可为NodeManager返回待释放的Container列表、Application列表等信息</li>
+</ul>
+</li>
+<li><strong>AM管理模块。*</strong>该模块主要涉及以下组件 ：*<ul>
+<li><strong>AMLivelinessMonitor。</strong>监控AM是否活着，如果一个ApplicationMaster在一定时间内未汇报心跳信息，则认为它死掉了，它上面所有正在运行的Container将被置为失败状态，而AM本身会被重新分配到另外一个节点上执行</li>
+<li><strong>ApplicationMasterLauncher。</strong>与某个NodeManager通信，要求它为某个应用程序启动ApplicationMaster</li>
+<li><strong>ApplicationMasterService。</strong>处理来自ApplicationMaster的请求，主要包括注册和心跳两种请求，其中，注册是ApplicationMaster启动时发生的行为，注册请求包中包含ApplicationMaster启动节点；对外RPC端口号和trackingURL等信息；而心跳而是周期性行为，汇报信息包含所需资源描述、待释放的Container列表、黑名单列表等，而AMS则为之返回新分配的Container、失败的Container、待抢占的Container列表等信息</li>
+</ul>
+</li>
+<li><strong>Application管理模块。*</strong>该模块主要涉及以下组件 ：*<ul>
+<li><strong>ApplicationACLsManager。</strong>管理应用程序访问权限，包含两部分权限 ：查看权限和修改权限。查看权限主要用于查看应用程序基本信息，而修改权限则主要用于修改应用程序优先级、杀死应用程序等</li>
+<li><strong>RMAppManager。</strong>管理应用程序的启动和关闭</li>
+<li><strong>ContainerAllocationExpirer。</strong>当AM收到RM新分配的一个Container后，必须在一定的时间内在对应的NM上启动该Container，否则RM将强制回收该Container，而一个已经分配的Container是否该被回收则是由ContainerAllocationExpirer决定和执行的</li>
+</ul>
+</li>
+<li><strong>状态机管理模块。</strong>ResourceManager使用有限状态机维护有状态对象的生命周期，状态机的引入使得YARN设计架构更加清晰。<em>ResourceManager共维护了四类状态机，分别是RMApp、RMAppAttempt、RMContainer和RMNode</em><ul>
+<li><strong>RMApp。</strong>RMApp维护了一个应用程序的整个运行周期，包括从启动到运行结束整个过程。由于一个Application的生命周期可能会启动多个Application运行实例，因此可认为，RMApp维护的是同一个Application启动的所有运行实例的生命周期</li>
+<li><strong>RMAppAttempt。</strong>一个应用程序可能启动多个实例，即一个实例运行失败后，可能再次启动一个重新运行，而每次启动称为一个运行尝试，用“RMAppAttempt”描述，RMAppAttempt维护了一次运行尝试的整个生命周期</li>
+<li><strong>RMContainer。</strong>RMContainer维护了一个Container的运行周期，包括从创建到运行结束整个过程。RM将资源封装成Container发送给应用程序的ApplicationMaster，而ApplicationMaster则会在Container描述的运行环境中启动任务，因此，从这个层面上讲，Container和任务的生命周期是一致的</li>
+<li><strong>RMNode。</strong>RMNode维护了一个NodeManager的生命周期，包括启动到运行结束整个过程</li>
+</ul>
+</li>
+<li><strong>安全管理模块。</strong>ResourceManager自带了非常全面的权限管理机制，主要由ClientTOAMSecretManager、ContainerTokenSecretManager、ApplicationTokenSecretManager等模块完成</li>
+<li><strong>资源分配模块。</strong>该模块主要涉及一个组件 – ResourceScheduler。ResourceScheduler是资源调度器，它按照一定的约束条件将集群中的资源分配给各个应用程序，当前主要考虑内存和CPU资源。ResourceScheduler是一个插拔式模块，YARN自带了一个批处理资源调度器 – FIFO和两个多用户调度器 – Fair Scheduler和Capacity Scheduler</li>
+</ul>
+<h1 id="ResouceManager内部架构图"><a href="#ResouceManager内部架构图" class="headerlink" title="ResouceManager内部架构图"></a>ResouceManager内部架构图</h1><p><img src="blog1.png" alt="ResourceManager内部架构图"></p>
+
       
     </div>
 
