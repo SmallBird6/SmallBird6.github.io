@@ -296,8 +296,46 @@ body {
   padding-left: 24px;
   font-size: 12px;
 }
+#toc-toggle {
+  display: none;
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #4a6fa5;
+  color: #fff;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+  z-index: 100;
+  box-shadow: 0 2px 12px rgba(74,111,165,0.4);
+  transition: transform 0.3s;
+}
+#toc-toggle:hover {
+  transform: scale(1.1);
+}
+#toc-toggle.open {
+  background: #636e72;
+}
 @media (max-width: 1400px) {
-  #post-toc { display: none; }
+  #post-toc {
+    display: none;
+    position: fixed;
+    right: 10px;
+    top: auto;
+    bottom: 76px;
+    width: 260px;
+    max-height: 50vh;
+    z-index: 99;
+  }
+  #post-toc.mobile-show {
+    display: block;
+  }
+  #toc-toggle {
+    display: block;
+  }
 }
 @media (max-width: 600px) {
   body { padding: 12px; }
@@ -970,7 +1008,7 @@ body {
 <div style="font-size:small;margin-top:8px;float:right;"></div>
 
 </div>
-    <div id="footer"><div id="footer1">Copyright © <span id="copyrightYear"></span> <a href="https://SmallBird6.github.io">Blog</a></div>
+    <div id="footer"><div id="footer1">Copyright © <span id="copyrightYear"></span> <a href="https://SmallBird6.github.io">SmallBird6's Blog</a></div>
 <div id="footer2">
     <span id="runday"></span><span>Powered by <a href="https://meekdai.com/Gmeek.html" target="_blank">Gmeek</a></span>
 </div>
@@ -1120,6 +1158,15 @@ document.addEventListener('DOMContentLoaded', () => {
     links.push({el:a,target:h});
   }
   body.parentNode.insertBefore(toc,body);
+  var btn=document.createElement('button');
+  btn.id='toc-toggle';
+  btn.textContent='\u2630';
+  btn.title='\u76EE\u5F55';
+  btn.onclick=function(){
+    toc.classList.toggle('mobile-show');
+    btn.classList.toggle('open');
+  };
+  document.body.appendChild(btn);
   window.addEventListener('scroll',function(){
     var scrollY=window.scrollY+120;
     var current=null;
