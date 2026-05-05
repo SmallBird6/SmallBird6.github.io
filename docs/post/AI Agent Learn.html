@@ -5,7 +5,34 @@
     <meta name="viewport" content="width=device-width,initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <link href='https://mirrors.sustech.edu.cn/cdnjs/ajax/libs/Primer/21.0.7/primer.css' rel='stylesheet' />
-    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --blog-accent: #ff6b35;
+  --blog-accent2: #e84526;
+  --blog-accent-light: #fff4ef;
+  --blog-text: #24292f;
+  --blog-text-secondary: #656d76;
+  --blog-bg: #fafaf8;
+  --blog-border: #d8dee4;
+  --blog-card-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  --blog-radius: 8px;
+  --blog-font-serif: 'Noto Serif SC', Georgia, 'Times New Roman', serif;
+  --blog-font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+}
+[data-color-mode="dark"] {
+  --blog-accent: #ff8c5a;
+  --blog-accent2: #ff6b35;
+  --blog-accent-light: #2a1f1a;
+  --blog-text: #e6edf3;
+  --blog-text-secondary: #8b949e;
+  --blog-bg: #0d1117;
+  --blog-border: #30363d;
+  --blog-card-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+</style>
     <link rel="icon" href="https://avatars.githubusercontent.com/u/39933960?v=4&size=64"><script>
         let theme = localStorage.getItem("meek_theme") || "light";
         document.documentElement.setAttribute("data-color-mode", theme);
@@ -57,7 +84,183 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
     font-size: 12px;
 }
 </style>
+@keyframes fadeSlideIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeSlideRight {
+  from { opacity: 0; transform: translateX(-20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@keyframes shimmer {
+  0% { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
 
+body {
+  font-family: var(--blog-font-serif);
+  line-height: 1.8;
+  color: var(--blog-text);
+  background-color: var(--blog-bg);
+  max-width: 960px;
+}
+
+#header {
+  border-bottom: 2px solid var(--blog-accent);
+  padding-bottom: 12px;
+  animation: fadeSlideIn 0.6s ease both;
+}
+
+.postTitle {
+  font-family: var(--blog-font-serif);
+  position: relative;
+  padding-bottom: 14px;
+  background: linear-gradient(90deg, var(--blog-accent), var(--blog-accent2), var(--blog-accent));
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 4s linear infinite, fadeSlideRight 0.6s ease both;
+}
+.postTitle::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 80px;
+  height: 3px;
+  background: linear-gradient(90deg, var(--blog-accent), transparent);
+  border-radius: 2px;
+}
+
+#postBody {
+  font-size: 16px;
+  line-height: 1.9;
+  animation: fadeSlideIn 0.8s ease 0.2s both;
+}
+
+#postBody h2 {
+  margin-top: 2em;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--blog-border);
+  transition: border-color 0.3s;
+}
+#postBody h2:hover {
+  border-bottom-color: var(--blog-accent);
+}
+
+#postBody h3 {
+  margin-top: 1.5em;
+  color: var(--blog-accent);
+  position: relative;
+  padding-left: 14px;
+}
+#postBody h3::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 4px;
+  bottom: 4px;
+  width: 3px;
+  background: var(--blog-accent);
+  border-radius: 2px;
+}
+
+#postBody table {
+  border-radius: var(--blog-radius);
+  overflow: hidden;
+  border: 1px solid var(--blog-border);
+  transition: box-shadow 0.3s;
+}
+#postBody table:hover {
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+}
+#postBody table th {
+  background: linear-gradient(135deg, var(--blog-accent), var(--blog-accent2));
+  color: #fff;
+  font-weight: 600;
+  padding: 10px 16px;
+}
+#postBody table td {
+  padding: 8px 16px;
+  border-color: var(--blog-border);
+  transition: background 0.2s;
+}
+#postBody table tbody tr:nth-child(even) {
+  background-color: var(--blog-accent-light);
+}
+#postBody table tbody tr:hover {
+  background-color: var(--blog-accent-light);
+  box-shadow: inset 3px 0 0 var(--blog-accent);
+}
+
+#postBody code {
+  background: var(--blog-accent-light);
+  border-radius: 4px;
+  padding: 2px 6px;
+  font-size: 0.9em;
+  color: var(--blog-accent);
+}
+
+#postBody pre {
+  border-radius: var(--blog-radius);
+  border: 1px solid var(--blog-border);
+  transition: border-color 0.3s;
+}
+#postBody pre:hover {
+  border-color: var(--blog-accent);
+}
+
+#postBody blockquote {
+  border-left: 4px solid var(--blog-accent);
+  background: var(--blog-accent-light);
+  border-radius: 0 var(--blog-radius) var(--blog-radius) 0;
+  padding: 12px 16px;
+  margin: 16px 0;
+  color: var(--blog-text-secondary);
+}
+
+#postBody img {
+  border-radius: var(--blog-radius);
+  box-shadow: var(--blog-card-shadow);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+#postBody img:hover {
+  transform: scale(1.02);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+}
+
+.title-right a, .title-right button {
+  transition: transform 0.3s, color 0.3s;
+}
+.title-right a:hover, .title-right button:hover {
+  transform: scale(1.15);
+  color: var(--blog-accent) !important;
+}
+
+#footer {
+  border-top: 1px solid var(--blog-border);
+  padding-top: 20px;
+  color: var(--blog-text-secondary);
+  animation: fadeSlideIn 0.6s ease 0.4s both;
+}
+#footer a {
+  color: var(--blog-accent);
+  text-decoration: none;
+  transition: opacity 0.2s;
+}
+#footer a:hover {
+  opacity: 0.7;
+}
+
+@media (max-width: 600px) {
+  body { padding: 12px; }
+  .postTitle { font-size: 24px; }
+}
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--blog-border); border-radius: 3px; }
 
 
 
@@ -203,10 +406,7 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 <li><strong>AutoGen Java</strong>（了解）：微软多Agent对话框架移植版，适合多Agent对话协作研究</li>
 <li><strong>Agents-Flex</strong>（了解）：轻量级框架，不强制绑定Spring，灵活轻便</li>
 </ul></div>
-<div style="font-size:small;margin-top:8px;float:right;"></div>
-
-<button class="btn btn-block" type="button" onclick="openComments()" id="cmButton">评论</button>
-<div class="comments" id="comments"></div>
+<div style="font-size:small;margin-top:8px;float:right;"><span style="color: var(--blog-text-secondary, #656d76);">Thanks for reading</span></div>
 
 </div>
     <div id="footer"><div id="footer1">Copyright © <span id="copyrightYear"></span> <a href="https://SmallBird6.github.io">BLOG</a></div>
@@ -218,8 +418,8 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 var now=new Date();
 document.getElementById("copyrightYear").innerHTML=now.getFullYear();
 
-if(""!=""){
-    var startSite=new Date("");
+if("2026-03-30"!=""){
+    var startSite=new Date("2026-03-30");
     var diff=now.getTime()-startSite.getTime();
     var diffDay=Math.floor(diff/(1000*60*60*24));
     document.getElementById("runday").innerHTML="网站运行 "+diffDay+" 天"+" • ";
@@ -264,42 +464,6 @@ document.getElementById("pathIssue").setAttribute("d",IconList["github"]);
 
 
 
-function openComments(){
-    cm=document.getElementById("comments");
-    cmButton=document.getElementById("cmButton");
-    cmButton.disabled=true;
-    cmButton.innerHTML="loading";
-    span=document.createElement("span");
-    span.setAttribute("class","AnimatedEllipsis");
-    cmButton.appendChild(span);
-
-    script=document.createElement("script");
-    script.setAttribute("src","https://utteranc.es/client.js");
-    script.setAttribute("repo","SmallBird6/SmallBird6.github.io");
-    script.setAttribute("issue-term","title");
-    
-    if(localStorage.getItem("meek_theme")=="dark"){script.setAttribute("theme","dark-blue");}
-    else if(localStorage.getItem("meek_theme")=="light") {script.setAttribute("theme","github-light");}
-    else{script.setAttribute("theme","preferred-color-scheme");}
-    
-    script.setAttribute("crossorigin","anonymous");
-    script.setAttribute("async","");
-    cm.appendChild(script);
-
-    int=self.setInterval("iFrameLoading()",200);
-}
-
-function iFrameLoading(){
-    var utterances=document.getElementsByClassName('utterances');
-    if(utterances.length==1){
-        if(utterances[0].style.height!=""){
-            utterancesLoad=1;
-            int=window.clearInterval(int);
-            document.getElementById("cmButton").style.display="none";
-            console.log("utterances Load OK");
-        }
-    }
-}
 
 document.addEventListener('DOMContentLoaded', () => {
     const createClipboardHTML = (codeContent, additionalClasses = '') => `
@@ -367,6 +531,32 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 </script>
-
+(function() {
+  var btn = document.createElement('button');
+  btn.innerHTML = '\u2191';
+  btn.setAttribute('title', '\u56DE\u5230\u9876\u90E8');
+  btn.style.cssText = 'position:fixed;bottom:32px;right:32px;width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,#ff6b35,#e84526);color:#fff;border:none;font-size:20px;cursor:pointer;opacity:0;transform:translateY(20px);transition:opacity 0.4s,transform 0.4s;z-index:999;box-shadow:0 4px 14px rgba(255,107,53,0.35);';
+  document.body.appendChild(btn);
+  window.addEventListener('scroll', function() {
+    if (window.scrollY > 300) {
+      btn.style.opacity = '1';
+      btn.style.transform = 'translateY(0)';
+    } else {
+      btn.style.opacity = '0';
+      btn.style.transform = 'translateY(20px)';
+    }
+  });
+  btn.addEventListener('click', function() {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+  btn.addEventListener('mouseenter', function() {
+    btn.style.transform = 'translateY(-3px) scale(1.1)';
+    btn.style.boxShadow = '0 6px 20px rgba(255,107,53,0.5)';
+  });
+  btn.addEventListener('mouseleave', function() {
+    btn.style.transform = 'translateY(0)';
+    btn.style.boxShadow = '0 4px 14px rgba(255,107,53,0.35)';
+  });
+})();
 
 </html>
