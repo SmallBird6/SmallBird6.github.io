@@ -13,12 +13,12 @@
         document.documentElement.setAttribute("data-color-mode", theme);
     </script>
 <meta name="description" content="一灯如豆，万语千言。">
-<meta property="og:title" content="SmallBird6's Blog">
+<meta property="og:title" content="Blog">
 <meta property="og:description" content="一灯如豆，万语千言。">
 <meta property="og:type" content="blog">
 <meta property="og:url" content="https://SmallBird6.github.io">
 <meta property="og:image" content="https://avatars.githubusercontent.com/u/39933960?v=4&size=64">
-<title>SmallBird6's Blog</title>
+<title>Blog</title>
 
 </head>
 <style>
@@ -107,22 +107,37 @@ body {
 }
 
 .SideNav {
+  background-color: transparent !important;
+  border: 1px solid #e0dcd5 !important;
   border-radius: 8px;
-  overflow: hidden;
-  border: 1px solid #e0dcd5;
 }
 [data-color-mode="dark"] .SideNav {
-  border-color: #2d3436;
+  border-color: #2d3436 !important;
 }
 
 .SideNav-item {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  position: relative !important;
   transition: all 0.25s ease;
-  border-left: 3px solid transparent;
-  padding: 14px 16px;
+  border-left: 3px solid transparent !important;
+  border-top: 1px solid #e0dcd5 !important;
+  padding: 14px 16px !important;
+  color: #2d3436 !important;
+  text-decoration: none;
+}
+.SideNav-item:first-child {
+  border-top: none !important;
+}
+[data-color-mode="dark"] .SideNav-item {
+  color: #e0dcd5 !important;
+  border-top-color: #2d3436 !important;
 }
 .SideNav-item:hover {
   background-color: rgba(74, 111, 165, 0.08) !important;
-  border-left-color: #4a6fa5;
+  border-left-color: #4a6fa5 !important;
+  text-decoration: none;
 }
 [data-color-mode="dark"] .SideNav-item:hover {
   background-color: rgba(74, 111, 165, 0.15) !important;
@@ -171,7 +186,7 @@ body {
 @media (max-width: 600px) {
   body { padding: 12px; }
   .title-left a { font-size: 22px; }
-  .SideNav-item { padding: 10px 12px; }
+  .SideNav-item { padding: 10px 12px !important; }
 }
 </style>
 
@@ -179,7 +194,7 @@ body {
 <body>
     <div id="header">
 <div class="title-left">
-    <img src="https://avatars.githubusercontent.com/u/39933960?v=4&size=64" class="avatar circle" id="avatarImg" alt="avatar"><a class="blogTitle">SmallBird6's Blog</a></div>
+    <img src="https://avatars.githubusercontent.com/u/39933960?v=4&size=64" class="avatar circle" id="avatarImg" alt="avatar"><a class="blogTitle">Blog</a></div>
 <div class="title-right">
     <a href="https://SmallBird6.github.io/tag.html" id="buttonSearch" class="btn btn-invisible circle" title="搜索">
         <svg class="octicon" width="16" height="16" >
@@ -221,25 +236,14 @@ body {
         <span class="listTitle">AI Agent Learn</span>
     </div>
     <div class="listLabels">
-        
-        <span class="Label LabelName" style="background-color:"><object><a style="color:#fff" href="tag.html#documentation">documentation</a></object></span>
+        <span class="Label" style="background-color:#006b75">1</span>
+        <span class="Label LabelName" style="background-color:#dc81e1"><object><a style="color:#fff" href="tag.html#复习">复习</a></object></span>
         <span class="Label LabelTime" style="background-color:#1f883d">2026-05-05</span>
-    </div>
-</a><a class="SideNav-item d-flex flex-items-center flex-justify-between" href="post/ye-wu-biao-jie-gou.html">
-    <div class="d-flex flex-items-center">
-        <svg class="SideNav-icon octicon" style="width:16px;height:16px"><path class="svgTop0" d=""></path>
-        </svg>
-        <span class="listTitle">业务表结构</span>
-    </div>
-    <div class="listLabels">
-        
-        <span class="Label LabelName" style="background-color:"><object><a style="color:#fff" href="tag.html#test">test</a></object></span>
-        <span class="Label LabelTime" style="background-color:#1f883d">2026-04-21</span>
     </div>
 </a>
 </nav>
 </div>
-    <div id="footer"><div id="footer1">Copyright © <span id="copyrightYear"></span> <a href="https://SmallBird6.github.io">SmallBird6's Blog</a></div>
+    <div id="footer"><div id="footer1">Copyright © <span id="copyrightYear"></span> <a href="https://SmallBird6.github.io">Blog</a></div>
 <div id="footer2">
     <span id="runday"></span><span>Powered by <a href="https://meekdai.com/Gmeek.html" target="_blank">Gmeek</a></span>
 </div>
