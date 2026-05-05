@@ -8,42 +8,17 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700&display=swap" rel="stylesheet">
-<style>
-:root {
-  --blog-accent: #ff6b35;
-  --blog-accent2: #e84526;
-  --blog-accent-light: #fff4ef;
-  --blog-text: #24292f;
-  --blog-text-secondary: #656d76;
-  --blog-bg: #fafaf8;
-  --blog-border: #d8dee4;
-  --blog-card-shadow: 0 1px 3px rgba(0,0,0,0.06);
-  --blog-radius: 8px;
-  --blog-font-serif: 'Noto Serif SC', Georgia, 'Times New Roman', serif;
-  --blog-font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
-}
-[data-color-mode="dark"] {
-  --blog-accent: #ff8c5a;
-  --blog-accent2: #ff6b35;
-  --blog-accent-light: #2a1f1a;
-  --blog-text: #e6edf3;
-  --blog-text-secondary: #8b949e;
-  --blog-bg: #0d1117;
-  --blog-border: #30363d;
-  --blog-card-shadow: 0 1px 3px rgba(0,0,0,0.3);
-}
-</style>
     <link rel="icon" href="https://avatars.githubusercontent.com/u/39933960?v=4&size=64"><script>
         let theme = localStorage.getItem("meek_theme") || "light";
         document.documentElement.setAttribute("data-color-mode", theme);
     </script>
 <meta name="description" content="一灯如豆，万语千言。">
-<meta property="og:title" content="BLOG">
+<meta property="og:title" content="SmallBird6's Blog">
 <meta property="og:description" content="一灯如豆，万语千言。">
 <meta property="og:type" content="blog">
 <meta property="og:url" content="https://SmallBird6.github.io">
 <meta property="og:image" content="https://avatars.githubusercontent.com/u/39933960?v=4&size=64">
-<title>BLOG</title>
+<title>SmallBird6's Blog</title>
 
 </head>
 <style>
@@ -81,10 +56,6 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
   from { opacity: 0; transform: translateY(16px); }
   to { opacity: 1; transform: translateY(0); }
 }
-@keyframes fadeSlideRight {
-  from { opacity: 0; transform: translateX(-20px); }
-  to { opacity: 1; transform: translateX(0); }
-}
 @keyframes shimmer {
   0% { background-position: -200% center; }
   100% { background-position: 200% center; }
@@ -95,136 +66,131 @@ body{box-sizing: border-box;min-width: 200px;max-width: 900px;margin: 20px auto;
 }
 
 body {
-  font-family: var(--blog-font-serif);
-  line-height: 1.8;
-  color: var(--blog-text);
-  background-color: var(--blog-bg);
-  max-width: 960px;
+  font-family: 'Noto Serif SC', Georgia, 'Times New Roman', serif !important;
+  line-height: 1.8 !important;
+  color: #24292f !important;
+  background-color: #fafaf8 !important;
+  max-width: 960px !important;
+}
+[data-color-mode="dark"] body {
+  color: #e6edf3 !important;
+  background-color: #0d1117 !important;
 }
 
 #header {
-  border-bottom: 2px solid var(--blog-accent);
-  padding-bottom: 12px;
-  margin-bottom: 24px;
+  border-bottom: 2px solid #ff6b35 !important;
+  padding-bottom: 12px !important;
+  margin-bottom: 24px !important;
   animation: fadeSlideIn 0.6s ease both;
 }
 
 .avatar {
-  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-  border: 2px solid var(--blog-accent);
+  transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) !important;
+  border: 2px solid #ff6b35 !important;
   animation: breathe 3s ease-in-out infinite;
 }
 .avatar:hover {
-  transform: scale(1.15) rotate(6deg);
+  transform: scale(1.15) rotate(6deg) !important;
 }
 
 .title-left a {
-  font-family: var(--blog-font-sans);
-  letter-spacing: 1px;
-  font-size: 32px;
-  background: linear-gradient(90deg, var(--blog-accent), var(--blog-accent2), var(--blog-accent));
-  background-size: 200% auto;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif !important;
+  letter-spacing: 1px !important;
+  font-size: 32px !important;
+  background: linear-gradient(90deg, #ff6b35, #e84526, #ff6b35) !important;
+  background-size: 200% auto !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
   animation: shimmer 4s linear infinite;
 }
 
 #content > div:first-child {
-  font-family: var(--blog-font-serif);
-  font-style: italic;
-  color: var(--blog-text-secondary);
-  font-size: 15px;
-  margin-bottom: 20px;
-  padding: 6px 14px;
-  border-left: 3px solid var(--blog-accent);
-  background: var(--blog-accent-light);
-  border-radius: 0 var(--blog-radius) var(--blog-radius) 0;
-  animation: fadeSlideRight 0.8s ease 0.2s both;
+  font-family: 'Noto Serif SC', Georgia, serif !important;
+  font-style: italic !important;
+  color: #656d76 !important;
+  font-size: 15px !important;
+  margin-bottom: 20px !important;
+  padding: 6px 14px !important;
+  border-left: 3px solid #ff6b35 !important;
+  background: #fff4ef !important;
+  border-radius: 0 8px 8px 0 !important;
+}
+[data-color-mode="dark"] #content > div:first-child {
+  color: #8b949e !important;
+  background: #2a1f1a !important;
 }
 
 .SideNav {
-  border-radius: var(--blog-radius);
-  overflow: hidden;
-  border-color: var(--blog-border) !important;
+  border-radius: 8px !important;
+  overflow: hidden !important;
 }
-
 .SideNav-item {
-  transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transition: all 0.3s ease !important;
   padding: 14px 16px !important;
-  border-left: 3px solid transparent;
+  border-left: 3px solid transparent !important;
 }
 .SideNav-item:hover {
-  background-color: var(--blog-accent-light) !important;
-  border-left-color: var(--blog-accent);
+  background-color: #fff4ef !important;
+  border-left-color: #ff6b35 !important;
   transform: translateX(6px);
-  box-shadow: var(--blog-card-shadow);
+}
+[data-color-mode="dark"] .SideNav-item:hover {
+  background-color: #2a1f1a !important;
 }
 
 .listTitle {
-  font-family: var(--blog-font-serif);
-  font-size: 16px;
-  font-weight: 500;
+  font-family: 'Noto Serif SC', Georgia, serif !important;
+  font-size: 16px !important;
+  font-weight: 500 !important;
   transition: color 0.2s;
 }
 .SideNav-item:hover .listTitle {
-  color: var(--blog-accent);
+  color: #ff6b35 !important;
 }
 
 .Label {
   border-radius: 20px !important;
   padding: 2px 10px !important;
   font-size: 12px !important;
-  font-weight: 500;
   transition: transform 0.2s;
 }
 .Label:hover {
   transform: scale(1.08);
 }
 
-.LabelTime {
-  opacity: 0.8;
-}
-
 #footer {
-  border-top: 1px solid var(--blog-border);
-  padding-top: 20px;
-  color: var(--blog-text-secondary);
-  animation: fadeSlideIn 0.6s ease 0.4s both;
+  border-top: 1px solid #d8dee4 !important;
+  padding-top: 20px !important;
+  color: #656d76 !important;
 }
 #footer a {
-  color: var(--blog-accent);
-  text-decoration: none;
-  transition: opacity 0.2s;
+  color: #ff6b35 !important;
+  text-decoration: none !important;
 }
-#footer a:hover {
-  opacity: 0.7;
+[data-color-mode="dark"] #footer {
+  border-top-color: #30363d !important;
+  color: #8b949e !important;
 }
 
 .title-right a, .title-right button {
-  transition: transform 0.3s, color 0.3s;
+  transition: transform 0.3s, color 0.3s !important;
 }
 .title-right a:hover, .title-right button:hover {
-  transform: scale(1.15);
-  color: var(--blog-accent) !important;
+  transform: scale(1.15) !important;
+  color: #ff6b35 !important;
 }
 
 @media (max-width: 600px) {
-  body { padding: 12px; }
-  .title-left a { font-size: 24px; }
-  .SideNav-item { padding: 10px 12px !important; }
+  body { padding: 12px !important; }
+  .title-left a { font-size: 24px !important; }
 }
-
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--blog-border); border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: var(--blog-text-secondary); }
 
 
 <body>
     <div id="header">
 <div class="title-left">
-    <img src="https://avatars.githubusercontent.com/u/39933960?v=4&size=64" class="avatar circle" id="avatarImg" alt="avatar"><a class="blogTitle">BLOG</a></div>
+    <img src="https://avatars.githubusercontent.com/u/39933960?v=4&size=64" class="avatar circle" id="avatarImg" alt="avatar"><a class="blogTitle">SmallBird6's Blog</a></div>
 <div class="title-right">
     <a href="https://SmallBird6.github.io/tag.html" id="buttonSearch" class="btn btn-invisible circle" title="搜索">
         <svg class="octicon" width="16" height="16" >
@@ -273,7 +239,7 @@ body {
 </a>
 </nav>
 </div>
-    <div id="footer"><div id="footer1">Copyright © <span id="copyrightYear"></span> <a href="https://SmallBird6.github.io">BLOG</a></div>
+    <div id="footer"><div id="footer1">Copyright © <span id="copyrightYear"></span> <a href="https://SmallBird6.github.io">SmallBird6's Blog</a></div>
 <div id="footer2">
     <span id="runday"></span><span>Powered by <a href="https://meekdai.com/Gmeek.html" target="_blank">Gmeek</a></span>
 </div>
@@ -282,8 +248,8 @@ body {
 var now=new Date();
 document.getElementById("copyrightYear").innerHTML=now.getFullYear();
 
-if("2026-03-30"!=""){
-    var startSite=new Date("2026-03-30");
+if("2026-04-21"!=""){
+    var startSite=new Date("2026-04-21");
     var diff=now.getTime()-startSite.getTime();
     var diffDay=Math.floor(diff/(1000*60*60*24));
     document.getElementById("runday").innerHTML="网站运行 "+diffDay+" 天"+" • ";
@@ -344,7 +310,7 @@ document.addEventListener('DOMContentLoaded', function() {
   items.forEach(function(item, i) {
     item.style.opacity = '0';
     item.style.transform = 'translateY(20px)';
-    item.style.transition = 'opacity 0.5s ease, transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)';
+    item.style.transition = 'opacity 0.5s ease, transform 0.5s';
     setTimeout(function() {
       item.style.opacity = '1';
       item.style.transform = 'translateY(0)';
