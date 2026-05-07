@@ -502,49 +502,6 @@ document.getElementById("pathIssue").setAttribute("d",IconList["github"]);
 
 
 </script>
-(function(){
-  var body=document.getElementById('postBody');
-  if(!body) return;
-  var hs=body.querySelectorAll('h2,h3');
-  if(hs.length<2) return;
-  var toc=document.createElement('div');
-  toc.id='post-toc';
-  var title=document.createElement('div');
-  title.id='post-toc-title';
-  title.textContent='\u76EE\u5F55';
-  toc.appendChild(title);
-  var links=[];
-  for(var i=0;i<hs.length;i++){
-    var h=hs[i];
-    var id='toc-'+i;
-    h.id=id;
-    var a=document.createElement('a');
-    a.href='#'+id;
-    a.textContent=h.textContent;
-    a.className=h.tagName==='H3'?'toc-h3':'';
-    toc.appendChild(a);
-    links.push({el:a,target:h});
-  }
-  body.parentNode.insertBefore(toc,body);
-  var btn=document.createElement('button');
-  btn.id='toc-toggle';
-  btn.textContent='\u2630';
-  btn.title='\u76EE\u5F55';
-  btn.onclick=function(){
-    toc.classList.toggle('mobile-show');
-    btn.classList.toggle('open');
-  };
-  document.body.appendChild(btn);
-  window.addEventListener('scroll',function(){
-    var scrollY=window.scrollY+120;
-    var current=null;
-    for(var j=0;j<links.length;j++){
-      if(links[j].target.offsetTop<=scrollY) current=j;
-    }
-    for(var k=0;k<links.length;k++){
-      links[k].el.className=(k===current)?(links[k].target.tagName==='H3'?'toc-h3 active':'active'):(links[k].target.tagName==='H3'?'toc-h3':'');
-    }
-  });
-})();
+
 
 </html>
